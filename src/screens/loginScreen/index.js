@@ -1,11 +1,36 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { TouchableOpacity,View, Text, ImageBackground, SafeAreaView, StyleSheet, Image, Dimensions, Button } from 'react-native';
 import Images from '../../config/im';
 import { calculateFontSize } from '../../config/font';
 import { CustomeButton,Inputcomponent,CenteredTextWithLines } from '../../Components';
 const { width, height } = Dimensions.get('window');
-
+import {
+    GoogleSignin,
+    GoogleSigninButton,
+    statusCodes,
+  } from '@react-native-google-signin/google-signin';
 const LoginScreen = ({navigation}) => {
+useEffect(()=>{
+    GoogleSignin.configure();
+})
+    const GoogleLogin = async () => {
+        try {
+          await GoogleSignin.hasPlayServices();
+          const userInfo = await GoogleSignin.signIn();
+          console.log('user-info', userInfo);
+          // setState({ userInfo });
+        } catch (error) {
+          if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+            // user cancelled the login flow
+          } else if (error.code === statusCodes.IN_PROGRESS) {
+            // operation (e.g. sign in) is in progress already
+          } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+            // play services not available or outdated
+          } else {
+            // some other error happened
+          }
+        }
+      };
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.logomaincontainer}>
@@ -23,7 +48,7 @@ const LoginScreen = ({navigation}) => {
             <View style={styles.centertextcontainer}>
             <CenteredTextWithLines text="Or Login With" lineColor="white" textColor="#fff"/>
             </View>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={GoogleLogin} >
             <View style={styles.googolecontainer}>
                    <View style={styles.googleimage}>
                     <Image resizeMode="cover" style={{width:"100%",height:"100%"}} source={Images.Google}/> 

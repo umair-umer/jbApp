@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "279422402146",
+    "project_id": "authjobbook",
+    "storage_bucket": "authjobbook.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:279422402146:android:b2c838a1cb9b2f7a5f9b3b",
+        "android_client_info": {
+          "package_name": "com.jobbook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "279422402146-cf629fsbb6pch2mgj926mu1bf5pdoep6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jobbook",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "279422402146-jlafeimeh7os41ddfdnb6f9d99jj2gq2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIQOipcKc6JdNQ_sSMhMwu3xX3KLeUQh8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "279422402146-jlafeimeh7os41ddfdnb6f9d99jj2gq2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "279422402146-fjbr8fvn654r5l0c7em1doa4nru1jn2m.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.jobbook"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
