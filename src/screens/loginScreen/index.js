@@ -4,6 +4,7 @@ import Images from '../../config/im';
 import { calculateFontSize } from '../../config/font';
 import { CustomeButton,Inputcomponent,CenteredTextWithLines } from '../../Components';
 const { width, height } = Dimensions.get('window');
+import { LoginButton, AccessToken,Settings,LoginManager } from 'react-native-fbsdk-next';
 import {
     GoogleSignin,
     GoogleSigninButton,
@@ -12,6 +13,7 @@ import {
 const LoginScreen = ({navigation}) => {
 useEffect(()=>{
     GoogleSignin.configure();
+    Settings.initializeSDK();
 })
     const GoogleLogin = async () => {
         try {
@@ -31,6 +33,33 @@ useEffect(()=>{
           }
         }
       };
+
+      const fbLogin = (resCallback) =>{
+       LoginManager.logOut()
+       return LoginManager.logInWithPermissions(['email', 'public_profile']).then(
+        result =>{
+
+            console.log('fb ====>>',result)
+            if(result.declinedPermissions && result.declinedPermissions.includes('email')){
+                resCallback({message: "Email is required"})
+            }
+            if (result.isCancelled){
+                console.log('error')
+            }else{
+
+                const infoRequest = new GraphRequest(
+                    '/me?fileds=email,name,picture,friends',
+                    null,
+                    resCallback
+                );
+                new GraphRequestManager().addrequest(infoRequest).start()
+            }
+        },
+        function(error){
+          console.log("login failed" , error)
+        }
+       )
+      }
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.logomaincontainer}>
@@ -48,13 +77,23 @@ useEffect(()=>{
             <View style={styles.centertextcontainer}>
             <CenteredTextWithLines text="Or Login With" lineColor="white" textColor="#fff"/>
             </View>
-                <TouchableOpacity onPress={GoogleLogin} >
+            <TouchableOpacity onPress={GoogleLogin} >
             <View style={styles.googolecontainer}>
                    <View style={styles.googleimage}>
                     <Image resizeMode="cover" style={{width:"100%",height:"100%"}} source={Images.Google}/> 
                     
                     </View>
                     <Text style={styles.btntxt}>Sign up with Google</Text>
+            </View>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={fbLogin} >
+            <View style={styles.googolecontainer}>
+                   <View style={styles.googleimage}>
+                    <Image resizeMode="cover" style={{width:"100%",height:"100%"}} source={Images.Google}/> 
+                    
+                    </View>
+                    <Text style={styles.btntxt}>Sign up with Facebook</Text>
             </View>
                 </TouchableOpacity>
                 <Text style={styles.alreadymember} >Already a member ? <Text style={styles.login}>Login</Text></Text>

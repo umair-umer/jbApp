@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">jobbook</string>
+    <string name="facebook_app_id">7160672097328923</string>
+<string name="fb_login_protocol_scheme">fb1234</string>
+<string name="facebook_client_token">aae1f00c4b9b9d1f36c8db2dd794a484</string>
 </resources>
