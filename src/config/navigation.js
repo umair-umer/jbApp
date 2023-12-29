@@ -50,7 +50,8 @@ import {
   Companyapplicationstatus,
   Companyappliationpendingscreen,
   Companyshortlistedjob,
-  Companyrejectedjob
+  Companyrejectedjob,
+  Videocall
 } from '../screens';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -97,6 +98,8 @@ function Nav() {
 
         <Stack.Screen name="userprofilescreen" component={Profilescreen} />
         <Stack.Screen name="userchatroomscreen" component={ChatRoom} />
+        <Stack.Screen name="videocallscreen" component={Videocall} />
+
         <Stack.Screen name="notifyscreen" component={Notificationscreen} />
 
         <Stack.Screen name="specialscreen" component={Specialization} />

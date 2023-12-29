@@ -5,6 +5,7 @@ const { width, height } = Dimensions.get("window");
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import InputText from '../../Components/inputText';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 const ChatRoom = ({ route,navigation }) => {
     const { senderName } = route.params;
 
@@ -36,6 +37,11 @@ const ChatRoom = ({ route,navigation }) => {
                     </TouchableOpacity>
                  
                     <Text style={styles.headname}>Messages</Text>
+
+                    <TouchableOpacity  onPress={()=>navigation.navigate('videocallscreen')}>
+                     <MaterialCommunityIcons name="video-outline" size={30} color={'white'}/>
+                    </TouchableOpacity>
+               
             
              </View>
 

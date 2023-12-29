@@ -61,6 +61,9 @@ import Secondprofile from '../assets/SecondProlieimage.png'
 import Loadingimage from '../assets/loadingimage.png'
 import RejectIcon from '../assets/Rejecticon.png'
 import SendICon from '../assets/SendICon.png'
+import Video from '../assets/Videocallicon.png'
+import Videocaller from '../assets/videocaller.png'
+import Frontcaller from '../assets/nextcaller.png'
 const Images = {
   bg,
   logo,
@@ -123,7 +126,10 @@ const Images = {
   Secondprofile,
   Loadingimage,
   RejectIcon,
-  SendICon
+  SendICon,
+  Video,
+  Videocaller,
+  Frontcaller
 };
 
 export default Images;

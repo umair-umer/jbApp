@@ -46,7 +46,7 @@ import Companyapplicationstatus from './Companypendingscreen';
 import Companyappliationpendingscreen from './CompanyApplicationpendingcompany';
 import Companyshortlistedjob from './Companyshortlistscreen';
 import Companyrejectedjob from './Companyrejectjobscreen';
-
+import Videocall from './Videocallscreen';
 
 export {
   GetStarted,
@@ -96,5 +96,6 @@ export {
   Companyapplicationstatus,
   Companyappliationpendingscreen,
   Companyshortlistedjob,
-  Companyrejectedjob
+  Companyrejectedjob,
+  Videocall
 };
