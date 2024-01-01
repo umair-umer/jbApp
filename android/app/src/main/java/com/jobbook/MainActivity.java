@@ -1,7 +1,7 @@
 package com.jobbook;
 import org.devio.rn.splashscreen.SplashScreen;
 import android.os.Bundle; // add this
-
+import com.zmxv.RNSound.RNSoundPackage; // <-- New
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
@@ -16,7 +16,8 @@ public class MainActivity extends ReactActivity {
   @Override                                             // add this
   protected void onCreate(Bundle savedInstanceState) {  // add this
     SplashScreen.show(this);                            // add this
-    super.onCreate(savedInstanceState);                 // add this
+    super.onCreate(savedInstanceState);   
+            // add this
 
   } 
   @Override

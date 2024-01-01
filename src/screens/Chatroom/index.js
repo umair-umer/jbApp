@@ -6,7 +6,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import InputText from '../../Components/inputText';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-const ChatRoom = ({ route,navigation }) => {
+const ChatRoom = ({ route, navigation }) => {
     const { senderName } = route.params;
 
     const [message, setMessage] = useState('');
@@ -28,61 +28,67 @@ const ChatRoom = ({ route,navigation }) => {
             scrollViewRef.current.scrollToEnd({ animated: true });
         }
     }, [messages]);
+    const endVideoCall = () => {
+        if (peerConnection.current) {
+          peerConnection.current.close();
+        }
+        if (localStream) {
+          localStream.release();
+        }
+        // Reset state
+        setLocalStream(null);
+        setRemoteStream(null);
+        peerConnection.current = null;
+      };
+      
     return (
         <SafeAreaView style={styles.container}>
 
             <View style={styles.hedr} >
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <Ionicons name="chevron-back" color="#fff" size={30} />
-                    </TouchableOpacity>
-                 
-                    <Text style={styles.headname}>Messages</Text>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Ionicons name="chevron-back" color="#fff" size={30} />
+                </TouchableOpacity>
 
-                    <TouchableOpacity  onPress={()=>navigation.navigate('videocallscreen')}>
-                     <MaterialCommunityIcons name="video-outline" size={30} color={'white'}/>
-                    </TouchableOpacity>
-               
-            
-             </View>
+                <Text style={styles.headname}>Messages</Text>
+
+                <TouchableOpacity onPress={navigation.navigate("videocallscreen")} >
+                    <MaterialCommunityIcons name="video-outline" size={30} color={'white'} />
+                </TouchableOpacity>
+
+
+            </View>
 
             <View style={{ flex: 1, paddingVertical: height * 0.03, }}>
-            <ScrollView
-          ref={scrollViewRef}
-          contentContainerStyle={styles.chatContainer}
-        >
-          {messages.map((msg, index) => (
-            <View
-              key={index}
-              style={msg.isSender ? styles.senderchat : styles.reciverchat}
-            >
-              <Text style={msg.isSender ? styles.sendertext : styles.recivertext}>
-                {msg.text}
-              </Text>
-            </View>
-          ))}
-        </ScrollView>
+                <ScrollView
+                    ref={scrollViewRef}
+                    contentContainerStyle={styles.chatContainer}
+                >
+                    {messages.map((msg, index) => (
+                        <View
+                            key={index}
+                            style={msg.isSender ? styles.senderchat : styles.reciverchat}
+                        >
+                            <Text style={msg.isSender ? styles.sendertext : styles.recivertext}>
+                                {msg.text}
+                            </Text>
+                        </View>
+                    ))}
+                </ScrollView>
 
-                {/* <View style={styles.Reciverchat}>
-                    <Text style={styles.recivertext}>The main body of matter in a manuscript, book,
-                    </Text>
-                </View>
-      
-            <View style={{ alignItems: 'flex-end' }}>
-                <View style={styles.senderchat}>
-                    <Text style={styles.sendertext}>The main body of matter in a manuscript, book,
-                    </Text>
-                </View>
-            </View> */}
+              
             </View>
             <View style={styles.inputchatcontainer}>
                 <View style={styles.inputcontainer}><InputText value={message}
                     onChangeText={(text) => setMessage(text)}
                     placeholder="Type a message" /></View>
                 <TouchableOpacity style={styles.iconsendcontainer} onPress={handleSend}>
-                    <FontAwesome name="send" size={calculateFontSize(23)} color="#009A8C"  />
+                    <FontAwesome name="send" size={calculateFontSize(23)} color="#009A8C" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={endVideoCall}>
+                    <Text>End Call</Text>
                 </TouchableOpacity>
             </View>
-
+     
         </SafeAreaView>
     )
 }
@@ -152,10 +158,10 @@ const styles = StyleSheet.create({
     },
     hedr: {
         flexDirection: "row",
-        marginVertical:height*0.03,
+        marginVertical: height * 0.03,
         alignItems: "center",
         // justifyContent:"center",
-        
+
     },
     headname: {
         fontSize: calculateFontSize(15),
@@ -166,7 +172,7 @@ const styles = StyleSheet.create({
         // justifyContent:"center",
         marginHorizontal: width * 0.3,
         fontFamily: "Poppins",
-        
+
 
     },
 })

@@ -7,10 +7,27 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Entypo from 'react-native-vector-icons/Entypo'
+import {ZegoUIKitPrebuiltCall, ONE_ON_ONE_VIDEO_CALL_CONFIG } from '@zegocloud/zego-uikit-prebuilt-call-rn'
+
 function Videocall() {
+    randomUserID = String(Math.floor(Math.random() * 100000))
   return (
     <SafeAreaView style={styles.container}>
-        <ImageBackground
+               <ZegoUIKitPrebuiltCall
+        appID={1528797470}
+        appSign={"95b46d9d610a707e31f4013b4f0cc9bab5b0652b24242ae616f334200d70393d"}
+        userID={randomUserID} // userID can be something like a phone number or the user id on your own user system. 
+        userName={"user_" + randomUserID}
+        callID={"jobbook"} // callID can be any unique string. 
+
+        config={{
+            // You can also use ONE_ON_ONE_VOICE_CALL_CONFIG/GROUP_VIDEO_CALL_CONFIG/GROUP_VOICE_CALL_CONFIG to make more types of calls.
+            ...ONE_ON_ONE_VIDEO_CALL_CONFIG,
+            onOnlySelfInRoom: () => { props.navigation.navigate('HomePage') },
+            onHangUp: () => { props.navigation.navigate('HomePage') },
+        }}
+      />
+        {/* <ImageBackground
         source={Images.Videocaller}
         style={{width:"100%",height:"100%"}}
         resizeMode='cover'
@@ -62,7 +79,7 @@ function Videocall() {
          </TouchableOpacity>
       </View>
 
-        </ImageBackground>
+        </ImageBackground> */}
     </SafeAreaView>
   )
 }
