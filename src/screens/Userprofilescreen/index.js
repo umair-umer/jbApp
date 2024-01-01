@@ -78,7 +78,7 @@ const Profilescreen = ({ navigation }) => {
                                 </TouchableOpacity>
                             </View>
 
-                            <View style={{ borderBottomWidth: 1, marginVertical: height * 0.04, borderBottomColor: "grey" }}></View>
+                            <View style={{ borderBottomWidth: 1, marginVertical: height * 0.04, borderBottomColor: "#fff" }}></View>
 
 
 
@@ -300,7 +300,7 @@ const Profilescreen = ({ navigation }) => {
                             </View>
                         </View>
                         <TouchableOpacity>
-                            <Feather name="edit" color="#fff" size={calculateFontSize(20)} onPress={() => navigation.navigate('editprofile')} />
+                            <AntDesign name="setting" color="#fff" size={calculateFontSize(22)} onPress={() => navigation.navigate('userprofilesetting')} />
                         </TouchableOpacity>
                     </View>
                     <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: width * 0.04, marginTop: height * 0.02, }}>
