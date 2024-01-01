@@ -47,6 +47,15 @@ import Companyappliationpendingscreen from './CompanyApplicationpendingcompany';
 import Companyshortlistedjob from './Companyshortlistscreen';
 import Companyrejectedjob from './Companyrejectjobscreen';
 import Videocall from './Videocallscreen';
+import Myprofilesettingscreen from './Myprofilesettingscreen';
+import Purcahsecoursescreen from './Mypucahsecoursescreen';
+import Mypaymentscreen from './Mypaymentsmethodscreen';
+import Letsaddyourcard from './Letsaddyourcardscreen';
+import Addcardlistscreen from './Addcardlistscreen';
+import Verfymyprofilesettingscreen from './Verifymyprofilescreen';
+
+
+
 
 export {
   GetStarted,
@@ -97,5 +106,11 @@ export {
   Companyappliationpendingscreen,
   Companyshortlistedjob,
   Companyrejectedjob,
-  Videocall
+  Videocall,
+  Myprofilesettingscreen,
+  Purcahsecoursescreen,
+  Mypaymentscreen,
+  Letsaddyourcard,
+  Addcardlistscreen,
+  Verfymyprofilesettingscreen
 };

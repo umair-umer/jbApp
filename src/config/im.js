@@ -64,6 +64,7 @@ import SendICon from '../assets/SendICon.png'
 import Video from '../assets/Videocallicon.png'
 import Videocaller from '../assets/videocaller.png'
 import Frontcaller from '../assets/nextcaller.png'
+import Addcard from '../assets/letadd.png'
 const Images = {
   bg,
   logo,
@@ -129,7 +130,8 @@ const Images = {
   SendICon,
   Video,
   Videocaller,
-  Frontcaller
+  Frontcaller,
+  Addcard
 };
 
 export default Images;

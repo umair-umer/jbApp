@@ -51,7 +51,13 @@ import {
   Companyappliationpendingscreen,
   Companyshortlistedjob,
   Companyrejectedjob,
-  Videocall
+  Videocall,
+  Myprofilesettingscreen,
+  Purcahsecoursescreen,
+  Mypaymentscreen,
+  Letsaddyourcard,
+  Addcardlistscreen,
+  Verfymyprofilesettingscreen
 } from '../screens';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -97,6 +103,13 @@ function Nav() {
         <Stack.Screen name="closedscreen" component={Closejobscreen} />
 
         <Stack.Screen name="userprofilescreen" component={Profilescreen} />
+        <Stack.Screen name="userprofilesetting" component={Myprofilesettingscreen} />
+        <Stack.Screen name="Purchaseprofilescreen" component={Purcahsecoursescreen} />
+        <Stack.Screen name="mypaymentscreen" component={Mypaymentscreen} />
+        <Stack.Screen name="letpayment" component={Letsaddyourcard} />
+        <Stack.Screen name="addcardlist" component={Addcardlistscreen} />
+        <Stack.Screen name="myprofileverifyscreen" component={Verfymyprofilesettingscreen} />
+
         <Stack.Screen name="userchatroomscreen" component={ChatRoom} />
         <Stack.Screen name="videocallscreen" component={Videocall} />
 
