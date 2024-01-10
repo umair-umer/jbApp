@@ -222,7 +222,6 @@ const { width, height } = Dimensions.get('window');
 import axios from "axios"
 import Loader from '../../Components/Loader';
 import { useDispatch } from 'react-redux';
-import { setUserData } from '../../store/actions/authActions';
 
 const RegistertalentProfile = () => {
   const dispatch = useDispatch()

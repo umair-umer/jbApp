@@ -51,26 +51,7 @@ console.log(token,"reduxtoken");
         console.error('Error fetching user data:', error);
       });
   }, [token]);
-  const handleLogout = async () => {
-    const config = {
-      method: 'post',
-      url: 'https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/logout',
-      headers: { 
-        'Authorization': `Bearer ${token}`
-      }
-    };
 
-    try {
-      await axios.request(config);
-      console.log('Logout successful');
-
-      
-      navigation.navigate('LoginScreen'); 
-    } catch (error) {
-      console.error('Logout Error:', error);
-
-    }
-  };
   return (
     <View style={styles.container}>
       <View style={styles.procon}>
@@ -126,7 +107,7 @@ console.log(token,"reduxtoken");
         </TouchableOpacity>
       </View>
       <View style={{marginVertical: height * 0.07}}>
-        <TouchableOpacity style={styles.logbutton} onPress={handleLogout}>
+        <TouchableOpacity style={styles.logbutton} >
           <AntDesign color={'#fff'} size={20} name="logout" />
           <Text style={styles.editbutton}>Sign out</Text>
         </TouchableOpacity>
