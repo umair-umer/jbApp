@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View, SafeAreaView, ImageBackground, ScrollView } from 'react-native';
 const { width, height } = Dimensions.get("window");
 import { calculateFontSize } from '../../config/font';
@@ -7,12 +7,46 @@ import Images from '../../config/im';
 import DocumentPicker from 'react-native-document-picker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import AntDesign from 'react-native-vector-icons/AntDesign'
-
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 const Profilescreen = ({ navigation }) => {
     const [show, setshow] = useState(false)
     const [selectedTab, setSelectedTab] = useState('About_me');
     const [uploadedDocument, setUploadedDocument] = useState('');
     const [attachedCertificate, setAttachedCertificate] = useState('');
+    const { token } = useSelector((state) => state.auth); 
+    const [userData, setUserData] = useState({
+        name: '',
+        email: '',
+        picture:"",
+        phone:""
+        // Add other user data properties here
+      });
+    
+      useEffect(() => {
+        // Make an Axios GET request to your API endpoint with the token
+        axios
+          .get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/profile', {
+            headers: {
+              "Authorization": `Bearer ${token}`,
+            },
+          })
+          .then((response) => {
+            console.log(response.data.data,"====>getprofile")
+            // Handle the successful response and update userData state
+            // const { name, email ,picture} = response.data.data; // Update this with your actual response structure
+            const name= response.data.data.name;
+            const email= response.data.data.email;
+            const picture= response.data.data.picture;
+            const phone= response.data.data.phone;
+            phone
+            setUserData({ name, email ,picture,phone});
+          })
+          .catch((error) => {
+            // Handle any errors here
+            console.error('Error fetching user data:', error);
+          });
+      }, [token]);
     const handleTabPress = (tab) => {
         setSelectedTab(tab);
     };
@@ -294,9 +328,9 @@ const Profilescreen = ({ navigation }) => {
                                 <Image resizeMode='cover' style={{ width: "1005", height: "100%" }} source={Images.Profile} />
                             </View>
                             <View style={{ marginHorizontal: width * 0.05 }}>
-                                <Text style={styles.prname}>Alex Hudson</Text>
-                                <Text style={styles.premail}>alexhudson@gmail.Com</Text>
-                                <Text style={styles.prnumb} >415) 727 - 71553</Text>
+                                <Text style={styles.prname}>{userData.name}</Text>
+                                <Text style={styles.premail}>{userData.email}</Text>
+                                <Text style={styles.prnumb} >{userData.phone}</Text>
                             </View>
                         </View>
                         <TouchableOpacity>
