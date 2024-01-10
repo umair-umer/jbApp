@@ -9,7 +9,8 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-const Profilescreen = ({ navigation }) => {
+const Profilescreen = ({ navigation,route }) => {
+ 
     const [show, setshow] = useState(false)
     const [selectedTab, setSelectedTab] = useState('About_me');
     const [uploadedDocument, setUploadedDocument] = useState('');
@@ -67,12 +68,12 @@ const Profilescreen = ({ navigation }) => {
                                 <Text style={styles.aboutmehead}>Skills</Text>
                             </View>
                             <TouchableOpacity>
-                                <Feather name="edit" color="#fff" size={calculateFontSize(20)} onPress={() => navigation.navigate('addskill')} />
+                                <Feather name="edit" color="#fff" size={calculateFontSize(20)} onPress={() => navigation.navigate('myprofileditskillsscreen')} />
                             </TouchableOpacity>
                         </View>
                         <View style={styles.skillpoincontainer}>
                             <View style={styles.skilsscon}>
-                                <Text style={styles.skilltext}>Surveillance</Text>
+                                <Text style={styles.skilltext}>Software Engineer</Text>
                             </View>
                             <View style={styles.skilsscon}>
                                 <Text style={styles.skilltext}>Communication</Text>
@@ -106,7 +107,7 @@ const Profilescreen = ({ navigation }) => {
                                 </View>
 
                                 <TouchableOpacity
-                                    onPress={() => navigation.navigate("workedit")}
+                                    onPress={() => navigation.navigate("myprofileditexperiancescreen")}
                                 >
                                     <Feather name="edit" color="#fff" size={calculateFontSize(20)} />
                                 </TouchableOpacity>

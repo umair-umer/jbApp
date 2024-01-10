@@ -57,7 +57,9 @@ import {
   Mypaymentscreen,
   Letsaddyourcard,
   Addcardlistscreen,
-  Verfymyprofilesettingscreen
+  Verfymyprofilesettingscreen,
+  Editprofileskillscreen,
+  Editprofileexperiancescreen
 } from '../screens';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -136,6 +138,8 @@ function Nav() {
         <Stack.Screen name="letpayment" component={Letsaddyourcard} />
         <Stack.Screen name="addcardlist" component={Addcardlistscreen} />
         <Stack.Screen name="myprofileverifyscreen" component={Verfymyprofilesettingscreen} />
+        <Stack.Screen name="myprofileditskillsscreen" component={Editprofileskillscreen} />
+        <Stack.Screen name="myprofileditexperiancescreen" component={Editprofileexperiancescreen} />
 
         <Stack.Screen name="userchatroomscreen" component={ChatRoom} />
         <Stack.Screen name="videocallscreen" component={Videocall} />

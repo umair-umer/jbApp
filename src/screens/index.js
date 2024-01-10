@@ -53,7 +53,8 @@ import Mypaymentscreen from './Mypaymentsmethodscreen';
 import Letsaddyourcard from './Letsaddyourcardscreen';
 import Addcardlistscreen from './Addcardlistscreen';
 import Verfymyprofilesettingscreen from './Verifymyprofilescreen';
-
+import Editprofileskillscreen from './EditProfileskillscreen';
+import Editprofileexperiancescreen from './Editexperianceprofilescreen';
 
 
 
@@ -112,5 +113,7 @@ export {
   Mypaymentscreen,
   Letsaddyourcard,
   Addcardlistscreen,
-  Verfymyprofilesettingscreen
+  Verfymyprofilesettingscreen,
+  Editprofileskillscreen,
+  Editprofileexperiancescreen
 };
