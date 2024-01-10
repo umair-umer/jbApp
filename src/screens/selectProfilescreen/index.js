@@ -11,7 +11,6 @@ import {
 import Images from '../../config/im';
 import {calculateFontSize} from '../../config/font';
 import {TouchableOpacity} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 
 const {width, height} = Dimensions.get('window');
 
@@ -48,8 +47,8 @@ const SelectProfile = ({navigation}) => {
         </Text>
       </View>
       <View style={styles.buttonContainer}>
-        {renderProfile('Talent', Images.proimage, '#26C0B2')}
-        {renderProfile('Company', Images.company, 'white')}
+        {renderProfile('talent', Images.proimage, '#26C0B2')}
+        {renderProfile('company', Images.company, 'white')}
       </View>
     </SafeAreaView>
   );

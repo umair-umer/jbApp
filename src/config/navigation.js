@@ -1,7 +1,7 @@
-import * as React from 'react';
-import {View, Text, Dimensions, StyleSheet} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Dimensions, StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   CheckoutScreen,
   CompanyProfileScreen,
@@ -59,36 +59,63 @@ import {
   Addcardlistscreen,
   Verfymyprofilesettingscreen
 } from '../screens';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {createDrawerNavigator} from '@react-navigation/drawer';
-const {width, height} = Dimensions.get('window');
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+const { width, height } = Dimensions.get('window');
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import CusTomDrawer from './customesidebar';
+import { useSelector, useDispatch } from 'react-redux';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
 function Nav() {
+
+  // const token = useSelector(state => state.auth.token); 
+  const { token, type } = useSelector((state) => state.auth);
+
+
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen name="get" component={GetStarted} />
-        <Stack.Screen name="logreg" component={RegLogButton} />
-        <Stack.Screen name="loginscreen" component={LoginScreen} />
-        <Stack.Screen name="seclectproscreen" component={SeclectProfile} />
-        <Stack.Screen
-          name="registrationscreen"
-          component={RegistertalentProfile}
-        />
-        <Stack.Screen name="forgetpass" component={ForgetPassWord} />
-        <Stack.Screen name="otpscreen" component={OtpScreen} />
-        <Stack.Screen name="newpassscreen" component={NewpassScreen} />
-        <Stack.Screen name="home" component={MyDrawer} />
-        <Stack.Screen name="Companyhome" component={MyCompanyDrawer} />
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        {token ? (
+          <Stack.Screen
+            name="Main"
+            component={() => (
+              <Drawer.Navigator screenOptions={{ headerShown: false }}
+                drawerContent={props => <CusTomDrawer {...props} />} >
+                {type === "talent" ? (
+                  <Stack.Screen name="home" component={MyDrawer} />
+                ) : (
+
+                  <Stack.Screen name="Companyhome" component={MyCompanyDrawer} />
+                )}
+              </Drawer.Navigator>
+            )}
+            options={{ headerShown: false }}
+          />
+
+        ) : (
+       <>
+            <Stack.Screen name="get" component={GetStarted} />
+            <Stack.Screen name="logreg" component={RegLogButton} />
+            <Stack.Screen name="loginscreen" component={LoginScreen} />
+            <Stack.Screen name="seclectproscreen" component={SeclectProfile} />
+            <Stack.Screen
+              name="registrationscreen"
+              component={RegistertalentProfile}
+            />
+            <Stack.Screen name="forgetpass" component={ForgetPassWord} />
+            <Stack.Screen name="otpscreen" component={OtpScreen} />
+            <Stack.Screen name="newpassscreen" component={NewpassScreen} />
+            </>
+        )}
+
+
 
         <Stack.Screen name="Vpost" component={ViewPost} />
         <Stack.Screen name="jobdeatilview" component={Jobdetail} />
@@ -138,14 +165,14 @@ function Nav() {
         <Stack.Screen name="pendingview" component={Companyappliationpendingscreen} />
         <Stack.Screen name="shortview" component={Companyshortlistedjob} />
         <Stack.Screen name="rejectedview" component={Companyrejectedjob} />
-        
-        
-        
 
-        
-        
-        
-        
+
+
+
+
+
+
+
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -197,7 +224,7 @@ function BottomTab() {
         name="Feeds"
         component={NewsFeed}
         options={{
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <Feather name="book-open" size={size} color={color} />
           ),
         }}
@@ -207,7 +234,7 @@ function BottomTab() {
         name="Forums"
         component={ForumScreen}
         options={{
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <FontAwesome6 name="users" size={size} color={color} />
           ),
         }}
@@ -217,7 +244,7 @@ function BottomTab() {
         name="Job Search"
         component={Jobserandcompanyprofile}
         options={{
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <FontAwesome6 name="briefcase" size={size} color={color} />
           ),
         }}
@@ -227,7 +254,7 @@ function BottomTab() {
         name="Chat"
         component={Messagesscreen}
         options={{
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <Ionicons
               name="chatbox-ellipses-outline"
               size={size}
@@ -241,7 +268,7 @@ function BottomTab() {
         name="Training"
         component={TrainingScren}
         options={{
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <FontAwesome5 name="graduation-cap" size={size} color={color} />
           ),
         }}
@@ -253,9 +280,10 @@ function BottomTab() {
 function MyDrawer() {
   return (
     <Drawer.Navigator
-      screenOptions={{headerShown: false}}
-      drawerContent={props => <CusTomDrawer {...props} />}
-      initialRouteName="HomeTab">
+      screenOptions={{ headerShown: false }}
+      drawerContent={props => <CusTomDrawer {...props} />
+      }
+    >
       <Drawer.Screen name="btab" component={BottomTab} />
     </Drawer.Navigator>
   );
@@ -293,7 +321,7 @@ function CompanyBottomTab() {
         name="Feeds"
         component={NewsFeed}
         options={{
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <Feather name="book-open" size={size} color={color} />
           ),
         }}
@@ -303,17 +331,17 @@ function CompanyBottomTab() {
         name="Forums"
         component={ForumScreen}
         options={{
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <FontAwesome6 name="users" size={size} color={color} />
           ),
         }}
       />
 
       <Tab.Screen
-        name="Job Search"
+        name="Talent search"
         component={Jobserandcompanyprofile}
         options={{
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <FontAwesome6 name="briefcase" size={size} color={color} />
           ),
         }}
@@ -323,7 +351,7 @@ function CompanyBottomTab() {
         name="Chat"
         component={Messagesscreen}
         options={{
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <Ionicons
               name="chatbox-ellipses-outline"
               size={size}
@@ -337,7 +365,7 @@ function CompanyBottomTab() {
         name="Training"
         component={TrainingScren}
         options={{
-          tabBarIcon: ({color, size}) => (
+          tabBarIcon: ({ color, size }) => (
             <FontAwesome5 name="graduation-cap" size={size} color={color} />
           ),
         }}
@@ -349,7 +377,7 @@ function CompanyBottomTab() {
 function MyCompanyDrawer() {
   return (
     <Drawer.Navigator
-      screenOptions={{headerShown: false}}
+      screenOptions={{ headerShown: false }}
       drawerContent={props => <CusTomDrawer {...props} />}
       initialRouteName="HomeTab">
       <Drawer.Screen name="companybtab" component={CompanyBottomTab} />

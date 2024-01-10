@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {
   View,
   Text,
@@ -14,12 +14,63 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-
+import axios from 'axios';
 import {calculateFontSize} from '../../config/font';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import { useSelector } from 'react-redux';
 const {width, height} = Dimensions.get('window');
-
 const CusTomDrawer = ({navigation}) => {
+  const { token } = useSelector((state) => state.auth); // Get the token from Redux store
+console.log(token,"reduxtoken");
+  const [userData, setUserData] = useState({
+    name: '',
+    email: '',
+    picture:"",
+    // Add other user data properties here
+  });
+
+  useEffect(() => {
+    // Make an Axios GET request to your API endpoint with the token
+    axios
+      .get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/profile', {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data.data,"====>getprofile")
+        // Handle the successful response and update userData state
+        // const { name, email ,picture} = response.data.data; // Update this with your actual response structure
+        const name= response.data.data.name;
+        const email= response.data.data.email;
+        const picture= response.data.data.picture;
+        setUserData({ name, email ,picture});
+      })
+      .catch((error) => {
+        // Handle any errors here
+        console.error('Error fetching user data:', error);
+      });
+  }, [token]);
+  const handleLogout = async () => {
+    const config = {
+      method: 'post',
+      url: 'https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/logout',
+      headers: { 
+        'Authorization': `Bearer ${token}`
+      }
+    };
+
+    try {
+      await axios.request(config);
+      console.log('Logout successful');
+
+      
+      navigation.navigate('LoginScreen'); 
+    } catch (error) {
+      console.error('Logout Error:', error);
+
+    }
+  };
   return (
     <View style={styles.container}>
       <View style={styles.procon}>
@@ -29,7 +80,7 @@ const CusTomDrawer = ({navigation}) => {
           <Image
             resizeMode="contain"
             style={{width: '100%', height: '100%'}}
-            source={Images.pro}
+            source={userData.picture}
           />
         </TouchableOpacity>
         <TouchableOpacity
@@ -40,8 +91,8 @@ const CusTomDrawer = ({navigation}) => {
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.sProfileText}>Alex Hudson</Text>
-      <Text style={styles.emailtext}>Alex Hudson@gmail.com</Text>
+      <Text style={styles.sProfileText}>{userData.name}</Text>
+      <Text style={styles.emailtext}>{userData.email}</Text>
       <View style={styles.viewiconsrout}>
         <TouchableOpacity
           style={styles.buttonroutes}
@@ -75,7 +126,7 @@ const CusTomDrawer = ({navigation}) => {
         </TouchableOpacity>
       </View>
       <View style={{marginVertical: height * 0.07}}>
-        <TouchableOpacity style={styles.logbutton}>
+        <TouchableOpacity style={styles.logbutton} onPress={handleLogout}>
           <AntDesign color={'#fff'} size={20} name="logout" />
           <Text style={styles.editbutton}>Sign out</Text>
         </TouchableOpacity>
@@ -83,6 +134,7 @@ const CusTomDrawer = ({navigation}) => {
     </View>
   );
 };
+
 
 export default CusTomDrawer;
 const styles = StyleSheet.create({
