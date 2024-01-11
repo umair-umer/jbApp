@@ -1,23 +1,34 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet, Dimensions, TextInput, FlatList, TouchableOpacity, SafeAreaView, Image } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, TextInput, FlatList, TouchableOpacity, SafeAreaView, Image, ScrollView } from 'react-native';
 const { width, height } = Dimensions.get("window");
 import { calculateFontSize } from '../../config/font';
 import { CustomeButton, CustomeforgetHeader } from '../../Components';
 import Images from '../../config/im';
 import Feather from 'react-native-vector-icons/dist/Feather';
 
-function Editprofileexperiancescreen() {
+function Editprofileexperiancescreen({navigation}) {
     const [isEditing, setIsEditing] = useState(false);
     const [editableText1, setEditableText1] = useState('Gate Guard');
     const [editableText2, setEditableText2] = useState('PeopleReady Eagle Pass, TX');
     const [editableText3, setEditableText3] = useState('Dec 2022 - Present');
+    
 
     const handleEditToggle = () => {
         setIsEditing(!isEditing);
     };
 
 
+    const handleUpdateProfile = () => {
+        // Navigate to the UserProfileScreen with the edited data
+        navigation.navigate('userprofilescreen', {
+          employmentType: editableText1,
+          employmentPlace: editableText2,
+          employmentDate: editableText3,
+        });
+      };
+
     return (
+        <ScrollView showsVerticalScrollIndicator={false}>
         <SafeAreaView style={styles.mainCon}>
 
             <CustomeforgetHeader
@@ -92,7 +103,7 @@ function Editprofileexperiancescreen() {
                         <View style={{ paddingHorizontal: width * 0.03 }}>
                             <Text style={{ color: "#fff", fontSize: calculateFontSize(16), fontWeight: "700" }}>{editableText1}</Text>
                             <Text style={{ color: "#fff" }}>{editableText2}</Text>
-                            <Text style={{ color: "#fffx" }}>{editableText3}</Text>
+                            <Text style={{ color: "#fff" }}>{editableText3}</Text>
                         </View>
                     </View>
                     <TouchableOpacity onPress={handleEditToggle}>
@@ -104,11 +115,11 @@ function Editprofileexperiancescreen() {
 
             <View style={styles.btncon}>
 
-                <CustomeButton title={'Update'} nonbg={true} />
+                <CustomeButton title={'Update'} nonbg={true} onPress={handleUpdateProfile} />
             </View>
 
         </SafeAreaView>
-
+        </ScrollView>
 
     )
 }
@@ -117,7 +128,7 @@ const styles = StyleSheet.create({
 
     mainCon: {
         flex: 1,
-        paddingHorizontal: width * 0.03,
+        paddingHorizontal: width * 0.034,
         backgroundColor: 'rgba(0, 154, 140,0.9)',
     },
     txt: {
@@ -193,7 +204,7 @@ const styles = StyleSheet.create({
         paddingTop: height * 0.02,
     },
     wrkexp: {
-        color: "#000",
+        color: "#fff",
         fontSize: calculateFontSize(13),
         textTransform: "capitalize",
         fontFamily: "Poppins",
@@ -226,7 +237,7 @@ const styles = StyleSheet.create({
     },
 
     editableInput: {
-        color: "#000"
+        color: "#fff"
 
     },
     btncon: {
