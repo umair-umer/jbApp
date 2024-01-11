@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { TouchableOpacity, View, Text, ImageBackground, SafeAreaView, StyleSheet, Image, Dimensions, Button } from 'react-native';
 import Images from '../../config/im';
 import { calculateFontSize } from '../../config/font';
-import { CustomeButton, Inputcomponent, CenteredTextWithLines } from '../../Components';
+import { CustomeButton, Inputcomponent, CenteredTextWithLines, CustomErrorModal } from '../../Components';
 const { width, height } = Dimensions.get('window');
 import { LoginButton, AccessToken, Settings, LoginManager } from 'react-native-fbsdk-next';
 import {
@@ -10,6 +10,7 @@ import {
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
+
 import { useDispatch } from 'react-redux';
 import { setUserData } from '../../store/actions/authActions';
 import qs from 'qs';
@@ -19,6 +20,8 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [isload, setload] = useState(false)
+  const[error,setErrro]=useState();
+  const [isModalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch()
   useEffect(() => {
     GoogleSignin.configure({
@@ -142,13 +145,19 @@ const LoginScreen = ({ navigation }) => {
       // Here, you can dispatch the user data to global state or store in local storage
       // Navigate to another screen if needed
     } catch (error) {
-      console.log('Login Error:', error);
+      console.log('Login Error:', error.response.data.error);
       setload(false)
+      setErrro(error.response.data.error)
+      setModalVisible(true);
       // Handle the error (e.g., show an error message)
     }
   };
 
 
+  const toggleModal = () => {
+    setModalVisible(false);
+    console.log(isModalVisible);
+};
 
 
   return (
@@ -189,6 +198,7 @@ const LoginScreen = ({ navigation }) => {
           </View>
         </TouchableOpacity>
         <Text style={styles.alreadymember} >Already a member ? <Text style={styles.login}>Login</Text></Text>
+        <CustomErrorModal onPressclose={toggleModal} error={error} isModalVisible={isModalVisible} />
       </SafeAreaView>}
     </>
 
