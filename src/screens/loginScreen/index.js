@@ -21,14 +21,17 @@ const LoginScreen = ({ navigation }) => {
   const [isload, setload] = useState(false)
   const dispatch = useDispatch()
   useEffect(() => {
-    GoogleSignin.configure();
+    GoogleSignin.configure({
+      // webClientId: '279422402146-fjbr8fvn654r5l0c7em1doa4nru1jn2m.apps.googleusercontent.com',
+    
+    });
     Settings.initializeSDK();
   })
   const GoogleLogin = async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      console.log('user-info', userInfo);
+      console.log('user-info', userInfo.user);
       // setState({ userInfo });
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -41,34 +44,77 @@ const LoginScreen = ({ navigation }) => {
         // some other error happened
       }
     }
+  
+
   };
+  // const GoogleLogin = async () => {
+  //   try {
+  //     await GoogleSignin.hasPlayServices();
+  //     const userInfo = await GoogleSignin.signIn();
+  //     console.log('User Info:', userInfo);
+  
+  //     // Extract the necessary information from userInfo
+  //     const { user } = userInfo;
+  //     const data = qs.stringify({
+  //       name: user.name,
+  //       email: user.email,
+  //       googleId: user.id,
+  //       token: userInfo.idToken, // Assuming you need the ID token
+  //       device_token: 'DEVICE_TOKEN_PLACEHOLDER', // Replace with actual device token if needed
+  //       role: 'talent', // Set the role or other data as required
+  //     });
+  
+  //     const config = {
+  //       method: 'post',
+  //       url: 'https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/signup/google',
+  //       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  //       data: data,
+  //     };
+  
+  //     const response = await axios.request(config);
+  //     console.log('Google Login Success:', response.data);
+  
+  //     // Handle the response. For example, store the token in Redux.
+  //     if (response.data.success) {
+  //       const { token, type } = response.data; // Adjust according to your API response
+  //       dispatch(setUserData(token, type));
+  //     }
+  //   } catch (error) {
+  //     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+  //       console.log('User cancelled the login flow');
+  //     } else if (error.code === statusCodes.IN_PROGRESS) {
+  //       console.log('Sign in is in progress');
+  //     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+  //       console.log('Play services not available or outdated');
+  //     } else {
+  //       console.log('Some other error:', error);
+  //     }
+  //   }
+  // };
 
-  const fbLogin = (resCallback) => {
-    LoginManager.logOut()
-    return LoginManager.logInWithPermissions(['email', 'public_profile']).then(
-      result => {
-
-        console.log('fb ====>>', result)
-        if (result.declinedPermissions && result.declinedPermissions.includes('email')) {
-          resCallback({ message: "Email is required" })
-        }
+  const facebookLogin = () => {
+    // Attempt a login using the Facebook login dialog asking for default permissions and email.
+    LoginManager.logInWithPermissions(['public_profile', 'email']).then(
+      function(result) {
         if (result.isCancelled) {
-          console.log('error')
+          console.log('Login cancelled');
         } else {
-
-          const infoRequest = new GraphRequest(
-            '/me?fileds=email,name,picture,friends',
-            null,
-            resCallback
+          console.log('Login success with permissions:', result.grantedPermissions.toString());
+          // Get the access token
+          AccessToken.getCurrentAccessToken().then(
+            (data) => {
+              // You now have the access token, you can send it to your server to authenticate the user server-side
+              // Or directly access Facebook API
+              console.log(data.accessToken.toString());
+            }
           );
-          new GraphRequestManager().addrequest(infoRequest).start()
         }
       },
-      function (error) {
-        console.log("login failed", error)
+      function(error) {
+        console.log('Login fail with error: ' + error);
       }
-    )
-  }
+    );
+  };
   const handleLogin = async () => {
     const data = qs.stringify({ 'username': email, 'password': password });
     setload(true)
@@ -133,7 +179,7 @@ const LoginScreen = ({ navigation }) => {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={fbLogin} >
+        <TouchableOpacity onPress={facebookLogin} >
           <View style={styles.googolecontainer}>
             <View style={styles.googleimage}>
               <Image resizeMode="cover" style={{ width: "100%", height: "100%" }} source={Images.Google} />

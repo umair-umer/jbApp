@@ -1,0 +1,1 @@
+export const baseprofileurl="https://jobbookbackend.azurewebsites.net/"

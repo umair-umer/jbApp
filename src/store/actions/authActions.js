@@ -6,3 +6,6 @@ export const setUserData = (token, type) => {
     payload: { token, type },
   };
 };
+export const logout = () => {
+  return { type: 'LOGOUT' };
+};

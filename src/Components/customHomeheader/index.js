@@ -6,13 +6,13 @@ import { CustomeButton, Inputcomponent,CustomeforgetHeader,CustomModal } from '.
 import { useNavigation } from '@react-navigation/native';
 const { width, height } = Dimensions.get('window');
 
-const CustomeHeader = ({iconsource1,iconsource2,iconsource3,title,onPress,onPressNotification}) => {
+const CustomeHeader = ({iconsource1,iconsource2,iconsource3,title,onPress,onPressNotification,source}) => {
     const navigation=useNavigation();
   return (
     <View style={styles.headmaincontainer}>
     <View style={styles.headersubcontainer}>
     <TouchableOpacity style={styles.profileconainter} onPress={()=>navigation.openDrawer()}>
-         <Image resizeMode='contain' style={{width:"100%",height:"100%"}} source={Images.pro}/>
+         <Image resizeMode='contain' style={{width:"100%",height:"100%"}} source={source}/>
      </TouchableOpacity>
      <Text style={styles.title}>{title}</Text>
     </View>
@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
         height:height*0.06,
         borderRadius:100,
         padding:3,
-        borderColor:"#1EC5B6"
-        // overflow:"hidden"
+        borderColor:"#1EC5B6",
+        overflow:"hidden"
     },
     icons:{
         width:width*0.05,

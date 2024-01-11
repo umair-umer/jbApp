@@ -1,16 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { TouchableOpacity, Modal, View, Text, ImageBackground, SafeAreaView, StyleSheet, Image, Dimensions, FlatList } from 'react-native';
 import Images from '../../config/im';
 import { calculateFontSize } from '../../config/font';
 import { CustomeButton, Inputcomponent, CustomeforgetHeader, CustomModal, CustomeHeader } from '../../Components';
-const { width, height } = Dimensions.get('window');
+import { useSelector } from 'react-redux';
+import axios from 'axios';
+import { baseprofileurl } from '../../config/utilities';
 
+const { width, height } = Dimensions.get('window');
 const NewsFeed = ({navigation,onPress,route}) => {
     const [show, setshow] = useState(false)
     const [isModalVisible, setModalVisible] = useState(false);
+    const [userData, setUserData] = useState({
+        // name: '',
+        // email: '',
+        picture:"",
+        // Add other user data properties here
+      });
     // const route = useRoute();
     const profileType = route.params
     console.log(route,"===>newsfeed");
+    const { token } = useSelector((state) => state.auth); // Get the token from Redux store
+    console.log(token,"reduxtoken");
+    useEffect(() => {
+      // Make an Axios GET request to your API endpoint with the token
+      axios
+        .get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/profile', {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          console.log(response.data.data,"====>getprofile")
+          // Handle the successful response and update userData state
+          // const { name, email ,picture} = response.data.data; // Update this with your actual response structure
+       
+          const picture= response.data.data.picture;
+          setUserData({picture});
+          console.log(userData,"===>userdatanewsfeed");
+        })
+        .catch((error) => {
+          // Handle any errors here
+          console.error('Error fetching user data:', error);
+        });
+    }, [token]);
 
     const toggleModal = () => {
         setModalVisible(!isModalVisible);
@@ -114,7 +147,7 @@ const NewsFeed = ({navigation,onPress,route}) => {
         <SafeAreaView style={styles.container}>
 
 
-            <CustomeHeader title={"jobbooks"} iconsource1={Images.searchicon} onPressNotification={()=>navigation.navigate('notifyscreen')}  iconsource2={Images.notificationicon} iconsource3={Images.fobox} />
+            <CustomeHeader source={{uri:`https://jobbookbackend.azurewebsites.net/${userData.picture}`}} title={"jobbooks"} iconsource1={Images.searchicon} onPressNotification={()=>navigation.navigate('notifyscreen')}  iconsource2={Images.notificationicon} iconsource3={Images.fobox} />
             <View>
                 <FlatList
                     data={sliderData}
