@@ -6,6 +6,7 @@ import { CustomeButton, Inputcomponent, CustomeforgetHeader, CustomModal, Custom
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { baseprofileurl } from '../../config/utilities';
+import { useFocusEffect } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('window');
 const NewsFeed = ({ navigation, onPress, route }) => {
@@ -22,31 +23,80 @@ const NewsFeed = ({ navigation, onPress, route }) => {
     console.log(route, "===>newsfeed");
     const { token } = useSelector((state) => state.auth); // Get the token from Redux store
     console.log(token, "reduxtokennewsfeed");
-    useEffect(() => {
-        // Make an Axios GET request to your API endpoint with the token
-        axios
-            .get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/profile', {
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                },
-            })
-            .then((response) => {
-                console.log(response.data.data, "====>getprofile")
-                // Handle the successful response and update userData state
-                // const { name, email ,picture} = response.data.data; // Update this with your actual response structure
-
-                const picture = response.data.data.picture;
-                setUserData({ picture });
-                console.log(userData, "===>userdatanewsfeed");
-            })
-            .catch((error) => {
-                // Handle any errors here
-                console.error('Error fetching user data:', error.response);
+    const fetchUserData = async () => {
+        try {
+            const response = await axios.get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/profile', {
+                headers: { "Authorization": `Bearer ${token}` },
             });
+            // Update userData with the fetched data
+            setUserData({ picture: response.data.data.picture });
+        } catch (error) {
+            console.error('Error fetching user data:', error.response);
+        }
+    };
 
+    const fetchPosts = async () => {
+        try {
+            const response = await axios.get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/news/fetch', {
+                headers: { "Authorization": `Bearer ${token}` },
+            });
+            setPosts(response.data.data);
+        } catch (error) {
+            console.error('Error fetching post data:', error);
+        }
+    };
 
+    useFocusEffect(
+        React.useCallback(() => {
+            // Call functions to fetch data when the screen comes into focus
+            fetchUserData();
+            fetchPosts();
+            return () => {
+                // Optional: Any cleanup actions
+            };
+        }, [token]) // Dependencies
+    );
+    // useEffect(() => {
+    //     // Make an Axios GET request to your API endpoint with the token
+    //     axios
+    //         .get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/profile', {
+    //             headers: {
+    //                 "Authorization": `Bearer ${token}`,
+    //             },
+    //         })
+    //         .then((response) => {
+    //             console.log(response.data.data, "====>getprofile")
+    //             // Handle the successful response and update userData state
+    //             // const { name, email ,picture} = response.data.data; // Update this with your actual response structure
 
-    }, [token]);
+    //             const picture = response.data.data.picture;
+    //             setUserData({ picture });
+    //             console.log(userData, "===>userdatanewsfeed");
+    //         })
+    //         .catch((error) => {
+    //             // Handle any errors here
+    //             console.error('Error fetching user data:', error.response);
+    //         });
+
+    //         const fetchPosts = async () => {
+    //             try {
+    //                 const response = await axios.get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/news/fetch', {
+    //                     headers: {
+    //                         "Authorization": `Bearer ${token}`,
+    //                     },
+    //                 });
+    //                 setPosts(response.data.data);
+    //                 console.log(response.data.data, "====> newsdata");
+    //                 // If you want to log a specific item, ensure the array is not empty
+    
+    //             } catch (error) {
+    //                 console.error('Error fetching post data:', error);
+    //             }
+    //         };
+    
+    //         fetchPosts();
+
+    // }, [token]);
 
     const toggleModal = () => {
         setModalVisible(!isModalVisible);
@@ -83,28 +133,28 @@ const NewsFeed = ({ navigation, onPress, route }) => {
             </View>
         </View>
     );
-    useEffect(() => {
-        // Fetch user data as before
+    // useEffect(() => {
+    //     // Fetch user data as before
 
-        // Fetch post data
-        const fetchPosts = async () => {
-            try {
-                const response = await axios.get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/news/fetch', {
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                    },
-                });
-                setPosts(response.data.data);
-                console.log(response.data.data, "====> newsdata");
-                // If you want to log a specific item, ensure the array is not empty
+    //     // Fetch post data
+    //     const fetchPosts = async () => {
+    //         try {
+    //             const response = await axios.get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/news/fetch', {
+    //                 headers: {
+    //                     "Authorization": `Bearer ${token}`,
+    //                 },
+    //             });
+    //             setPosts(response.data.data);
+    //             console.log(response.data.data, "====> newsdata");
+    //             // If you want to log a specific item, ensure the array is not empty
 
-            } catch (error) {
-                console.error('Error fetching post data:', error);
-            }
-        };
+    //         } catch (error) {
+    //             console.error('Error fetching post data:', error);
+    //         }
+    //     };
 
-        fetchPosts();
-    }, [token]);
+    //     fetchPosts();
+    // }, [token]);
 
     const renderPostItem = ({ item }) => (
         <View style={styles.postcontainermain}>

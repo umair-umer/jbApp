@@ -23,62 +23,78 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import ImagePicker from 'react-native-image-crop-picker';
 import { useSelector } from 'react-redux';
 import axios  from 'axios';
+import { launchImageLibrary } from 'react-native-image-picker';
+
 const AddNewFeeds = ({navigation}) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
   const [tags, setTags] = useState('');
-  const [images, setImages] = useState([]);
+  // const [images, setImages] = useState([]);
+  const [profileImage, setProfileImage] = useState(null);
   const { token } = useSelector((state) => state.auth); // Get the token from Redux store
   console.log(token, "reduxtokennewsfeed");
+  // const handleChoosePhoto = () => {
+  //   ImagePicker.openPicker({
+  //     multiple: true,
+  //     cropping: false,
+  //   })
+  //     .then(response => {
+  //       // Append the selected images to the existing state
+  //       setImages(prevImages => [...prevImages, ...response]);
+  //     })
+  //     .catch(error => {
+  //       console.log(error);
+  //     });
+  // };
   const handleChoosePhoto = () => {
-    ImagePicker.openPicker({
-      multiple: true,
-      cropping: false,
-    })
-      .then(response => {
-        // Append the selected images to the existing state
-        setImages(prevImages => [...prevImages, ...response]);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    launchImageLibrary({ noData: true }, response => {
+      if (response.assets && response.assets.length > 0) {
+        const asset = response.assets[0];
+        setProfileImage({
+          uri: asset.uri,
+          name: response.assets.fileName || 'profile.jpg', // Fallback name if fileName is not available
+          type: response.assets.type || 'image/jpeg', // Fallback type if not available
+        });
+      }
+    });
+    console.log(profileImage);
   };
+ 
   const handlePost = async () => {
-    let formData = new FormData();
-  
-    // Assuming you have other state hooks for title, description, location, and tags
+    const formData = new FormData();
     formData.append('title', title);
     formData.append('description', description);
     formData.append('location', location);
-    formData.append('tags', tags); // Assuming tags is an array of strings
+    formData.append('tags', tags);
   
-    // Add each image to the form data
-    images.forEach((image, index) => {
-      
-      const imageFile = {
-        uri: image.path,
-        type: image.mime,
-        name: `image-${index}.jpg`, // or the actual file name if you have it
-      };
-      formData.append('pictures', imageFile);
-    });
+    // Handle images
+    if (profileImage) {
+      formData.append('picture', {
+        uri: profileImage.uri,
+        name: 'profile.jpg',
+        type: 'image/jpeg',
+      });
+    }
   
     try {
-      const response = await axios.put('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/news/update/659d841b3f715646bf9f5ffd', formData, {
+      let response = await axios({
+        method: 'post',
+        url: 'https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/news/create',
+        data: formData,
         headers: {
-          'Authorization': `Bearer ${token}`, // Replace with your token
+          'Authorization': `Bearer ${token}`, // Dynamic token from Redux store
           'Content-Type': 'multipart/form-data',
         },
       });
-  
-      console.log(response.data);
-      // Handle successful upload here, like navigation or state cleanup
+      console.log(response.data,"===>postdata");
+      // Handle success (navigate, show message, etc.)
     } catch (error) {
       console.error(error);
-      // Handle errors here
+      // Handle error (show error message, etc.)
     }
   };
+  
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.hedr}>
@@ -126,15 +142,19 @@ const AddNewFeeds = ({navigation}) => {
       <View style={styles.margininbetween}>
         <Text style={styles.label}>Add photos</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {images.map((item, index) => (
-            <View key={index} style={styles.uplodphotocontainer}>
-              <Image
-                resizeMode="cover"
-                style={{width: '100%', height: '100%'}}
-                source={{uri: item.path}}
-              />
-            </View>
-          ))}
+        {profileImage ? (
+                  <Image
+                    style={{ width: '100%', height: '100%', borderRadius: 100 }}
+                    source={{uri:profileImage}}
+                    resizeMode="cover"
+                  />
+                ) : (
+                  <Image
+                    style={{ width: '100%', height: '100%', borderRadius: 100 }}
+                    source={Images.pro}
+                    resizeMode="cover"
+                  />
+                )}
         </ScrollView>
       </View>
       <View style={styles.margininbetween}>
