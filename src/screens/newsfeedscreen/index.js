@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { TouchableOpacity, Modal, View, Text, ImageBackground, SafeAreaView, StyleSheet, Image, Dimensions, FlatList } from 'react-native';
 import Images from '../../config/im';
 import { calculateFontSize } from '../../config/font';
@@ -8,41 +8,44 @@ import axios from 'axios';
 import { baseprofileurl } from '../../config/utilities';
 
 const { width, height } = Dimensions.get('window');
-const NewsFeed = ({navigation,onPress,route}) => {
+const NewsFeed = ({ navigation, onPress, route }) => {
     const [show, setshow] = useState(false)
     const [isModalVisible, setModalVisible] = useState(false);
     const [userData, setUserData] = useState({
         // name: '',
         // email: '',
-        picture:"",
+        picture: "",
         // Add other user data properties here
-      });
-    // const route = useRoute();
+    });
+    const [posts, setPosts] = useState([]);
     const profileType = route.params
-    console.log(route,"===>newsfeed");
+    console.log(route, "===>newsfeed");
     const { token } = useSelector((state) => state.auth); // Get the token from Redux store
-    console.log(token,"reduxtoken");
+    console.log(token, "reduxtokennewsfeed");
     useEffect(() => {
-      // Make an Axios GET request to your API endpoint with the token
-      axios
-        .get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/profile', {
-          headers: {
-            "Authorization": `Bearer ${token}`,
-          },
-        })
-        .then((response) => {
-          console.log(response.data.data,"====>getprofile")
-          // Handle the successful response and update userData state
-          // const { name, email ,picture} = response.data.data; // Update this with your actual response structure
-       
-          const picture= response.data.data.picture;
-          setUserData({picture});
-          console.log(userData,"===>userdatanewsfeed");
-        })
-        .catch((error) => {
-          // Handle any errors here
-          console.error('Error fetching user data:', error);
-        });
+        // Make an Axios GET request to your API endpoint with the token
+        axios
+            .get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/profile', {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                },
+            })
+            .then((response) => {
+                console.log(response.data.data, "====>getprofile")
+                // Handle the successful response and update userData state
+                // const { name, email ,picture} = response.data.data; // Update this with your actual response structure
+
+                const picture = response.data.data.picture;
+                setUserData({ picture });
+                console.log(userData, "===>userdatanewsfeed");
+            })
+            .catch((error) => {
+                // Handle any errors here
+                console.error('Error fetching user data:', error.response);
+            });
+
+
+
     }, [token]);
 
     const toggleModal = () => {
@@ -57,13 +60,14 @@ const NewsFeed = ({navigation,onPress,route}) => {
         description: 'Take any courses',
     }));
 
-    const postData = Array.from({ length: 10 }, (_, index) => ({
-        id: `post_${index}`,
-        companyName: 'Google Inc',
-        timeAgo: '21 minutes ago',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...',
-        readMore: show,
-    }));
+
+    // const postData = Array.from({ length: 10 }, (_, index) => ({
+    //     id: `post_${index}`,
+    //     companyName: 'Google Inc',
+    //     timeAgo: '21 minutes ago',
+    //     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...',
+    //     readMore: show,
+    // }));
 
     const renderSliderItem = ({ item }) => (
         <View style={styles.sliedercontaintbox}>
@@ -79,6 +83,28 @@ const NewsFeed = ({navigation,onPress,route}) => {
             </View>
         </View>
     );
+    useEffect(() => {
+        // Fetch user data as before
+
+        // Fetch post data
+        const fetchPosts = async () => {
+            try {
+                const response = await axios.get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/news/fetch', {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                    },
+                });
+                setPosts(response.data.data);
+                console.log(response.data.data, "====> newsdata");
+                // If you want to log a specific item, ensure the array is not empty
+
+            } catch (error) {
+                console.error('Error fetching post data:', error);
+            }
+        };
+
+        fetchPosts();
+    }, [token]);
 
     const renderPostItem = ({ item }) => (
         <View style={styles.postcontainermain}>
@@ -86,15 +112,15 @@ const NewsFeed = ({navigation,onPress,route}) => {
                 <View style={styles.mianrow}>
                     <View style={styles.gcontainer}>
                         <View style={styles.googimagecontainer}>
-                            <Image resizeMode="contain" style={{ width: "100%", height: "100%" }} source={Images.Google} />
+                            <Image resizeMode="contain" style={{ width: "100%", height: "100%" }} source={{ uri: `${baseprofileurl}${item.user.picture}` }}/>
                         </View>
                         <View style={styles.texcontainer}>
-                            <Text style={styles.gtext}>Google Inc</Text>
+                            <Text style={styles.gtext}>{item.user.name}</Text>
                             <View style={styles.timercontainer}>
                                 <View style={styles.timerimage}>
                                     <Image resizeMode="center" style={{ width: "100%", height: "100%" }} source={Images.timericon} />
                                 </View>
-                                <Text style={styles.gtextime}>21 minuts ago</Text>
+                                <Text style={styles.gtextime}>{item.createdAt}</Text>
                             </View>
                         </View>
                     </View>
@@ -107,39 +133,36 @@ const NewsFeed = ({navigation,onPress,route}) => {
                 </View>
                 <View style={styles.typcontainer}>
                     <Text style={styles.textphyra}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                        Ut enim ad minim veniam, quis nostrud exercitation
-                        ullamco labo...{show ? <Text> Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        {item.description}{show ? <Text> Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                             sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                             Ut enim ad minim veniam, quis nostrud exercitation
                             ullamco labo.</Text> : ""}<Text onPress={() => setshow(!show)}>{show ? `Read less` : `Readmore`}</Text>
                     </Text>
                 </View>
                 <View style={styles.googleaddscontainer}>
-                    <Image resizeMode='contain' style={{ width: "100%", height: "100%" }} source={Images.goolgeadds} />
+                    <Image resizeMode='center' style={{ width: "100%", height: "100%" }} source={{ uri: `${baseprofileurl}${item.picture}` }} />
                 </View>
                 <View>
-                    <Text style={styles.googleques}>What's it like to work at Google?</Text>
-                    <Text style={styles.youlink}>Youtube.com</Text>
+                    <Text style={styles.googleques}>{item.title}</Text>
+                    <Text style={styles.youlink}>{item.tags}</Text>
                 </View>
 
             </View>
             <View style={styles.feedbackcontainer}>
-                    <View style={styles.pcontainer}>
-                        <TouchableOpacity style={styles.hert} >
-                            <Image resizeMode='center' style={{ width: "100%", height: "100%" }} source={Images.heart} />
-                        </TouchableOpacity>
-                        <Text style={styles.textfeed}>12</Text>
-                    </View>
-                    <View style={styles.pcontainer}>
-                        <TouchableOpacity style={styles.hert} >
-                            <Image resizeMode='center' style={{ width: "100%", height: "100%" }} source={Images.comenticon} />
-                        </TouchableOpacity>
-                        <Text style={styles.textfeed}>10</Text>
-                    </View>
+                <View style={styles.pcontainer}>
+                    <TouchableOpacity style={styles.hert} >
+                        <Image resizeMode='center' style={{ width: "100%", height: "100%" }} source={Images.heart} />
+                    </TouchableOpacity>
+                    <Text style={styles.textfeed}>12</Text>
+                </View>
+                <View style={styles.pcontainer}>
+                    <TouchableOpacity style={styles.hert} >
+                        <Image resizeMode='center' style={{ width: "100%", height: "100%" }} source={Images.comenticon} />
+                    </TouchableOpacity>
+                    <Text style={styles.textfeed}>10</Text>
                 </View>
             </View>
+        </View>
     )
 
 
@@ -147,7 +170,7 @@ const NewsFeed = ({navigation,onPress,route}) => {
         <SafeAreaView style={styles.container}>
 
 
-            <CustomeHeader source={{uri:`https://jobbookbackend.azurewebsites.net/${userData.picture}`}} title={"jobbooks"} iconsource1={Images.searchicon} onPressNotification={()=>navigation.navigate('notifyscreen')}  iconsource2={Images.notificationicon} iconsource3={Images.fobox} />
+            <CustomeHeader source={{ uri:`${baseprofileurl}${userData.picture}` }} title={"jobbooks"} iconsource1={Images.searchicon} onPressNotification={() => navigation.navigate('notifyscreen')} iconsource2={Images.notificationicon} iconsource3={Images.fobox} />
             <View>
                 <FlatList
                     data={sliderData}
@@ -160,18 +183,18 @@ const NewsFeed = ({navigation,onPress,route}) => {
             <View style={{ paddingBottom: 210 }}>
 
                 <FlatList
-                    data={postData}
+                    data={posts}
                     renderItem={renderPostItem}
-                    keyExtractor={(item) => item.id}
+                    keyExtractor={(item) => item.user._id}
                     showsVerticalScrollIndicator={false}
                 />
             </View>
             <TouchableOpacity onPress={toggleModal} style={styles.modalbutton}>
                 <Text style={styles.plus}>+</Text>
             </TouchableOpacity>
-            <CustomModal home={true}  isModalVisible={isModalVisible} onPress={toggleModal} onPressNewfeed={()=>navigation.navigate("addnewfeedscreen")} 
-            Addnewpost={()=>{navigation.navigate("addnewfroumscreen")}} 
-            onPressGeneratecv={()=>navigation.navigate("oneverfy")}
+            <CustomModal home={true} isModalVisible={isModalVisible} onPress={toggleModal} onPressNewfeed={() => navigation.navigate("addnewfeedscreen")}
+                Addnewpost={() => { navigation.navigate("addnewfroumscreen") }}
+                onPressGeneratecv={() => navigation.navigate("oneverfy")}
             />
         </SafeAreaView>
     )
@@ -199,7 +222,7 @@ const styles = StyleSheet.create({
         fontWeight: "500",
         color: "#fff",
         textTransform: "capitalize",
-        fontFamily:"Poppins",
+        fontFamily: "Poppins",
 
     },
     containr: {
@@ -226,7 +249,7 @@ const styles = StyleSheet.create({
         fontWeight: "500",
         color: "#fff",
         textTransform: "capitalize",
-        fontFamily:"Poppins",
+        fontFamily: "Poppins",
 
     },
     postcontainermain: {
@@ -248,6 +271,7 @@ const styles = StyleSheet.create({
         width: width * 0.10,
         height: height * 0.05,
         overflow: "hidden",
+        borderRadius:100,
 
     },
     gcontainer: {
@@ -263,7 +287,7 @@ const styles = StyleSheet.create({
         fontSize: calculateFontSize(15),
         fontWeight: "500",
         color: "#000",
-        fontFamily:"Poppins",
+        fontFamily: "Poppins",
 
 
     },
@@ -271,7 +295,7 @@ const styles = StyleSheet.create({
         fontSize: calculateFontSize(8),
         fontWeight: "500",
         color: "#AFAFAF",
-        fontFamily:"Poppins",
+        fontFamily: "Poppins",
 
 
     },
@@ -294,7 +318,7 @@ const styles = StyleSheet.create({
         fontSize: calculateFontSize(12),
         fontWeight: "500",
         color: "#434343",
-        fontFamily:"Poppins",
+        fontFamily: "Poppins",
         paddingHorizontal: width * 0.01,
         textTransform: "capitalize"
     },
@@ -308,10 +332,10 @@ const styles = StyleSheet.create({
         paddingVertical: height * 0.003,
         borderColor: "#2BADA1",
         borderRadius: 10,
-        paddingHorizontal:width*0.02,
+        paddingHorizontal: width * 0.02,
     },
     typcontainer: {
-        alignItems: "center",
+        // alignItems: "center",
         marginVertical: height * 0.02,
     },
     textphyra: {
@@ -319,7 +343,7 @@ const styles = StyleSheet.create({
         fontWeight: "500",
         color: "#434343",
         textTransform: "capitalize",
-        fontFamily:"Poppins",
+        fontFamily: "Poppins",
     },
     googleaddscontainer: {
         width: width * 0.85,
@@ -329,7 +353,7 @@ const styles = StyleSheet.create({
         fontSize: calculateFontSize(15),
         fontWeight: "500",
         color: "#000",
-        fontFamily:"Poppins",
+        fontFamily: "Poppins",
         textTransform: "capitalize"
 
     },
@@ -338,7 +362,7 @@ const styles = StyleSheet.create({
         fontWeight: "300",
         color: "#000",
         textTransform: "capitalize",
-        fontFamily:"Poppins",
+        fontFamily: "Poppins",
 
     },
     feedbackcontainer: {
@@ -364,7 +388,7 @@ const styles = StyleSheet.create({
         color: "#000",
         textTransform: "capitalize",
         marginHorizontal: width * 0.02,
-        fontFamily:"Poppins",
+        fontFamily: "Poppins",
 
     },
     modalbutton: {
@@ -377,7 +401,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         justifyContent: "center",
         alignItems: "center", shadowColor: "#000",
-        zIndex:1,
+        zIndex: 1,
         shadowOffset: {
             width: 0,
             height: 7,
@@ -392,7 +416,7 @@ const styles = StyleSheet.create({
         fontSize: calculateFontSize(30),
         fontWeight: "500",
         color: "#fff",
-        fontFamily:"Poppins",
+        fontFamily: "Poppins",
 
     }
 

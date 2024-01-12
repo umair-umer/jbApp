@@ -7,7 +7,7 @@ import InputText from '../../Components/inputText';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 const ChatRoom = ({ route, navigation }) => {
-    const { senderName } = route.params;
+    // const { senderName } = route?.params;
 
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([
@@ -40,7 +40,9 @@ const ChatRoom = ({ route, navigation }) => {
         setRemoteStream(null);
         peerConnection.current = null;
       };
-      
+      const handleVideocall=()=>{
+        navigation.navigate("videocallscreen")
+      }
     return (
         <SafeAreaView style={styles.container}>
 
@@ -51,7 +53,7 @@ const ChatRoom = ({ route, navigation }) => {
 
                 <Text style={styles.headname}>Messages</Text>
 
-                <TouchableOpacity onPress={navigation.navigate("videocallscreen")} >
+                <TouchableOpacity onPress={handleVideocall} >
                     <MaterialCommunityIcons name="video-outline" size={30} color={'white'} />
                 </TouchableOpacity>
 

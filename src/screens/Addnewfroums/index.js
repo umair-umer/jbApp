@@ -25,6 +25,9 @@ import ImagePicker from 'react-native-image-crop-picker';
 import { CustomeButton } from '../../Components';
 const Addnewfroums = ({navigation}) => {
 
+
+  
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.hedr}>

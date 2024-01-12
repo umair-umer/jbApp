@@ -9,8 +9,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import Entypo from 'react-native-vector-icons/Entypo'
 import {ZegoUIKitPrebuiltCall, ONE_ON_ONE_VIDEO_CALL_CONFIG } from '@zegocloud/zego-uikit-prebuilt-call-rn'
 
-function Videocall() {
-    randomUserID = String(Math.floor(Math.random() * 100000))
+function Videocall({navigation}) {
+   const randomUserID = String(Math.floor(Math.random() * 100000))
   return (
     <SafeAreaView style={styles.container}>
                <ZegoUIKitPrebuiltCall
@@ -23,8 +23,8 @@ function Videocall() {
         config={{
             // You can also use ONE_ON_ONE_VOICE_CALL_CONFIG/GROUP_VIDEO_CALL_CONFIG/GROUP_VOICE_CALL_CONFIG to make more types of calls.
             ...ONE_ON_ONE_VIDEO_CALL_CONFIG,
-            onOnlySelfInRoom: () => { props.navigation.navigate('HomePage') },
-            onHangUp: () => { props.navigation.navigate('HomePage') },
+            onOnlySelfInRoom: () => { navigation.navigate('userchatroomscreen') },
+            onHangUp: () => { navigation.navigate('userchatroomscreen') },
         }}
       />
         {/* <ImageBackground

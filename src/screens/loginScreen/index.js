@@ -139,11 +139,10 @@ const LoginScreen = ({ navigation }) => {
       console.log(token, type,success, "====>");
       setload(false)
       if (success) {
-        dispatch(setUserData(token, type))
+        dispatch({ type: 'LOGIN_SUCCESS', payload: { token, type } });
 
+        // navigation.navigate("home")
       }
-      // Here, you can dispatch the user data to global state or store in local storage
-      // Navigate to another screen if needed
     } catch (error) {
       console.log('Login Error:', error.response.data.error);
       setload(false)

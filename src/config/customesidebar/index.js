@@ -63,14 +63,14 @@ const CusTomDrawer = ({ navigation }) => {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then((response) => {
-        console.log('Logout successful:', response.data);
+        console.log('Logout successful:',response.data);
+        navigation.navigate('loginscreen'); 
         dispatch(logout());
       
-        navigation.navigate('LoginScreen');
         setload(false)
       })
       .catch((error) => {
-        console.error('Error during logout:', error);
+        console.error('Error during logout:', error.response);
 
       });
   };

@@ -9,6 +9,8 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import { baseprofileurl } from '../../config/utilities';
+
 const Profilescreen = ({ navigation,route }) => {
  
     const [show, setshow] = useState(false)
@@ -326,7 +328,7 @@ const Profilescreen = ({ navigation,route }) => {
                     <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: width * 0.04 }}>
                         <View style={styles.prof}>
                             <View style={styles.profileimage}>
-                                <Image resizeMode='cover' style={{ width: "1005", height: "100%" }} source={Images.Profile} />
+                                <Image resizeMode='cover' style={{ width: "1005", height: "100%" }} source={{uri:`${baseprofileurl}${userData.picture}`}} />
                             </View>
                             <View style={{ marginHorizontal: width * 0.05 }}>
                                 <Text style={styles.prname}>{userData.name}</Text>
