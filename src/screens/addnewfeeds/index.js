@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   TouchableOpacity,
   Modal,
@@ -15,59 +15,51 @@ import {
   TextInput,
 } from 'react-native';
 import Images from '../../config/im';
-import {calculateFontSize} from '../../config/font';
-const {width, height} = Dimensions.get('window');
+import { calculateFontSize } from '../../config/font';
+const { width, height } = Dimensions.get('window');
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import ImagePicker from 'react-native-image-crop-picker';
 import { useSelector } from 'react-redux';
-import axios  from 'axios';
-import { launchImageLibrary } from 'react-native-image-picker';
+import axios from 'axios';
+import Loader from '../../Components/Loader';
 
-const AddNewFeeds = ({navigation}) => {
+const AddNewFeeds = ({ navigation }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
   const [tags, setTags] = useState('');
-  // const [images, setImages] = useState([]);
-  const [profileImage, setProfileImage] = useState(null);
+  const [isload, setload] = useState();
+  const [profileImage, setProfileImage] = useState();
   const { token } = useSelector((state) => state.auth); // Get the token from Redux store
   console.log(token, "reduxtokennewsfeed");
-  // const handleChoosePhoto = () => {
-  //   ImagePicker.openPicker({
-  //     multiple: true,
-  //     cropping: false,
-  //   })
-  //     .then(response => {
-  //       // Append the selected images to the existing state
-  //       setImages(prevImages => [...prevImages, ...response]);
-  //     })
-  //     .catch(error => {
-  //       console.log(error);
-  //     });
-  // };
-  const handleChoosePhoto = () => {
-    launchImageLibrary({ noData: true }, response => {
-      if (response.assets && response.assets.length > 0) {
-        const asset = response.assets[0];
-        setProfileImage({
-          uri: asset.uri,
-          name: response.assets.fileName || 'profile.jpg', // Fallback name if fileName is not available
-          type: response.assets.type || 'image/jpeg', // Fallback type if not available
-        });
-      }
-    });
-    console.log(profileImage);
-  };
  
+  const handleChoosePhoto = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      // cropping: true, // Enable cropping
+    })
+      .then(image => {
+        if (typeof image.path === 'string') {
+          setProfileImage({ uri: image.path }); // Set the 'uri' correctly
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+
+
   const handlePost = async () => {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('description', description);
     formData.append('location', location);
     formData.append('tags', tags);
-  
+
     // Handle images
     if (profileImage) {
       formData.append('picture', {
@@ -76,8 +68,9 @@ const AddNewFeeds = ({navigation}) => {
         type: 'image/jpeg',
       });
     }
-  
+
     try {
+      setload(true)
       let response = await axios({
         method: 'post',
         url: 'https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/news/create',
@@ -87,26 +80,28 @@ const AddNewFeeds = ({navigation}) => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log(response.data,"===>postdata");
-      // Handle success (navigate, show message, etc.)
+      console.log(response.data, "===>postdata");
+      setload(true)
+      navigation.goBack()
     } catch (error) {
       console.error(error);
-      // Handle error (show error message, etc.)
+      
     }
   };
-  
+
   return (
-    <SafeAreaView style={styles.container}>
+  <>
+   {isload ?<Loader/> :<SafeAreaView style={styles.container}>
       <View style={styles.hedr}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Entypo name="cross" color="#fff" size={30} />
         </TouchableOpacity>
         <Text style={styles.headname}>Create Post</Text>
-        <TouchableOpacity
-          // style={styles.profileconainter}
+        {/* <TouchableOpacity
+          style={styles.profileconainter}
           onPress={() => navigation.openDrawer()}>
-          {/* <Image resizeMode='contain' style={{ width: "100%", height: "100%" }} source={Images.BookmarkSimple} /> */}
-        </TouchableOpacity>
+          <Image resizeMode='contain' style={{ width: "100%", height: "100%" }} source={Images.BookmarkSimple} />
+        </TouchableOpacity> */}
       </View>
       <View style={styles.margininbetween}>
         <TextInput
@@ -141,21 +136,16 @@ const AddNewFeeds = ({navigation}) => {
       </View>
       <View style={styles.margininbetween}>
         <Text style={styles.label}>Add photos</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {profileImage ? (
-                  <Image
-                    style={{ width: '100%', height: '100%', borderRadius: 100 }}
-                    source={{uri:profileImage}}
-                    resizeMode="cover"
-                  />
-                ) : (
-                  <Image
-                    style={{ width: '100%', height: '100%', borderRadius: 100 }}
-                    source={Images.pro}
-                    resizeMode="cover"
-                  />
-                )}
-        </ScrollView>
+
+        {profileImage && ( // Check if an image is selected
+          <View style={styles.uplodphotocontainer}>
+            <Image
+              resizeMode="cover"
+              style={{ width: '100%', height: '100%' }}
+              source={profileImage}
+            />
+          </View>
+        )}
       </View>
       <View style={styles.margininbetween}>
         <Text style={styles.label}>add tags</Text>
@@ -181,7 +171,8 @@ const AddNewFeeds = ({navigation}) => {
           <Text style={styles.posttext}>Post</Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </SafeAreaView>}
+  </>
   );
 };
 

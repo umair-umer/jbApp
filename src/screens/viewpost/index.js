@@ -22,8 +22,8 @@ const ViewPost = ({ route, navigation }) => {
                             <Image style={{ width: "100%", height: "100%" }} resizeMode='center' source={Images.profpost} />
                         </View>
                         <View>
-                            <Text style={styles.tname}>{post.author} </Text>
-                            <Text style={styles.tpostname}>{post.time}</Text>
+                            <Text style={styles.tname}>{post.user.name} </Text>
+                            <Text style={styles.tpostname}>{post.createdAt}</Text>
                         </View>
                     </View>
                     <View style={styles.savicon}>

@@ -213,7 +213,7 @@ import {
   Dimensions,
 } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { CustomModal, CustomeButton, Inputcomponent } from '../../Components';
+import { CustomErrorModal, CustomModal, CustomeButton, Inputcomponent } from '../../Components';
 import Images from '../../config/im';
 import { calculateFontSize } from '../../config/font';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -236,6 +236,7 @@ const RegistertalentProfile = () => {
   const [mobile, setMobile] = useState('');
   const [Location, setLocation] = useState('');
   const [Website, setWebsite] = useState('');
+  const[error,setErrro]=useState();
 
   const [UserType, setUserType] = useState('');
   const [Companyname, setCompanyName] = useState('');
@@ -246,7 +247,8 @@ const RegistertalentProfile = () => {
   const [companyPassword, setComapnyPassword] = useState('');
 
   // console.log(username,Companyname,Phonenum,companyPassword,companyemail,companywebsite,companylocation)
-
+  
+  const [isModalVisiblesucess, setModalVisiblesucess] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
 
@@ -335,19 +337,25 @@ console.log(token,type,"====>");
           dispatch({ type: 'LOGIN_SUCCESS', payload: { token, type } });
           // dispatch(setUserData(token, type))
           setload(false)
-          setModalVisible(true);
+          setModalVisiblesucess(true);
         } else {
           console.log('Registration failed with status code: ', response.status);
         }
       } catch (error) {
-        console.error('Registration error:', error);
+        console.error('Registration error:', error.response.data.error);
+        setload(false)
+        setErrro(error.response.data.error)
+        setModalVisible(true);
       }
     }
 
     console.log(name, email, password, mobile, profileType, '====>');
   };
 
-
+  const toggleModal = () => {
+    setModalVisible(false);
+    console.log(isModalVisible);
+};
 
   const handleregistersucess = () => {
 
@@ -512,10 +520,13 @@ console.log(token,type,"====>");
         <CustomModal
           status="profile Registered successfully "
           statusTwo="You can now configure your profile through the launcher or by adding details on the profile page later on."
-          isModalVisible={isModalVisible}
+          isModalVisible={isModalVisiblesucess}
           onPress={handleregistersucess}
         />
+
       </SafeAreaView>}
+      <CustomErrorModal onPressclose={toggleModal} error={error} isModalVisible={isModalVisible} />
+
     </>
 
 

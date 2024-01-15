@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {
   TouchableOpacity,
   Modal,
@@ -25,8 +25,13 @@ import {
   CustomModal,
   CustomeHeader,
 } from '../../Components';
-
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import Loader from '../../Components/Loader';
+import { baseprofileurl } from '../../config/utilities';
 const ForumScreen = ({navigation,route,onPress}) => {
+  const { token } = useSelector((state) => state.auth); // Get the token from Redux store
+  console.log(token, "reduxtokenforem")
   const [selectedTab, setSelectedTab] = useState('Popular');
   const [data, setData] = useState([
     {id: '1', topic: '##c', quantity: '30 post'},
@@ -37,6 +42,51 @@ const ForumScreen = ({navigation,route,onPress}) => {
     {id: '3', topic: 'React-native', quantity: '10 post'},
     // Add more data items as needed
   ]);
+  const [userData, setUserData] = useState({
+    // name: '',
+    // email: '',
+    picture: "",
+    // Add other user data properties here
+});
+const [forumData, setForumData] = useState([]);
+const [isload, setload] = useState();
+  const fetchUserData = async () => {
+    setload(true)
+    try {
+        const response = await axios.get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/profile', {
+            headers: { "Authorization": `Bearer ${token}` },
+        });
+        // Update userData with the fetched data
+        setUserData({ picture: response.data.data.picture });
+        setload(false)
+    } catch (error) {
+        console.error('Error fetching user data:', error.response);
+        setload(false)
+
+    }
+};
+ 
+  const fetchForumData = async () => {
+    try {
+      const response = await axios.get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/forum/fetch', {
+        headers: { 
+          'Authorization':` Bearer ${token}`
+        }
+      });
+      console.log(response.data.data,"foreumdata"); // Handle the response data as needed
+      // For example, if you want to set this data to state
+      setForumData(response.data.data)
+    } catch (error) {
+      console.error('Error fetching forum data:', error);
+      // Handle error appropriately
+    }
+  };
+  useEffect(() => {
+    fetchUserData();
+    fetchForumData();
+  }, [token]); 
+    
+
   const renderTopicItem = ({item}) => (
     <ImageBackground
       style={styles.bg}
@@ -84,6 +134,7 @@ const ForumScreen = ({navigation,route,onPress}) => {
 
     
   ]);
+  
   const [isModalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -107,7 +158,7 @@ const ForumScreen = ({navigation,route,onPress}) => {
             <View>
               <Text style={styles.tname}>{item.title}</Text>
               <Text style={styles.tpostname}>
-                {item.author} {item.time}
+              {item.user.name} {item.createdAt}
               </Text>
             </View>
           </View>
@@ -198,9 +249,9 @@ const ForumScreen = ({navigation,route,onPress}) => {
 
             <View>
               <FlatList
-                data={postdata}
+                data={forumData}
                 renderItem={renderItem}
-                keyExtractor={item => item.id}
+                keyExtractor={(item) => item.user._id}
               />
             </View>
           </View>
@@ -227,9 +278,11 @@ const ForumScreen = ({navigation,route,onPress}) => {
   };
 
   return (
-    <View style={styles.container}>
+  <>
+  {isload ? <Loader/>:  <View style={styles.container}>
       <CustomeHeader
         title={'jobbooks'}
+        source={{ uri: `${baseprofileurl}${userData.picture}` }}
         iconsource1={Images.searchicon}
         iconsource2={Images.notificationicon}
         onPressNotification={()=>navigation.navigate('notifyscreen')}
@@ -301,7 +354,8 @@ const ForumScreen = ({navigation,route,onPress}) => {
       {renderTabContent()}
       <CustomModal home={true}  isModalVisible={isModalVisible} onPress={toggleModal}  onPressGeneratecv={()=>navigation.navigate("oneverfy")} />
       
-    </View>
+    </View>}
+  </>
   );
 };
 

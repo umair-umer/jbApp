@@ -32,7 +32,7 @@ function CustomErrorModal({
       <Modal isVisible={isModalVisible}>
       <View style={styles.mainContainer}>
         <Text style={styles.mainHeading}>{error}</Text>
-        <TouchableOpacity onPress={onPressclose} style={{top:height * 0.2,backgroundColor:"#0E746B",padding:14,borderRadius:10,}}><Text style={{color:"#fff",fontWeight:"bold"}}>ok</Text></TouchableOpacity>
+        <TouchableOpacity onPress={onPressclose} style={{marginVertical:height*0.02,backgroundColor:"#0E746B",padding:14,borderRadius:10,}}><Text style={{color:"#fff",fontWeight:"bold"}}>ok</Text></TouchableOpacity>
       </View>
       </Modal>
     </View>
@@ -41,8 +41,8 @@ function CustomErrorModal({
 
 const styles = StyleSheet.create({
   mainContainer: {
-    width: width * 0.9,
-    height: height * 0.53,
+    // width: width * 0.9,
+    // height: height ,
     backgroundColor: '#fff',
     borderRadius: 20,
     justifyContent:"center",

@@ -5,8 +5,10 @@ import { calculateFontSize } from '../../config/font';
 import { CustomeButton, Inputcomponent, CustomeforgetHeader, CustomModal, CustomeHeader } from '../../Components';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+
 import { baseprofileurl } from '../../config/utilities';
 import { useFocusEffect } from '@react-navigation/native';
+import Loader from '../../Components/Loader';
 
 const { width, height } = Dimensions.get('window');
 const NewsFeed = ({ navigation, onPress, route }) => {
@@ -18,89 +20,60 @@ const NewsFeed = ({ navigation, onPress, route }) => {
         picture: "",
         // Add other user data properties here
     });
+    const [isload, setload] = useState();
+
     const [posts, setPosts] = useState([]);
     const profileType = route.params
     console.log(route, "===>newsfeed");
     const { token } = useSelector((state) => state.auth); // Get the token from Redux store
     console.log(token, "reduxtokennewsfeed");
     const fetchUserData = async () => {
+        setload(true)
         try {
             const response = await axios.get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/profile', {
                 headers: { "Authorization": `Bearer ${token}` },
             });
             // Update userData with the fetched data
             setUserData({ picture: response.data.data.picture });
+            setload(false)
         } catch (error) {
             console.error('Error fetching user data:', error.response);
+            setload(false)
+
         }
     };
 
     const fetchPosts = async () => {
+        setload(true)
+
         try {
             const response = await axios.get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/news/fetch', {
                 headers: { "Authorization": `Bearer ${token}` },
             });
             setPosts(response.data.data);
+        setload(false)
+
         } catch (error) {
             console.error('Error fetching post data:', error);
+        setload(false)
+
         }
     };
 
     useFocusEffect(
         React.useCallback(() => {
-            // Call functions to fetch data when the screen comes into focus
+
             fetchUserData();
             fetchPosts();
             return () => {
-                // Optional: Any cleanup actions
+
             };
-        }, [token]) // Dependencies
+        }, [token])
     );
-    // useEffect(() => {
-    //     // Make an Axios GET request to your API endpoint with the token
-    //     axios
-    //         .get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/profile', {
-    //             headers: {
-    //                 "Authorization": `Bearer ${token}`,
-    //             },
-    //         })
-    //         .then((response) => {
-    //             console.log(response.data.data, "====>getprofile")
-    //             // Handle the successful response and update userData state
-    //             // const { name, email ,picture} = response.data.data; // Update this with your actual response structure
-
-    //             const picture = response.data.data.picture;
-    //             setUserData({ picture });
-    //             console.log(userData, "===>userdatanewsfeed");
-    //         })
-    //         .catch((error) => {
-    //             // Handle any errors here
-    //             console.error('Error fetching user data:', error.response);
-    //         });
-
-    //         const fetchPosts = async () => {
-    //             try {
-    //                 const response = await axios.get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/news/fetch', {
-    //                     headers: {
-    //                         "Authorization": `Bearer ${token}`,
-    //                     },
-    //                 });
-    //                 setPosts(response.data.data);
-    //                 console.log(response.data.data, "====> newsdata");
-    //                 // If you want to log a specific item, ensure the array is not empty
-    
-    //             } catch (error) {
-    //                 console.error('Error fetching post data:', error);
-    //             }
-    //         };
-    
-    //         fetchPosts();
-
-    // }, [token]);
 
     const toggleModal = () => {
         setModalVisible(!isModalVisible);
-        console.log(isModalVisible);
+        // console.log(isModalVisible);
     };
 
 
@@ -111,13 +84,7 @@ const NewsFeed = ({ navigation, onPress, route }) => {
     }));
 
 
-    // const postData = Array.from({ length: 10 }, (_, index) => ({
-    //     id: `post_${index}`,
-    //     companyName: 'Google Inc',
-    //     timeAgo: '21 minutes ago',
-    //     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...',
-    //     readMore: show,
-    // }));
+ 
 
     const renderSliderItem = ({ item }) => (
         <View style={styles.sliedercontaintbox}>
@@ -133,7 +100,7 @@ const NewsFeed = ({ navigation, onPress, route }) => {
             </View>
         </View>
     );
-    // useEffect(() => {
+  
     //     // Fetch user data as before
 
     //     // Fetch post data
@@ -162,7 +129,7 @@ const NewsFeed = ({ navigation, onPress, route }) => {
                 <View style={styles.mianrow}>
                     <View style={styles.gcontainer}>
                         <View style={styles.googimagecontainer}>
-                            <Image resizeMode="contain" style={{ width: "100%", height: "100%" }} source={{ uri: `${baseprofileurl}${item.user.picture}` }}/>
+                            <Image resizeMode="contain" style={{ width: "100%", height: "100%" }} source={{ uri: `${baseprofileurl}${item.user.picture}` }} />
                         </View>
                         <View style={styles.texcontainer}>
                             <Text style={styles.gtext}>{item.user.name}</Text>
@@ -217,36 +184,39 @@ const NewsFeed = ({ navigation, onPress, route }) => {
 
 
     return (
-        <SafeAreaView style={styles.container}>
+        <>
+            {isload ? <Loader /> : <SafeAreaView style={styles.container}>
 
 
-            <CustomeHeader source={{ uri:`${baseprofileurl}${userData.picture}` }} title={"jobbooks"} iconsource1={Images.searchicon} onPressNotification={() => navigation.navigate('notifyscreen')} iconsource2={Images.notificationicon} iconsource3={Images.fobox} />
-            <View>
-                <FlatList
-                    data={sliderData}
-                    renderItem={renderSliderItem}
-                    keyExtractor={(item) => item.id}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
+                <CustomeHeader source={{ uri: `${baseprofileurl}${userData.picture}` }} title={"jobbooks"} iconsource1={Images.searchicon} onPressNotification={() => navigation.navigate('notifyscreen')} iconsource2={Images.notificationicon} iconsource3={Images.fobox} />
+                <View>
+                    <FlatList
+                        data={sliderData}
+                        renderItem={renderSliderItem}
+                        keyExtractor={(item) => item.id}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                    />
+                </View>
+                <View style={{ paddingBottom: 210 }}>
+
+                    <FlatList
+                        data={posts}
+                        renderItem={renderPostItem}
+                        keyExtractor={(item) => item.user._id}
+                        showsVerticalScrollIndicator={false}
+                    />
+                </View>
+                <TouchableOpacity onPress={toggleModal} style={styles.modalbutton}>
+                    <Text style={styles.plus}>+</Text>
+                </TouchableOpacity>
+                <CustomModal home={true} isModalVisible={isModalVisible} onPress={toggleModal} onPressNewfeed={() => navigation.navigate("addnewfeedscreen")}
+                    Addnewpost={() => { navigation.navigate("addnewfroumscreen") }}
+                    onPressGeneratecv={() => navigation.navigate("oneverfy")}
                 />
-            </View>
-            <View style={{ paddingBottom: 210 }}>
+            </SafeAreaView>}
+        </>
 
-                <FlatList
-                    data={posts}
-                    renderItem={renderPostItem}
-                    keyExtractor={(item) => item.user._id}
-                    showsVerticalScrollIndicator={false}
-                />
-            </View>
-            <TouchableOpacity onPress={toggleModal} style={styles.modalbutton}>
-                <Text style={styles.plus}>+</Text>
-            </TouchableOpacity>
-            <CustomModal home={true} isModalVisible={isModalVisible} onPress={toggleModal} onPressNewfeed={() => navigation.navigate("addnewfeedscreen")}
-                Addnewpost={() => { navigation.navigate("addnewfroumscreen") }}
-                onPressGeneratecv={() => navigation.navigate("oneverfy")}
-            />
-        </SafeAreaView>
     )
 }
 
@@ -321,7 +291,7 @@ const styles = StyleSheet.create({
         width: width * 0.10,
         height: height * 0.05,
         overflow: "hidden",
-        borderRadius:100,
+        borderRadius: 100,
 
     },
     gcontainer: {
