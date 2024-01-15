@@ -155,7 +155,6 @@ const Profilescreen = ({navigation}) => {
             </View>
             <View style={{paddingHorizontal: width * 0.02}}>
               <Text style={styles.workexperdive}>work experience </Text>
-
               <View
                 style={{
                   flexDirection: 'row',
@@ -765,11 +764,11 @@ const styles = StyleSheet.create({
   wrkexperience: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: height * 0.02,
+    paddingTop: height * 0.034,
   },
   wrkexp: {
     color: '#fff',
-    fontSize: calculateFontSize(13),
+    fontSize: calculateFontSize(12),
     textTransform: 'capitalize',
     fontFamily: 'Poppins',
   },

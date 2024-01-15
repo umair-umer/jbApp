@@ -36,8 +36,6 @@
 //   const [locationError, setLocationError] = useState('');
 //   const [portfolioLinkError, setPortfolioLinkError] = useState('');
 
-
-
 //   const toggleModal = () => {
 //     setModalVisible(!isModalVisible);
 //   };
@@ -51,9 +49,6 @@
 //       navigation.navigate('', { profileType: 'talent' });
 //     }
 //   };
-
-
-
 
 //   const TalentRegistationForm = () => {
 //     return (
@@ -200,7 +195,7 @@
 //     left: width * 0.08,
 //   },
 // });
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -212,24 +207,24 @@ import {
   KeyboardAvoidingView,
   Dimensions,
 } from 'react-native';
-import { launchImageLibrary } from 'react-native-image-picker';
-import { CustomErrorModal, CustomModal, CustomeButton, Inputcomponent } from '../../Components';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {CustomModal, CustomeButton, Inputcomponent} from '../../Components';
 import Images from '../../config/im';
-import { calculateFontSize } from '../../config/font';
+import {calculateFontSize} from '../../config/font';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { useNavigation, useRoute } from '@react-navigation/native';
-const { width, height } = Dimensions.get('window');
-import axios from "axios"
+import {useNavigation, useRoute} from '@react-navigation/native';
+const {width, height} = Dimensions.get('window');
+import axios from 'axios';
 import Loader from '../../Components/Loader';
-import { useDispatch } from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 const RegistertalentProfile = () => {
-  const dispatch = useDispatch()
-  const navigation = useNavigation()
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
   const route = useRoute();
   const profileType = route.params.profileType;
-  console.log(profileType, "====>profiletype");
-  const [ISload, setload] = useState(false)
+  console.log(profileType, '====>profiletype');
+  const [ISload, setload] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -255,10 +250,10 @@ const RegistertalentProfile = () => {
   const [nameError, setNameError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  const [companynameError, setCompanyNameError] = useState('')
+  const [companynameError, setCompanyNameError] = useState('');
 
   const handleChoosePhoto = () => {
-    launchImageLibrary({ noData: true }, response => {
+    launchImageLibrary({noData: true}, response => {
       if (response.assets && response.assets.length > 0) {
         const asset = response.assets[0];
         setProfileImage({
@@ -270,14 +265,12 @@ const RegistertalentProfile = () => {
     });
     console.log(profileImage);
   };
- 
 
   const register = async () => {
     // Reset errors
     setNameError('');
     setEmailError('');
     setPasswordError('');
-
 
     // Validate inputs
     let isValid = true;
@@ -299,8 +292,7 @@ const RegistertalentProfile = () => {
       isValid = false;
     }
 
-
-    setload(true)
+    setload(true);
     if (isValid) {
       const formData = new FormData();
       formData.append('name', name);
@@ -328,18 +320,21 @@ const RegistertalentProfile = () => {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
-          }
+          },
         );
-       const token=response.data.token;
-       const type=response.data.user.role;
-console.log(token,type,"====>");
+        const token = response.data.token;
+        const type = response.data.user.role;
+        console.log(token, type, '====>');
         if (response.status === 200) {
-          dispatch({ type: 'LOGIN_SUCCESS', payload: { token, type } });
+          dispatch({type: 'LOGIN_SUCCESS', payload: {token, type}});
           // dispatch(setUserData(token, type))
-          setload(false)
-          setModalVisiblesucess(true);
+          setload(false);
+          setModalVisible(true);
         } else {
-          console.log('Registration failed with status code: ', response.status);
+          console.log(
+            'Registration failed with status code: ',
+            response.status,
+          );
         }
       } catch (error) {
         console.error('Registration error:', error.response.data.error);
@@ -358,8 +353,6 @@ console.log(token,type,"====>");
 };
 
   const handleregistersucess = () => {
-
-
     // setUserType(UserType);
 
     // if (UserType === 'company') {
@@ -372,164 +365,167 @@ console.log(token,type,"====>");
     setModalVisible(false);
   };
 
-
-
   return (
     <>
-      {ISload ? <Loader /> : <SafeAreaView style={styles.container}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={styles.container}>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={styles.textContainer}>
-              <Text style={styles.sProfileText}>register profile</Text>
-              <Text style={styles.subTextProfile}>
-                enter your information below for registration
-              </Text>
-            </View>
-            <View style={styles.profilecontainer}>
-              <View style={styles.profil}>
-                {profileImage ? (
-                  <Image
-                    style={{ width: '100%', height: '100%', borderRadius: 100 }}
-                    source={profileImage}
-                    resizeMode="cover"
+      {ISload ? (
+        <Loader />
+      ) : (
+        <SafeAreaView style={styles.container}>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={styles.container}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <View style={styles.textContainer}>
+                <Text style={styles.sProfileText}>register profile</Text>
+                <Text style={styles.subTextProfile}>
+                  enter your information below for registration
+                </Text>
+              </View>
+              <View style={styles.profilecontainer}>
+                <View style={styles.profil}>
+                  {profileImage ? (
+                    <Image
+                      style={{width: '100%', height: '100%', borderRadius: 100}}
+                      source={profileImage}
+                      resizeMode="cover"
+                    />
+                  ) : (
+                    <Image
+                      style={{width: '100%', height: '100%', borderRadius: 100}}
+                      source={Images.pro}
+                      resizeMode="cover"
+                    />
+                  )}
+                </View>
+                <TouchableOpacity
+                  style={styles.editprofilebutton}
+                  onPress={handleChoosePhoto}>
+                  <FontAwesome5 name="edit" color="#fff" />
+                </TouchableOpacity>
+              </View>
+              {profileType === 'Talent' ? (
+                <View style={styles.registraiontalentform}>
+                  <Inputcomponent
+                    label="Name"
+                    placeholder="Name"
+                    onChange={text => setName(text)}
+                    error={nameError}
+                    value={name}
                   />
-                ) : (
-                  <Image
-                    style={{ width: '100%', height: '100%', borderRadius: 100 }}
-                    source={Images.pro}
-                    resizeMode="cover"
+                  {nameError ? (
+                    <Text style={styles.errorText}>{nameError}</Text>
+                  ) : null}
+                  <Inputcomponent
+                    label="Email Address"
+                    placeholder="Email Address"
+                    onChange={text => setEmail(text)}
+                    value={email}
+                    error={emailError}
                   />
-                )}
-              </View>
-              <TouchableOpacity
-                style={styles.editprofilebutton}
-                onPress={handleChoosePhoto}>
-                <FontAwesome5 name="edit" color="#fff" />
-              </TouchableOpacity>
-            </View>
-            {profileType === 'Talent' ? (
-              <View style={styles.registraiontalentform}>
-                <Inputcomponent
-                  label="Name"
-                  placeholder="Name"
-                  onChange={(text) => setName(text)}
-                  error={nameError}
-                  value={name}
-                />
-                {nameError ? (
-                  <Text style={styles.errorText}>{nameError}</Text>
-                ) : null}
-                <Inputcomponent
-                  label="Email Address"
-                  placeholder="Email Address"
-                  onChange={(text) => setEmail(text)}
-                  value={email}
-                  error={emailError}
-                />
-                {emailError ? (
-                  <Text style={styles.errorText}>{emailError}</Text>
-                ) : null}
-                <Inputcomponent
-                  label="Password"
-                  placeholder="Password"
-                  error={passwordError}
-                  onChange={(text) => setPassword(text)}
-                  value={password}
-                  secureTextEntry
-                />
-                {passwordError ? (
-                  <Text style={styles.errorText}>{passwordError}</Text>
-                ) : null}
-                <Inputcomponent
-                  label="Mobile Number"
-                  placeholder="Mobile Number"
-                  onChange={text => setMobile(text)}
-                  value={mobile}
-                />
-                <Inputcomponent
-                  label="Location"
-                  placeholder="Location"
-                  onChange={text => setLocation(text)}
-                  value={Location}
-                />
-                <Inputcomponent
-                  label="Website or Portfolio link"
-                  placeholder="Website or Portfolio link"
-                  onChange={text => setWebsite(text)}
-                  value={Website}
-                />
-                <CustomeButton onPress={register} title="Register" nonbg={true} />
-              </View>
-            ) : (
-              <View style={styles.registraiontalentform}>
-                <Inputcomponent
-                  label=" Name"
-                  placeholder="Name"
-                  onChange={text => setName(text)}
-                  value={name}
+                  {emailError ? (
+                    <Text style={styles.errorText}>{emailError}</Text>
+                  ) : null}
+                  <Inputcomponent
+                    label="Password"
+                    placeholder="Password"
+                    error={passwordError}
+                    onChange={text => setPassword(text)}
+                    value={password}
+                    secureTextEntry
+                  />
+                  {passwordError ? (
+                    <Text style={styles.errorText}>{passwordError}</Text>
+                  ) : null}
+                  <Inputcomponent
+                    label="Mobile Number"
+                    placeholder="Mobile Number"
+                    onChange={text => setMobile(text)}
+                    value={mobile}
+                  />
+                  <Inputcomponent
+                    label="Location"
+                    placeholder="Location"
+                    onChange={text => setLocation(text)}
+                    value={Location}
+                  />
+                  <Inputcomponent
+                    label="Website or Portfolio link"
+                    placeholder="Website or Portfolio link"
+                    onChange={text => setWebsite(text)}
+                    value={Website}
+                  />
+                  <CustomeButton
+                    onPress={register}
+                    title="Register"
+                    nonbg={true}
+                  />
+                </View>
+              ) : (
+                <View style={styles.registraiontalentform}>
+                  <Inputcomponent
+                    label="Company Name"
+                    placeholder="Company Name"
+                    onChange={text => setName(text)}
+                    value={name}
+                  />
 
-                />
-
-
-                <Inputcomponent
-                  label="Email Address"
-                  placeholder="Email Address "
-                  onChange={text => setEmail(text)}
-                  value={email}
-                  error={emailError}
-                />
-                {emailError ? (
-                  <Text style={styles.errorText}>{emailError}</Text>
-                ) : null}
-                <Inputcomponent
-                  label="Password"
-                  placeholder="Password"
-                  onChange={text => setPassword(text)}
-                  value={password}
-                  error={passwordError}
-                  secureTextEntry
-                />
-                {passwordError ? (
-                  <Text style={styles.errorText}>{passwordError}</Text>
-                ) : null}
-                <Inputcomponent
-                  label="Mobile Number"
-                  placeholder="Mobile Number"
-                  onChange={text => setMobile(text)}
-                  value={mobile}
-                />
-                <Inputcomponent
-                  label="Company Website"
-                  placeholder="Company Website"
-                  onChange={text => setCompanywebsite(text)}
-                  value={companywebsite}
-                />
-                <Inputcomponent
-                  label="Location"
-                  placeholder="Location"
-                  onChange={text => setCompanyLocation(text)}
-                  value={companylocation}
-                />
-                <CustomeButton onPress={register} title="Register" nonbg={true} />
-              </View>
-            )}
-          </ScrollView>
-        </KeyboardAvoidingView>
-        <CustomModal
-          status="profile Registered successfully "
-          statusTwo="You can now configure your profile through the launcher or by adding details on the profile page later on."
-          isModalVisible={isModalVisiblesucess}
-          onPress={handleregistersucess}
-        />
-
-      </SafeAreaView>}
-      <CustomErrorModal onPressclose={toggleModal} error={error} isModalVisible={isModalVisible} />
-
+                  <Inputcomponent
+                    label="Email Address"
+                    placeholder="Email Address "
+                    onChange={text => setEmail(text)}
+                    value={email}
+                    error={emailError}
+                  />
+                  {emailError ? (
+                    <Text style={styles.errorText}>{emailError}</Text>
+                  ) : null}
+                  <Inputcomponent
+                    label="Password"
+                    placeholder="Password"
+                    onChange={text => setPassword(text)}
+                    value={password}
+                    error={passwordError}
+                    secureTextEntry
+                  />
+                  {passwordError ? (
+                    <Text style={styles.errorText}>{passwordError}</Text>
+                  ) : null}
+                  <Inputcomponent
+                    label="Mobile Number"
+                    placeholder="Mobile Number"
+                    onChange={text => setMobile(text)}
+                    value={mobile}
+                  />
+                  <Inputcomponent
+                    label="Company Website"
+                    placeholder="Company Website"
+                    onChange={text => setCompanywebsite(text)}
+                    value={companywebsite}
+                  />
+                  <Inputcomponent
+                    label="Location"
+                    placeholder="Location"
+                    onChange={text => setCompanyLocation(text)}
+                    value={companylocation}
+                  />
+                  <CustomeButton
+                    onPress={register}
+                    title="Register"
+                    nonbg={true}
+                  />
+                </View>
+              )}
+            </ScrollView>
+          </KeyboardAvoidingView>
+          <CustomModal
+            status="profile Registered successfully "
+            statusTwo="You can now configure your profile through the launcher or by adding details on the profile page later on."
+            isModalVisible={isModalVisible}
+            onPress={handleregistersucess}
+          />
+        </SafeAreaView>
+      )}
     </>
-
-
   );
 };
 
