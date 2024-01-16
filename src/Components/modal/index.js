@@ -14,6 +14,7 @@ import Images from '../../config/im';
 import {calculateFontSize} from '../../config/font';
 import CustomeButton from '../custombutton';
 import {useNavigation} from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 // import AntDesign from 'react-native-vector-icons/AntDesign'
 
@@ -31,7 +32,7 @@ function CustomModal({
   jobposted,
 }) {
   const navigation = useNavigation();
-
+  const { token, type } = useSelector((state) => state.auth);
   return (
     <View style={{flex: 1, position: 'absolute'}}>
       {/* <Button title="Click Me" onPress={onPress} /> */}
@@ -39,7 +40,20 @@ function CustomModal({
       <Modal isVisible={isModalVisible}>
         {home ? (
           <View style={styles.mainContainer2}>
-            <TouchableOpacity style={styles.cross} onPress={onPress}>
+            {type === "talent" ?<><TouchableOpacity style={styles.cross} onPress={onPress}>
+              <Text style={styles.crosstext}>x</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.butto} onPress={onPressNewfeed}>
+              <Text style={styles.postnewjbtext}>Add to News feed</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.butto} onPress={Addnewpost}>
+              <Text style={styles.postnewjbtext}>Add to Forum </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.butto} 
+            // onPress={onPressGeneratecv}
+            >
+              <Text style={styles.postnewjbtext}>Generate CV</Text>
+            </TouchableOpacity></>:<><TouchableOpacity style={styles.cross} onPress={onPress}>
               <Text style={styles.crosstext}>x</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.butto} onPress={onPressNewfeed}>
@@ -50,7 +64,7 @@ function CustomModal({
             </TouchableOpacity>
             <TouchableOpacity style={styles.butto} onPress={onPressGeneratecv}>
               <Text style={styles.postnewjbtext}>Post A New Job</Text>
-            </TouchableOpacity>
+            </TouchableOpacity></>}
           </View>
         ) : (
           <View style={styles.mainContainer}>

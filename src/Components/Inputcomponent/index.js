@@ -4,7 +4,7 @@ const { width, height } = Dimensions.get('window');
 import { calculateFontSize } from '../../config/font';
 import Images from '../../config/im';
 
-const Inputcomponent = ({ onPress,label, placeholder, onChange, iconInput,right ,icon,secureTextEntry}) => {
+const Inputcomponent = ({ onPress,label, placeholder, onChange, iconInput,right ,icon,secureTextEntry,label1}) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
@@ -37,6 +37,7 @@ const Inputcomponent = ({ onPress,label, placeholder, onChange, iconInput,right 
       </View> :
         <View style={styles.inputNoicon}>
           <Text style={styles.label}>{label}</Text>
+          <Text style={styles.label}>{label1}</Text>
           <TextInput
             style={styles.inputsty}
             placeholder={placeholder}

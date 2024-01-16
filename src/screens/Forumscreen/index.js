@@ -29,6 +29,9 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Loader from '../../Components/Loader';
 import { baseprofileurl } from '../../config/utilities';
+import moment from 'moment';
+import { useFocusEffect } from '@react-navigation/native';
+
 const ForumScreen = ({navigation,route,onPress}) => {
   const { token } = useSelector((state) => state.auth); // Get the token from Redux store
   console.log(token, "reduxtokenforem")
@@ -42,6 +45,7 @@ const ForumScreen = ({navigation,route,onPress}) => {
     {id: '3', topic: 'React-native', quantity: '10 post'},
     // Add more data items as needed
   ]);
+ 
   const [userData, setUserData] = useState({
     // name: '',
     // email: '',
@@ -67,6 +71,7 @@ const [isload, setload] = useState();
 };
  
   const fetchForumData = async () => {
+    setload(true)
     try {
       const response = await axios.get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/forum/fetch', {
         headers: { 
@@ -74,18 +79,29 @@ const [isload, setload] = useState();
         }
       });
       console.log(response.data.data,"foreumdata"); // Handle the response data as needed
-      // For example, if you want to set this data to state
+      setload(false)
       setForumData(response.data.data)
     } catch (error) {
       console.error('Error fetching forum data:', error);
+      setload(false)
       // Handle error appropriately
     }
   };
-  useEffect(() => {
-    fetchUserData();
-    fetchForumData();
-  }, [token]); 
-    
+  // useEffect(() => {
+  //   fetchUserData();
+  //   fetchForumData();
+  // }, [token]); 
+  useFocusEffect(
+    React.useCallback(() => {
+
+      fetchUserData();
+      fetchForumData();
+        return () => {
+
+        };
+    }, [token])
+);
+
 
   const renderTopicItem = ({item}) => (
     <ImageBackground
@@ -141,8 +157,16 @@ const [isload, setload] = useState();
     console.log(isModalVisible);
 };
 
-  const renderItem = ({item}) => (
-    <TouchableOpacity
+
+const renderItem = ({item}) => {
+ 
+  const createdAtTimestamp = moment(item.createdAt)
+  const currentTime = moment();
+  const hoursAgo = currentTime.diff(createdAtTimestamp, 'hours');
+ return (
+
+   <ScrollView>
+     <TouchableOpacity
       onPress={() => navigation.navigate('Vpost', {post: item})}
       style={{marginVertical: height * 0.02}}>
       <View style={styles.postmaincontainer}>
@@ -158,7 +182,7 @@ const [isload, setload] = useState();
             <View>
               <Text style={styles.tname}>{item.title}</Text>
               <Text style={styles.tpostname}>
-              {item.user.name} {item.createdAt}
+              {item.user.name} {hoursAgo === 0 ? 'just now' : `${hoursAgo} hour${hoursAgo > 1 ? 's' : ''} ago`}
               </Text>
             </View>
           </View>
@@ -199,7 +223,10 @@ const [isload, setload] = useState();
         </View>
       </View>
     </TouchableOpacity>
+   </ScrollView>
   );
+}
+
 
   const handleTabPress = tab => {
     setSelectedTab(tab);
@@ -352,7 +379,7 @@ const [isload, setload] = useState();
             </TouchableOpacity>
 
       {renderTabContent()}
-      <CustomModal home={true}  isModalVisible={isModalVisible} onPress={toggleModal}  onPressGeneratecv={()=>navigation.navigate("oneverfy")} />
+      <CustomModal home={true}  isModalVisible={isModalVisible} onPress={toggleModal}  onPressGeneratecv={()=>navigation.navigate("oneverfy")} Addnewpost={() => { navigation.navigate("addnewfroumscreen") }} />
       
     </View>}
   </>

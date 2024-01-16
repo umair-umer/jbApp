@@ -5,7 +5,7 @@ import { calculateFontSize } from '../../config/font';
 import { CustomeButton, Inputcomponent, CustomeforgetHeader, CustomModal, CustomeHeader } from '../../Components';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-
+import moment from 'moment';
 import { baseprofileurl } from '../../config/utilities';
 import { useFocusEffect } from '@react-navigation/native';
 import Loader from '../../Components/Loader';
@@ -123,64 +123,71 @@ const NewsFeed = ({ navigation, onPress, route }) => {
     //     fetchPosts();
     // }, [token]);
 
-    const renderPostItem = ({ item }) => (
-        <View style={styles.postcontainermain}>
-            <View style={styles.postcontainer}>
-                <View style={styles.mianrow}>
-                    <View style={styles.gcontainer}>
-                        <View style={styles.googimagecontainer}>
-                            <Image resizeMode="contain" style={{ width: "100%", height: "100%" }} source={{ uri: `${baseprofileurl}${item.user.picture}` }} />
-                        </View>
-                        <View style={styles.texcontainer}>
-                            <Text style={styles.gtext}>{item.user.name}</Text>
-                            <View style={styles.timercontainer}>
-                                <View style={styles.timerimage}>
-                                    <Image resizeMode="center" style={{ width: "100%", height: "100%" }} source={Images.timericon} />
+    const renderPostItem = ({ item }) =>{
+        const createdAtTimestamp = moment(item.createdAt)
+        const currentTime = moment();
+        const hoursAgo = currentTime.diff(createdAtTimestamp, 'hours');
+        return(  (
+            <View style={styles.postcontainermain}>
+                <View style={styles.postcontainer}>
+                    <View style={styles.mianrow}>
+                        <View style={styles.gcontainer}>
+                            <View style={styles.googimagecontainer}>
+                                <Image resizeMode="contain" style={{ width: "100%", height: "100%" }} source={{ uri: `${baseprofileurl}${item.user.picture}` }} />
+                            </View>
+                            <View style={styles.texcontainer}>
+                                <Text style={styles.gtext}>{item.user.name}</Text>
+                                <View style={styles.timercontainer}>
+                                    <View style={styles.timerimage}>
+                                        <Image resizeMode="center" style={{ width: "100%", height: "100%" }} source={Images.timericon} />
+                                    </View>
+                                    <Text style={styles.gtextime}>{hoursAgo === 0 ? 'just now' : `${hoursAgo} hour${hoursAgo > 1 ? 's' : ''} ago`}</Text>
                                 </View>
-                                <Text style={styles.gtextime}>{item.createdAt}</Text>
                             </View>
                         </View>
-                    </View>
-                    <View style={styles.viewprocontainer}>
-                        <View style={styles.proview}>
-                            <Image style={{ width: "100%", height: "100%" }} resizeMode='center' source={Images.viewpro} />
+                        <View style={styles.viewprocontainer}>
+                            <View style={styles.proview}>
+                                <Image style={{ width: "100%", height: "100%" }} resizeMode='center' source={Images.viewpro} />
+                            </View>
+                            <Text style={styles.vietext}>view profile</Text>
                         </View>
-                        <Text style={styles.vietext}>view profile</Text>
+                    </View>
+                    <View style={styles.typcontainer}>
+                        <Text style={styles.textphyra}>
+                            {item.description}{show ? <Text> Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                Ut enim ad minim veniam, quis nostrud exercitation
+                                ullamco labo.</Text> : ""}<Text onPress={() => setshow(!show)}>{show ? `Read less` : `Readmore`}</Text>
+                        </Text>
+                    </View>
+                    <View style={styles.googleaddscontainer}>
+                        <Image resizeMode='center' style={{ width: "100%", height: "100%" }} source={{ uri: `${baseprofileurl}${item.picture}` }} />
+                    </View>
+                    <View>
+                        <Text style={styles.googleques}>{item.title}</Text>
+                        <Text style={styles.youlink}>{item.tags}</Text>
+                    </View>
+    
+                </View>
+                <View style={styles.feedbackcontainer}>
+                    <View style={styles.pcontainer}>
+                        <TouchableOpacity style={styles.hert} >
+                            <Image resizeMode='center' style={{ width: "100%", height: "100%" }} source={Images.heart} />
+                        </TouchableOpacity>
+                        <Text style={styles.textfeed}>12</Text>
+                    </View>
+                    <View style={styles.pcontainer}>
+                        <TouchableOpacity style={styles.hert} >
+                            <Image resizeMode='center' style={{ width: "100%", height: "100%" }} source={Images.comenticon} />
+                        </TouchableOpacity>
+                        <Text style={styles.textfeed}>10</Text>
                     </View>
                 </View>
-                <View style={styles.typcontainer}>
-                    <Text style={styles.textphyra}>
-                        {item.description}{show ? <Text> Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                            Ut enim ad minim veniam, quis nostrud exercitation
-                            ullamco labo.</Text> : ""}<Text onPress={() => setshow(!show)}>{show ? `Read less` : `Readmore`}</Text>
-                    </Text>
-                </View>
-                <View style={styles.googleaddscontainer}>
-                    <Image resizeMode='center' style={{ width: "100%", height: "100%" }} source={{ uri: `${baseprofileurl}${item.picture}` }} />
-                </View>
-                <View>
-                    <Text style={styles.googleques}>{item.title}</Text>
-                    <Text style={styles.youlink}>{item.tags}</Text>
-                </View>
-
             </View>
-            <View style={styles.feedbackcontainer}>
-                <View style={styles.pcontainer}>
-                    <TouchableOpacity style={styles.hert} >
-                        <Image resizeMode='center' style={{ width: "100%", height: "100%" }} source={Images.heart} />
-                    </TouchableOpacity>
-                    <Text style={styles.textfeed}>12</Text>
-                </View>
-                <View style={styles.pcontainer}>
-                    <TouchableOpacity style={styles.hert} >
-                        <Image resizeMode='center' style={{ width: "100%", height: "100%" }} source={Images.comenticon} />
-                    </TouchableOpacity>
-                    <Text style={styles.textfeed}>10</Text>
-                </View>
-            </View>
-        </View>
-    )
+        ))
+    }
+    
+  
 
 
     return (
@@ -316,6 +323,7 @@ const styles = StyleSheet.create({
         fontWeight: "500",
         color: "#AFAFAF",
         fontFamily: "Poppins",
+        marginHorizontal:width*0.01,
 
 
     },

@@ -1,5 +1,5 @@
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   TouchableOpacity,
   Modal,
@@ -16,20 +16,54 @@ import {
   TextInput,
 } from 'react-native';
 import Images from '../../config/im';
-import {calculateFontSize} from '../../config/font';
-const {width, height} = Dimensions.get('window');
+import { calculateFontSize } from '../../config/font';
+const { width, height } = Dimensions.get('window');
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import ImagePicker from 'react-native-image-crop-picker';
 import { CustomeButton } from '../../Components';
-const Addnewfroums = ({navigation}) => {
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import Loader from '../../Components/Loader';
 
+const Addnewfroums = ({ navigation }) => {
+  const { token } = useSelector((state) => state.auth); // Get the token from Redux store
+  console.log(token, "reduxtokennewsforum");
+  const [title, setTitle] = useState(''); // State for the title input
+  const [description, setDescription] = useState('');
+  const [isload, setload] = useState();
+  const handleforum = async () => {
+    console.log(description,"des");
+    const data = {
+      title: title,
+      description: description,
+    };
+    try {
+      const response = await axios({
+        method: 'post',
+        url: 'https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/forum/create',
+        data: data,
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log(response.data, "forum data");
+      setload(true)
+      navigation.goBack(); // or any other success action
+    } catch (error) {
+      console.error(error);
+      setload(false)
 
-  
+    } finally {
+      setload(false);
+    }
+  }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <>
+    {isload ?<Loader/>: <SafeAreaView style={styles.container}>
       <View style={styles.hedr}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Entypo name="cross" color="#fff" size={30} />
@@ -46,8 +80,8 @@ const Addnewfroums = ({navigation}) => {
           style={styles.input}
           placeholder={'Add a title...'}
           placeholderTextColor={'#fff'}
-          // value={value}
-          // onChangeText={onChange}
+          value={title} // Bind value to state
+          onChangeText={(text) => setTitle(text)} 
         />
       </View>
       <View style={styles.margininbetween}>
@@ -55,18 +89,23 @@ const Addnewfroums = ({navigation}) => {
           style={styles.inputdes}
           placeholder={'Add a Description...'}
           placeholderTextColor={'#fff'}
-          // value={value}
-          // onChangeText={onChange}
+          value={description} // Bind value to state
+          onChangeText={(text) => setDescription(text)}
           multiline={true}
           numberOfLines={8}
           textAlignVertical="top"
         />
       </View>
-<View style={{flex:1,justifyContent:"flex-end"}}>
-    <CustomeButton nonbg={true} title={"Post"} onPress={()=>navigation.navigate("newsfeed")}/>
-</View>
-     
-    </SafeAreaView>
+      <View style={{ flex: 1, justifyContent: "flex-end" }}>
+        <CustomeButton nonbg={true} title={"Post"} onPress={
+          handleforum}
+        // ()=>navigation.navigate("newsfeed")}
+        />
+      </View>
+
+    </SafeAreaView>}
+    </>
+   
   );
 };
 

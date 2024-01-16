@@ -465,8 +465,8 @@ console.log(token,type,"====>");
             ) : (
               <View style={styles.registraiontalentform}>
                 <Inputcomponent
-                  label="Company Name"
-                  placeholder="Company Name"
+                  label=" Name"
+                  placeholder="Name"
                   onChange={text => setName(text)}
                   value={name}
 

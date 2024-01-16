@@ -25,6 +25,7 @@
     "axios": "^1.6.5",
     "cordova": "^12.0.0",
     "cordova-plugin-splashscreen": "^6.0.2",
+    "moment": "^2.30.1",
     "plugin": "^0.3.3",
     "pod": "^0.9.0",
     "qs": "^6.11.2",
