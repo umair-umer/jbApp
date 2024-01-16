@@ -27,7 +27,7 @@ const JobsearchScreen = ({navigation}) => {
   //   // Add more data items as needed
   // ];
 
-
+ 
 
   return (
     <ImageBackground style={styles.backgroundImage} source={Images.jsbg} resizeMode='cover'>

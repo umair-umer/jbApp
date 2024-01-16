@@ -219,7 +219,7 @@ const NewsFeed = ({ navigation, onPress, route }) => {
                 </TouchableOpacity>
                 <CustomModal home={true} isModalVisible={isModalVisible} onPress={toggleModal} onPressNewfeed={() => navigation.navigate("addnewfeedscreen")}
                     Addnewpost={() => { navigation.navigate("addnewfroumscreen") }}
-                    onPressGeneratecv={() => navigation.navigate("oneverfy")}
+                    onPressGeneratecv={() => navigation.navigate("resumegenratescreen")}
                 />
             </SafeAreaView>}
         </>

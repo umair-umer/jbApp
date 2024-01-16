@@ -379,7 +379,7 @@ const renderItem = ({item}) => {
             </TouchableOpacity>
 
       {renderTabContent()}
-      <CustomModal home={true}  isModalVisible={isModalVisible} onPress={toggleModal}  onPressGeneratecv={()=>navigation.navigate("oneverfy")} Addnewpost={() => { navigation.navigate("addnewfroumscreen") }} />
+      <CustomModal home={true}  isModalVisible={isModalVisible} onPress={toggleModal}  onPressGeneratecv={()=>navigation.navigate("resumegenratescreen")} Addnewpost={() => { navigation.navigate("addnewfroumscreen") }} />
       
     </View>}
   </>
