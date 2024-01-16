@@ -55,6 +55,11 @@ import Addcardlistscreen from './Addcardlistscreen';
 import Verfymyprofilesettingscreen from './Verifymyprofilescreen';
 import Editprofileskillscreen from './EditProfileskillscreen';
 import Editprofileexperiancescreen from './Editexperianceprofilescreen';
+import ResumeGanratescreen from './GenrateResume';
+import Genrateresumeform from './Genrateresumeform';
+import Resumepreview from './Genrateresumepreviewscreen';
+
+
 
 
 
@@ -115,5 +120,8 @@ export {
   Addcardlistscreen,
   Verfymyprofilesettingscreen,
   Editprofileskillscreen,
-  Editprofileexperiancescreen
+  Editprofileexperiancescreen,
+  ResumeGanratescreen,
+  Genrateresumeform,
+  Resumepreview
 };

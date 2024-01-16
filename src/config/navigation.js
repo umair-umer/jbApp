@@ -59,7 +59,10 @@ import {
   Addcardlistscreen,
   Verfymyprofilesettingscreen,
   Editprofileskillscreen,
-  Editprofileexperiancescreen
+  Editprofileexperiancescreen,
+  ResumeGanratescreen,
+  Genrateresumeform,
+  Resumepreview
 } from '../screens';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -169,6 +172,13 @@ function Nav() {
         <Stack.Screen name="pendingview" component={Companyappliationpendingscreen} />
         <Stack.Screen name="shortview" component={Companyshortlistedjob} />
         <Stack.Screen name="rejectedview" component={Companyrejectedjob} />
+
+        <Stack.Screen name="resumegenratescreen" component={ResumeGanratescreen} />
+        <Stack.Screen name="resumegenrateformscreen" component={Genrateresumeform} />
+        <Stack.Screen name="resumepreviewscreen" component={Resumepreview} />
+
+
+
 
 
 

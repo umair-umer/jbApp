@@ -65,6 +65,16 @@ import Video from '../assets/Videocallicon.png'
 import Videocaller from '../assets/videocaller.png'
 import Frontcaller from '../assets/nextcaller.png'
 import Addcard from '../assets/letadd.png'
+import Resume1 from '../assets/resume1.png'
+import Resume2 from '../assets/resume2.png'
+import Resume3 from '../assets/Resume3.png'
+import Resume4 from '../assets/Resume4.png'
+import Resume5 from '../assets/Resume5.png'
+import Resume6 from '../assets/Resume6.png'
+import Preview from '../assets/Previewresume.png'
+
+
+
 const Images = {
   bg,
   logo,
@@ -131,7 +141,16 @@ const Images = {
   Video,
   Videocaller,
   Frontcaller,
-  Addcard
+  Addcard,
+  Resume1,
+  Resume2,
+  Resume3,
+  Resume4,
+  Resume5,
+  Resume6,
+  Preview
+ 
+
 };
 
 export default Images;

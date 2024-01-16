@@ -50,10 +50,10 @@ function CustomModal({
               <Text style={styles.postnewjbtext}>Add to Forum </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.butto} 
-            // onPress={onPressGeneratecv}
+            onPress={onPressGeneratecv}
             >
               <Text style={styles.postnewjbtext}>Generate CV</Text>
-            </TouchableOpacity></>:<><TouchableOpacity style={styles.cross} onPress={onPress}>
+            </TouchableOpacity></>: <><TouchableOpacity style={styles.cross} onPress={onPress}>
               <Text style={styles.crosstext}>x</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.butto} onPress={onPressNewfeed}>
