@@ -51,6 +51,7 @@ const NewsFeed = ({ navigation, onPress, route }) => {
                 headers: { "Authorization": `Bearer ${token}` },
             });
             setPosts(response.data.data);
+            console.log(response.data,"====>hhg");
         setload(false)
 
         } catch (error) {
@@ -220,6 +221,7 @@ const NewsFeed = ({ navigation, onPress, route }) => {
                 <CustomModal home={true} isModalVisible={isModalVisible} onPress={toggleModal} onPressNewfeed={() => navigation.navigate("addnewfeedscreen")}
                     Addnewpost={() => { navigation.navigate("addnewfroumscreen") }}
                     onPressGeneratecv={() => navigation.navigate("resumegenratescreen")}
+                    onPresspost={() => navigation.navigate("codeverified")}
                 />
             </SafeAreaView>}
         </>

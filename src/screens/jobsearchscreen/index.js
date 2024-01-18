@@ -12,6 +12,7 @@ import IMG from '../../assets/dp.png'
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { calculateDaysAgo } from '../../config/utilities/hours';
+import { baseprofileurl } from '../../config/utilities';
 const JobsearchScreen = ({ navigation }) => {
   const { token, type } = useSelector((state) => state.auth);
   const [jobsData, setJobsData] = useState([]);
@@ -111,7 +112,7 @@ const JobsearchScreen = ({ navigation }) => {
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <View style={styles.iconimage} >
               {/* Replace Images.dp with job.picture */}
-              <Image style={{ width: "100%", height: "100%" }} resizeMode='center' source={{ uri: job.picture }} />
+              <Image style={{ width: "100%", height: "100%" }} resizeMode='center' source={{ uri: `${baseprofileurl}${job.user.picture}` }}  />
             </View>
             <View style={{ marginHorizontal: width * 0.03, }}>
               {/* Replace 'SumatoSoft' with job.title */}
@@ -340,6 +341,7 @@ const styles = StyleSheet.create({
     height: height * 0.06,
     backgroundColor: "#fff",
     borderRadius: 10,
+    overflow:"hidden"
   },
   designation: {
     fontSize: calculateFontSize(15),

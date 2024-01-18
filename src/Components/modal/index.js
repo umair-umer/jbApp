@@ -30,6 +30,7 @@ function CustomModal({
   onPressGeneratecv,
   company,
   jobposted,
+  onPresspost
 }) {
   const navigation = useNavigation();
   const { token, type } = useSelector((state) => state.auth);
@@ -62,7 +63,7 @@ function CustomModal({
             <TouchableOpacity style={styles.butto} onPress={Addnewpost}>
               <Text style={styles.postnewjbtext}>Add to Forum </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.butto} onPress={onPressGeneratecv}>
+            <TouchableOpacity style={styles.butto} onPress={onPresspost}>
               <Text style={styles.postnewjbtext}>Post A New Job</Text>
             </TouchableOpacity></>}
           </View>
