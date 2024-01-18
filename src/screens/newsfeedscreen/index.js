@@ -47,7 +47,7 @@ const NewsFeed = ({ navigation, onPress, route }) => {
         setload(true)
 
         try {
-            const response = await axios.get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/news/fetch', {
+            const response = await axios.get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/home/news', {
                 headers: { "Authorization": `Bearer ${token}` },
             });
             setPosts(response.data.data);
