@@ -103,6 +103,7 @@ const AddNewFeeds = ({ navigation }) => {
           <Image resizeMode='contain' style={{ width: "100%", height: "100%" }} source={Images.BookmarkSimple} />
         </TouchableOpacity> */}
       </View>
+      <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.margininbetween}>
         <TextInput
           style={styles.input}
@@ -171,6 +172,7 @@ const AddNewFeeds = ({ navigation }) => {
           <Text style={styles.posttext}>Post</Text>
         </TouchableOpacity>
       </View>
+      </ScrollView>
     </SafeAreaView>}
   </>
   );

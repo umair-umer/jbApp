@@ -71,6 +71,7 @@ function CompanyLocationPhoto({navigation,route}) {
     data.append('category', routeParams.selectedCategories);
     data.append('description', routeParams.des);
     data.append('experience', routeParams.des);
+    data.append('title', routeParams.titles);
     
     // Handle image file
     if (selectedImage) {
