@@ -15,7 +15,9 @@ import {CustomeforgetHeader, CustomeButton, CustomModal} from '../../Components'
 import Images from '../../config/im';
 import {calculateFontSize} from '../../config/font';
 
-const CompanyPreView = ({navigation}) => {
+const CompanyPreView = ({navigation,route}) => {
+  const collecteddata=route.params;
+  console.log(collecteddata,"collecteddata");
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
 

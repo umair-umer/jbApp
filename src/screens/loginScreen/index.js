@@ -22,6 +22,7 @@ const LoginScreen = ({ navigation }) => {
   const [isload, setload] = useState(false)
   const[error,setErrro]=useState();
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isModalVisibleerr, setModalVisiblerrr] = useState(false);
   const dispatch = useDispatch()
   useEffect(() => {
     GoogleSignin.configure({
@@ -119,8 +120,8 @@ const LoginScreen = ({ navigation }) => {
     );
   };
   const handleLogin = async () => {
-    const data = qs.stringify({ 'username': email, 'password': password });
     setload(true)
+    const data = qs.stringify({ 'username': email, 'password': password });
     const config = {
       method: 'post',
       url: 'https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/login',
@@ -139,22 +140,22 @@ const LoginScreen = ({ navigation }) => {
       console.log(token, type,success, "====>");
       setload(false)
       if (success) {
+        // setload(true)
         dispatch({ type: 'LOGIN_SUCCESS', payload: { token, type } });
 
-        // navigation.navigate("home")
+        navigation.navigate("home")
       }
     } catch (error) {
       console.log('Login Error:', error.response.data.error);
-      setload(false)
       setErrro(error.response.data.error)
-      setModalVisible(true);
+      setModalVisiblerrr(true)
       // Handle the error (e.g., show an error message)
     }
   };
 
 
-  const toggleModal = () => {
-    setModalVisible(false);
+  const closemodal = () => {
+    setModalVisiblerrr(false);
     console.log(isModalVisible);
 };
 
@@ -197,7 +198,7 @@ const LoginScreen = ({ navigation }) => {
           </View>
         </TouchableOpacity>
         <Text style={styles.alreadymember} >Already a member ? <Text style={styles.login}>Login</Text></Text>
-        <CustomErrorModal onPressclose={toggleModal} error={error} isModalVisible={isModalVisible} />
+        <CustomErrorModal onPressclose={closemodal} error={error} isModalVisible={isModalVisibleerr} />
       </SafeAreaView>}
     </>
 

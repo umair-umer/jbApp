@@ -16,9 +16,13 @@ import {CustomeforgetHeader, CustomeButton} from '../../Components';
 import Images from '../../config/im';
 import {calculateFontSize} from '../../config/font';
 
-const JobSeniority = ({navigation}) => {
+const JobSeniority = ({navigation,route}) => {
+  const datasenorityscreen=route.params;
+  console.log(datasenorityscreen,"datasenorityscreen");
   const [selectedCategories, setSelectedCategories] = useState([]);
-
+const HandleNext=()=>{
+  navigation.navigate('jobdes',{datasenorityscreen:datasenorityscreen,selectedCategories})
+}
   const data = [
     'Entry',
     'Junior ',
@@ -74,7 +78,7 @@ const JobSeniority = ({navigation}) => {
         <CustomeButton
           nonbg={true}
           title={'Next'}
-          onPress={() => navigation.navigate('jobdes')}
+          onPress={HandleNext}
         />
       </View>
     </SafeAreaView>

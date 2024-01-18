@@ -25,7 +25,9 @@ const initialJobs = [
   'Texas',
 ];
 
-function Joblocationscreen({navigation}) {
+function Joblocationscreen({navigation,route}) {
+   const data=route.params;
+   console.log(data,"locRang");
   const [searchText, setSearchText] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
@@ -45,6 +47,10 @@ function Joblocationscreen({navigation}) {
   const handleRemoveSelectedJob = () => {
     setSelectedJob(null);
   };
+  const  Handlepostparam=()=>{
+    navigation.navigate('companysalary',{data:data,selectedJob})
+   
+   }
 
   const renderJobItem = ({item}) => {
     const isInitialJob = initialJobs.includes(item);
@@ -98,8 +104,8 @@ function Joblocationscreen({navigation}) {
       />
 
   
-        <CustomeButton title={'Next'} nonbg={true} onPress={()=>{navigation.navigate("companysalary")}} />
-    
+        <CustomeButton title={'Next'} nonbg={true} onPress={Handlepostparam} />
+   
     </View>
   );
 }

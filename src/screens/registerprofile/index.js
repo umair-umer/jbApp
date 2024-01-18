@@ -340,7 +340,7 @@ const RegistertalentProfile = () => {
         console.error('Registration error:', error.response.data.error);
         setload(false)
         setErrro(error.response.data.error)
-        setModalVisible(true);
+        // setModalVisible(true);
       }
     }
 

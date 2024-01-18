@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   View,
@@ -12,11 +12,20 @@ import {
   Image,
 } from 'react-native';
 import { calculateFontSize } from '../../config/font';
-import { CustomeforgetHeader ,CustomeButton} from '../../Components';
-const {width, height} = Dimensions.get('window');
+import { CustomeforgetHeader, CustomeButton } from '../../Components';
+const { width, height } = Dimensions.get('window');
 import Images from '../../config/im';
 
-function Jobdescriptionscreen({navigation}) {
+function Jobdescriptionscreen({ navigation, route }) {
+  const jobdesdata = route.params;
+  console.log(jobdesdata, "jobdesdata");
+  const [title, setTitle] = useState('');
+  const [companyUrl, setCompanyUrl] = useState('');
+  const [description, setDescription] = useState('');
+
+  const HandleNext=()=>{
+    navigation.navigate('locationphot',{jobdesdata:jobdesdata,title,companyUrl,description})
+  }
   return (
     <SafeAreaView style={styles.miancon}>
       <CustomeforgetHeader
@@ -32,26 +41,32 @@ function Jobdescriptionscreen({navigation}) {
           placeholder="Type Title"
           placeholderTextColor={'#fff'}
           style={styles.inp}
+          value={title}
+          onChangeText={text => setTitle(text)}
         />
 
         <TextInput
           placeholder="Add Company website URL"
           placeholderTextColor={'#fff'}
           style={styles.inp}
+          value={companyUrl}
+          onChangeText={text => setCompanyUrl(text)}
         />
 
         <TextInput
           placeholder="Description"
           placeholderTextColor={'#fff'}
           style={styles.inp1}
+          value={description}
+          onChangeText={text => setDescription(text)}
         />
       </View>
 
       <CustomeButton
-          nonbg={true}
-          title={'Next'}
-          onPress={() => navigation.navigate('locationphot')}
-        />
+        nonbg={true}
+        title={'Next'}
+        onPress={HandleNext}
+      />
     </SafeAreaView>
   );
 }
@@ -59,9 +74,9 @@ function Jobdescriptionscreen({navigation}) {
 const styles = StyleSheet.create({
   miancon: {
     flex: 1,
-    backgroundColor:'#0F7369',
+    backgroundColor: '#0F7369',
     // justifyContent: 'center',
-    padding:10,
+    padding: 10,
   },
 
   heading: {
@@ -78,11 +93,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
- 
+
 
   inpcon: {
-    flex:1,
-    paddingVertical:height*0.02,
+    flex: 1,
+    paddingVertical: height * 0.02,
     // paddingHorizontal: width * 0.04,
   },
   inp: {
@@ -101,7 +116,7 @@ const styles = StyleSheet.create({
     paddingBottom: height * 0.15,
     borderRadius: 10,
     color: '#fff',
-    marginVertical:height*0.02,
+    marginVertical: height * 0.02,
   },
 });
 

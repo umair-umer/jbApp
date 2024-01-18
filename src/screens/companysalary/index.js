@@ -14,18 +14,31 @@ import {CustomeforgetHeader, CustomeButton} from '../../Components';
 
 import Images from '../../config/im';
 import {calculateFontSize} from '../../config/font';
-function Salaryexpscreen({navigation}) {
+function Salaryexpscreen({navigation,route}) {
+  const  data2= route.params;
+  console.log(data2,"slary screen");
   const [selectedType, setSelectedType] = useState(null);
+  const [inputValue, setInputValue] = useState('');
+  const [inputValueto, setInputValueto] = useState('');
   const jobTypes = [
-    {label: 'Daily', value: 'Daily'},
-    {label: 'Weekly', value: 'Weekly'},
-    {label: 'Monthly', value: 'Monthly'},
+    {label: 'Daily', value: 'daily'},
+    {label: 'Weekly', value: 'weekly'},
+    {label: 'Monthly', value: 'monthly'},
     // { label: 'Internship', value: 'Internship' },
   ];
 
   const handleTypeChange = value => {
     setSelectedType(value);
   };
+  const handleInputChange = (text) => {
+    setInputValue(text);
+  };
+  const handleInputChangeTo = (text) => {
+    setInputValueto(text);
+  };
+  const handleNext=()=>{
+   navigation.navigate('jobCategory',{data2:data2,selectedType,inputValueto,inputValue})
+  }
 
   return (
     <SafeAreaView style={styles.mainCon}>
@@ -41,11 +54,15 @@ function Salaryexpscreen({navigation}) {
           placeholder="start from"
           placeholderTextColor="#fff"
           style={styles.inp}
+          onChangeText={handleInputChange}
+          value={inputValue}
         />
         <TextInput
           placeholder="To"
           placeholderTextColor="#fff"
           style={styles.inp}
+          onChangeText={handleInputChangeTo}
+          value={inputValueto}
         />
       </View>
       <View style={styles.type}>
@@ -75,7 +92,7 @@ function Salaryexpscreen({navigation}) {
         <CustomeButton
           nonbg={true}
           title={'Next'}
-          onPress={() => navigation.navigate('jobCategory')}
+          onPress={handleNext}
         />
       </View>
     </SafeAreaView>

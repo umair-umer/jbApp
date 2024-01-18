@@ -16,7 +16,9 @@ const initialJobs = [
     'UAE'
   ];
   
-  function Loctionsearching({navigation}) {
+  function Loctionsearching({navigation,route}) {
+    const locationsearch=route.params;
+    console.log(locationsearch,"locationsearch");
       const [searchText, setSearchText] = useState('');
       const [searchResults, setSearchResults] = useState([]);
       const [selectedJob, setSelectedJob] = useState(null);
@@ -29,7 +31,7 @@ const initialJobs = [
     
       const handleJobSelect = (job) => {
         setSelectedJob(job);
-        navigation.navigate('prefscreen')
+        navigation.navigate('prefscreen',{selectedJob})
       };
     
       const handleRemoveSelectedJob = () => {

@@ -18,10 +18,10 @@ function Employetypescreen({navigation}) {
   const [selectedType, setSelectedType] = useState(null);
   const [salaryRange, setSalaryRange] = useState([50000, 100000]); // Initial salary range
   const jobTypes = [
-    {label: 'Full time', value: 'Full time'},
-    {label: 'Part time', value: 'Part time'},
-    {label: 'Contract', value: 'Contract'},
-    {label: 'Internship', value: 'Internship'},
+    {label: 'Full time', value: 'fulltime'},
+    {label: 'Part time', value: 'parttime'},
+    {label: 'Contract', value: 'contract'},
+    {label: 'Internship', value: 'internship'},
   ];
 
   const handleTypeChange = value => {
@@ -31,6 +31,10 @@ function Employetypescreen({navigation}) {
   const handleSalaryChange = values => {
     setSalaryRange(values);
   };
+
+ const  Handlepostparam=()=>{
+  navigation.navigate('joblocation',{selectedType,salaryRange})
+ }
   return (
     <SafeAreaView style={styles.mainCon}>
       <CustomeforgetHeader source={Images.arrow} company={true} />
@@ -96,7 +100,7 @@ function Employetypescreen({navigation}) {
         <CustomeButton
           nonbg={true}
           title={'Next'}
-          onPress={() => navigation.navigate('joblocation')}
+          onPress={Handlepostparam}
         />
       </View>
     </SafeAreaView>

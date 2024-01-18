@@ -16,9 +16,13 @@ import {CustomeforgetHeader, CustomeButton} from '../../Components';
 import Images from '../../config/im';
 import {calculateFontSize} from '../../config/font';
 
-const JobCategory = ({navigation}) => {
+const JobCategory = ({navigation,route}) => {
+  const data3=route.params;
+  console.log(data3,"data3");
   const [selectedCategories, setSelectedCategories] = useState([]);
-
+const handleNext=()=>{
+navigation.navigate("jobseniority",{data3:data3,selectedCategories})
+}
   const data = [
     'Sales & Business Development',
     'Another Category',
@@ -82,7 +86,7 @@ const JobCategory = ({navigation}) => {
             keyExtractor={item => item}
             contentContainerStyle={styles.flatListContainer}
           />
-      <CustomeButton nonbg={true} title={"Next"} onPress={()=>navigation.navigate("jobseniority")}/>
+      <CustomeButton nonbg={true} title={"Next"} onPress={handleNext}/>
         </ScrollView>
     </SafeAreaView>
   );

@@ -12,12 +12,34 @@ import {
 const {width, height} = Dimensions.get('window');
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {calculateFontSize} from '../../config/font';
-import { CustomeforgetHeader ,CustomeButton} from '../../Components';
+import { CustomeforgetHeader ,CustomeButton,CustomModal} from '../../Components';
 
 import Images from '../../config/im';
-function CompanyLocationPhoto({navigation}) {
-  const [selectedImage, setSelectedImage] = useState('');
+import { useSelector } from 'react-redux';
+import axios from 'axios';
+import Loader from '../../Components/Loader';
 
+function CompanyLocationPhoto({navigation,route}) {
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [isload,setload]=useState();
+  const routeParams = {
+    typeseclect: route.params.jobdesdata.datasenorityscreen.data3.data2.data.selectedType,
+    mileRange: route.params.jobdesdata.datasenorityscreen.data3.data2.data.salaryRange,
+    placelocation: route.params.jobdesdata.datasenorityscreen.data3.data2.selectedJob,
+    inputValue: route.params.jobdesdata.datasenorityscreen.data3.inputValue,
+    inputValueto: route.params.jobdesdata.datasenorityscreen.data3.inputValueto,
+    selectedTyperoutien: route.params.jobdesdata.datasenorityscreen.data3.selectedType,
+    selectedCategories: route.params.jobdesdata.datasenorityscreen.selectedCategories,
+    statuss: route.params.jobdesdata.selectedCategories,
+    titles: route.params.title,
+    companyurl: route.params.companyUrl,
+    des: route.params.description,
+  };
+  console.log(routeParams,"routeparams");
+  
+ 
+  const [selectedImage, setSelectedImage] = useState('');
+  const { token, type } = useSelector((state) => state.auth);
   const imagepicker = () => {
     let option = {
       storageoption: {
@@ -36,8 +58,58 @@ function CompanyLocationPhoto({navigation}) {
     });
   };
 
+  const HandleNext = () => {
+    setload(true)
+    let data = new FormData();
+  
+    data.append('type', routeParams.typeseclect);
+    data.append('travel', [routeParams.mileRange]);
+    data.append('location', routeParams.placelocation);
+    data.append('salary', [routeParams.inputValue, routeParams.inputValueto]);
+    data.append('salaryMode', routeParams.selectedTyperoutien);
+    data.append('speciality', 'ergh4r5uy'); // Example, change as needed
+    data.append('category', routeParams.selectedCategories);
+    data.append('description', routeParams.des);
+    
+    // Handle image file
+    if (selectedImage) {
+      // Assuming selectedImage is the file URI
+      const filename = selectedImage.split('/').pop();
+      data.append('picture', {
+        uri: selectedImage,
+        type: 'image/jpeg', // Or the correct mime type of the image
+        name: filename,
+      });
+    }
+  
+    let config = {
+      method: 'post',
+      url: 'https://jobbookbackend.azurewebsites.net/api/v1/jobbook/company/job/create',
+      headers: { 
+        'Authorization': `Bearer ${token}`,
+        // Content-Type will be set automatically
+      },
+      data: data,
+    };
+  
+    axios(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+        setload(false)
+        setModalVisible(true);
+
+        // Handle success here
+      })
+      .catch((error) => {
+        console.error(error);
+        setload(false)
+      });
+  };
+
+
   return (
-    <SafeAreaView style={styles.mainCon}>
+<>
+{ isload ? <Loader/>:  <SafeAreaView style={styles.mainCon}>
       <CustomeforgetHeader
         company={true}
         source={Images.arrow}
@@ -71,9 +143,21 @@ function CompanyLocationPhoto({navigation}) {
       <CustomeButton
         nonbg={true}
         title={'Next'}
-        onPress={() => navigation.navigate('preview')}
+        onPress={HandleNext}
       />
-    </SafeAreaView>
+        <CustomModal 
+       status={'Job Posted successfully '}
+       statusTwo={
+         'Your Job has been Posted successfully'
+       }
+       jobposted={true}
+       isModalVisible={isModalVisible}
+      
+      />
+    </SafeAreaView>}
+
+
+</>
   );
 }
 
