@@ -10,13 +10,13 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import Bg from '../../assets/shape.png';
 import IMG from '../../assets/dp.png'
 import axios from 'axios';
-import { useSelector } from 'react-redux';
-import { calculateDaysAgo } from '../../config/utilities/hours';
-import { baseprofileurl } from '../../config/utilities';
+import {useSelector} from 'react-redux';
+import {calculateDaysAgo} from '../../config/utilities/hours';
+import {baseprofileurl} from '../../config/utilities';
 import Loader from '../../Components/Loader';
 
-const JobsearchScreen = ({ navigation }) => {
-  const { token, type } = useSelector((state) => state.auth);
+const JobsearchScreen = ({navigation}) => {
+  const {token, type} = useSelector(state => state.auth);
   const [jobsData, setJobsData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);

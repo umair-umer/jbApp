@@ -116,7 +116,7 @@ const CusTomDrawer = ({ navigation }) => {
               <Ionicons color={'#fff'} size={25} name="notifications" />
               <Text style={styles.editbutton}>notifications</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonroutes}>
+            <TouchableOpacity style={styles.buttonroutes} onPress={()=>navigation.navigate('resumegenratescreen')}>
               <Ionicons color={'#fff'} size={25} name="document-text-outline" />
               <Text style={styles.editbutton}>Generate CV </Text>
             </TouchableOpacity>
