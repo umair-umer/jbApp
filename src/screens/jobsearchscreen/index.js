@@ -37,7 +37,7 @@ const JobsearchScreen = ({ navigation }) => {
       try {
         const response = await axios(config);
         setJobsData(response.data.data); 
-        console.log(response.data.data, "===>");
+        console.log(response.data, "===>");
       } catch (err) {
         console.error("Error fetching data: ", err);
         setError(err);
@@ -136,7 +136,7 @@ const JobsearchScreen = ({ navigation }) => {
           <View style={styles.descri}>
             <Entypo name='graduation-cap' />
             {/* Replace '3 years exp.' with job.experience */}
-            <Text style={styles.tstyle}>{job.experience} exp.</Text>
+            <Text style={styles.tstyle}>exp:{job.experience} </Text>
           </View>
           <View style={styles.descri}>
             <Ionicons name="time-outline" />
@@ -158,7 +158,7 @@ const JobsearchScreen = ({ navigation }) => {
           </View>
           <View>
             {/* Uncomment and use job.salary if available */}
-            <Text style={styles.postsalary}>${job.salary}/mo</Text>
+            <Text style={styles.postsalary}>{job.travel}km/m</Text>
           </View>
         </View>
       </ImageBackground>
