@@ -84,10 +84,10 @@ const ChatRoom = ({ route, navigation }) => {
                     onChangeText={(text) => setMessage(text)}
                     placeholder="Type a message" /></View>
                 <TouchableOpacity style={styles.iconsendcontainer} onPress={handleSend}>
-                    <FontAwesome name="send" size={calculateFontSize(23)} color="#009A8C" />
+                    <FontAwesome name="send" size={calculateFontSize(23)} color="#009A8C"/>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={endVideoCall}>
-                    <Text>End Call</Text>
+                    {/* <Text>End Call</Text> */}
                 </TouchableOpacity>
             </View>
      

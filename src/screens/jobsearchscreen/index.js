@@ -97,37 +97,57 @@ const[id,setId]=useState();
         </View>
 
         <ScrollView showsVerticalScrollIndicator={false}>
-        {jobsData && jobsData.length > 0 ? (
-  jobsData.map((job, index) => (
-    <View key={index} style={styles.shap}>
-      <ImageBackground
-        style={{
-          width: width * 0.94,
-          height: height * 0.3,
-          paddingTop: height * 0.039,
-          paddingHorizontal: width * 0.03,
-        }}
-        resizeMode='contain'
-        source={Bg}>
-
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <View style={styles.iconimage} >
-              {/* Replace Images.dp with job.picture */}
-              <Image style={{ width: "100%", height: "100%" }} resizeMode='center' source={{ uri: `${baseprofileurl}${job.user.picture}` }}  />
-            </View>
-            <View style={{ marginHorizontal: width * 0.03, }}>
-              {/* Replace 'SumatoSoft' with job.title */}
-              <Text style={styles.designation}>{job.title}</Text>
-              <Text style={styles.companyname}>{job.user.name}</Text>
-            </View>
-          </View>
-          <TouchableOpacity onPress={() => navigation.navigate("jobdeatilview",{id})}
-            style={{ flexDirection: "row", alignItems: "center", marginBottom: height * 0.035, marginRight: width * 0.01, }}>
-            <Text style={styles.vietex}>View</Text>
-            <Feather name='arrow-up-right' size={20} />
-          </TouchableOpacity>
-        </View>
+          {jobsData && jobsData.length > 0 ? (
+            jobsData.map((job, index) => (
+              <View key={index} style={styles.shap}>
+                <ImageBackground
+                  style={{
+                    width: width * 0.94,
+                    height: height * 0.3,
+                    paddingTop: height * 0.024,
+                    paddingHorizontal: width * 0.03,
+                  }}
+                  resizeMode="contain"
+                  source={Bg}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <View style={styles.iconimage}>
+                        {/* Replace Images.dp with job.picture */}
+                        <Image
+                          style={{
+                            width: '60%',
+                            height: '100%',
+                            alignSelf: 'center',
+                          }}
+                          resizeMode="center"
+                          source={{uri: `${baseprofileurl}${job.user.picture}`}}
+                        />
+                      </View>
+                      <View style={{marginHorizontal: width * 0.03}}>
+                        {/* Replace 'SumatoSoft' with job.title */}
+                        <Text style={styles.designation}>{job.title}</Text>
+                        <Text style={styles.companyname}>{job.user.name}</Text>
+                      </View>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate('jobdeatilview', {jobId: job._id})
+                        
+                      }
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        marginBottom: height * 0.03,
+                        marginRight: width * 0.01,
+                      }}>
+                      <Text style={styles.vietex}>View</Text>
+                      <Feather name="arrow-up-right" size={20} />
+                    </TouchableOpacity>
+                  </View>
 
         <View style={{ flexDirection: "row", marginVertical: height * 0.01, }}>
           {/* Replace 'New York' with job.location */}
