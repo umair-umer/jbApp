@@ -4,6 +4,7 @@ import DocumentPicker from 'react-native-document-picker';
 const { width, height } = Dimensions.get('window');
 import Images from '../../config/im';
 import { CustomModal, CustomeButton } from '../../Components'
+// import {useRoute} from '@react-navigation/native';
 function Applyjobscreen({ navigation }) {
     const [isModalVisible, setModalVisible] = useState(false);
     const [uploadedDocument, setUploadedDocument] = useState('');
@@ -42,14 +43,17 @@ function Applyjobscreen({ navigation }) {
 
     return (
         <>
-            <CustomModal passscreen={true} status={"Job application sent successfully"} statusTwo={"your job application has successfully uploaded Best of luck!"} isModalVisible={isModalVisible} onPress={toggleModal} />
+            <CustomModal 
+            passscreen={true} status={"Job application sent successfully"} 
+            statusTwo={"your job application has successfully uploaded Best of luck!"} 
+            isModalVisible={isModalVisible} onPress={toggleModal} />
             
             <View style={styles.mainCon}>
 
                 <View style={styles.headingCon}>
                     <Text style={styles.headingText}>Apply for this job</Text>
                 </View>
-             <ScrollView>
+             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.inputCon}>
                     <TextInput
                         placeholder="Enter Full Name"
@@ -87,7 +91,7 @@ function Applyjobscreen({ navigation }) {
                     />
                     <View>
                         <CustomeButton title={"Submit Application"} nonbg={true} onPress={toggleModal} />
-                        <CustomeButton title={"Generate CV"} />
+                        <CustomeButton title={"Generate CV"} onPress={()=>navigation.navigate('resumegenratescreen')}/>
                     </View>
 
                 </View>

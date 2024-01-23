@@ -258,6 +258,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#1B5953',
     paddingHorizontal: width * 0.04,
     borderRadius: 10,
+    color:"#fff"
 
   },
   expInput:{
@@ -265,6 +266,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#1B5953',
     paddingHorizontal: width * 0.04,
     borderRadius: 10,
+    color:"#fff"
 
   },
   txt:{

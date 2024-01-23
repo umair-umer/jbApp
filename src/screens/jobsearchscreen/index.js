@@ -162,7 +162,8 @@ const JobsearchScreen = ({navigation}) => {
                     </View>
                     <TouchableOpacity
                       onPress={() =>
-                        navigation.navigate('JobDetailView', {jobId: job.id})
+                        navigation.navigate('jobdeatilview', {jobId: job._id})
+                        
                       }
                       style={{
                         flexDirection: 'row',

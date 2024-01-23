@@ -232,7 +232,7 @@ const Profilescreen = ({navigation}) => {
                 </View>
 
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('workedit')}>
+                  onPress={() => navigation.navigate('myprofileditexperiancescreen')}>
                   <Feather
                     name="edit"
                     color="#fff"
@@ -257,7 +257,7 @@ const Profilescreen = ({navigation}) => {
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity style={styles.cvbtn}>
+            <TouchableOpacity style={styles.cvbtn} onPress={()=>navigation.navigate('resumegenratescreen')}>
               <View>
                 <FontAwesome5 name="crown" color={'#FFB545'} size={15} />
               </View>

@@ -85,7 +85,7 @@ function CustomModal({
                 <Text style={styles.updstetext}>{statusTwo}</Text>
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate('loginscreen');
+                    navigation.navigate('Feeds');
                   }}
                   style={styles.nonebutton}>
                   <Text style={styles.colorbg}>Done</Text>
