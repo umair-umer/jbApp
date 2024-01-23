@@ -13,12 +13,14 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { calculateDaysAgo } from '../../config/utilities/hours';
 import { baseprofileurl } from '../../config/utilities';
+import Loader from '../../Components/Loader';
+
 const JobsearchScreen = ({ navigation }) => {
   const { token, type } = useSelector((state) => state.auth);
   const [jobsData, setJobsData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-
+const[id,setId]=useState();
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -37,7 +39,7 @@ const JobsearchScreen = ({ navigation }) => {
       try {
         const response = await axios(config);
         setJobsData(response.data.data); 
-        console.log(response.data, "===>");
+     setId(response.data.data[0]._id);
       } catch (err) {
         console.error("Error fetching data: ", err);
         setError(err);
@@ -120,7 +122,7 @@ const JobsearchScreen = ({ navigation }) => {
               <Text style={styles.companyname}>{job.user.name}</Text>
             </View>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate("JobDetailView", { jobId: job.id })}
+          <TouchableOpacity onPress={() => navigation.navigate("jobdeatilview",{id})}
             style={{ flexDirection: "row", alignItems: "center", marginBottom: height * 0.035, marginRight: width * 0.01, }}>
             <Text style={styles.vietex}>View</Text>
             <Feather name='arrow-up-right' size={20} />
@@ -145,7 +147,7 @@ const JobsearchScreen = ({ navigation }) => {
           </View>
         </View>
 
-        <View>
+        <View style={{marginVertical:height*0.013,}}>
           {/* Replace this static description with job.description */}
           <Text style={styles.description}>{job.description}</Text>
         </View>
@@ -378,7 +380,7 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: calculateFontSize(10),
-    color: '#ffff',
+    color: '#fff',
   },
   postduration: {
     fontSize: calculateFontSize(15),

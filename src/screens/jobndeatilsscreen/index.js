@@ -12,7 +12,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import IMG from '../../assets/dp.png'
 import ICON from '../../assets/icon.png'
 
-const Jobdetail = ({ navigation }) => {
+const Jobdetail = ({ navigation ,route}) => {
+    const {id}=route.params;
+    console.log(id,"viewjobdetail");
     const jobDetailsData = {
         title: 'Ux Designer',
         company: 'SumatoSoft',
@@ -183,7 +185,7 @@ const Jobdetail = ({ navigation }) => {
             </Text>
         </TouchableOpacity>
      
-        <TouchableOpacity style={styles.btnn} onPress={()=>navigation.navigate('applyjobform')}>
+        <TouchableOpacity style={styles.btnn} onPress={()=>navigation.navigate('applyjobform',{id})}>
         <Text style={styles.btnntxt}> Apply this job</Text>
         </TouchableOpacity>
 
