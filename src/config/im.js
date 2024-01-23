@@ -72,7 +72,7 @@ import Resume4 from '../assets/Resume4.png'
 import Resume5 from '../assets/Resume5.png'
 import Resume6 from '../assets/Resume6.png'
 import Preview from '../assets/Previewresume.png'
-
+import saveicon from'../assets/saveicon.png'
 
 
 const Images = {
@@ -148,8 +148,8 @@ const Images = {
   Resume4,
   Resume5,
   Resume6,
-  Preview
- 
+  Preview,
+  saveicon
 
 };
 

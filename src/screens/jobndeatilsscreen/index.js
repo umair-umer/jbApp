@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { ScrollView,View, Text, ImageBackground, SafeAreaView, StyleSheet, Image, Dimensions, TouchableOpacity, FlatList, TextInput } from 'react-native';
 import Images from '../../config/im';
 import { calculateFontSize } from '../../config/font';
@@ -11,10 +12,13 @@ import Feather from 'react-native-vector-icons/Feather'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import IMG from '../../assets/dp.png'
 import ICON from '../../assets/icon.png'
-
+import { useSelector } from 'react-redux';
 const Jobdetail = ({ navigation ,route}) => {
     const {id}=route.params;
     console.log(id,"viewjobdetail");
+    const { token, type } = useSelector((state) => state.auth);
+ 
+    const [isSaved, setIsSaved] = useState(false); 
     const jobDetailsData = {
         title: 'Ux Designer',
         company: 'SumatoSoft',
@@ -47,6 +51,25 @@ const Jobdetail = ({ navigation ,route}) => {
             <Text style={styles.textdes}>{item}</Text>
         </View>
     );
+    const handleToggleSave = async () => {
+        try {
+            let action = isSaved ? "unsave" : "save"; // Determine action based on current state
+            const response = await axios.post(
+                `https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/home/saveToggle/${id}`,
+                JSON.stringify({ action }),
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`, // Use your actual token
+                    },
+                }
+            );
+            console.log(response.data);
+            setIsSaved(!isSaved); 
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
         <ImageBackground style={styles.backgroundImage} source={Images.jsbg} resizeMode='cover'>
@@ -82,10 +105,10 @@ const Jobdetail = ({ navigation ,route}) => {
                                         <Text style={{ fontWeight: "700", color: "#fff", fontSize: calculateFontSize(12) }}>{jobDetailsData.company}</Text>
                                     </View>
                                 </View>
-                                <TouchableOpacity style={styles.icon}>
+                                <TouchableOpacity style={styles.icon} onPress={handleToggleSave}>
                                     <Image
-                                        source={ICON}
-                                        style={{ width: "100%", height: "100%" }}
+                                      source={isSaved?Images.saveicon :ICON}
+                                        style={{ width: "100%", height: "100%",color:"black" }}
                                         resizeMode="center"
                                     />
                                 </TouchableOpacity>

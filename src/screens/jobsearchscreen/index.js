@@ -20,7 +20,7 @@ const JobsearchScreen = ({ navigation }) => {
   const [jobsData, setJobsData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-const[id,setId]=useState();
+  const [id, setId] = useState();
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -38,8 +38,8 @@ const[id,setId]=useState();
 
       try {
         const response = await axios(config);
-        setJobsData(response.data.data); 
-     setId(response.data.data[0]._id);
+        setJobsData(response.data.data);
+        //  setId(response.data.data[0]._id);
       } catch (err) {
         console.error("Error fetching data: ", err);
         setError(err);
@@ -53,124 +53,125 @@ const[id,setId]=useState();
 
 
   return (
-    <ImageBackground style={styles.backgroundImage} source={Images.jsbg} resizeMode='cover'>
-      <View style={styles.line}></View>
-      <SafeAreaView style={styles.container}>
-        <CustomeHeader iconsource3={Images.setting} />
+    <>
+      {isLoading ? <Loader /> : <ImageBackground style={styles.backgroundImage} source={Images.jsbg} resizeMode='cover'>
+        <View style={styles.line}></View>
+        <SafeAreaView style={styles.container}>
+          <CustomeHeader iconsource3={Images.setting} />
 
-        <View style={{ flexDirection: "row", justifyContent: "space-between", marginVertical: height * 0.03, }}>
-          <TouchableOpacity style={styles.screnbutt}>
-            <Text style={styles.screbutton}>Discover</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.screnbuttactive} onPress={() => navigation.navigate('pending')}>
-            <Text style={styles.screbuttonactive}>Saved</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.screnbuttactive} onPress={() => navigation.navigate('appliedscreen')}>
-            <Text style={styles.screbuttonactive}>Applied</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.screnbuttactive}>
-            <Text style={styles.screbuttonactive}>INTERVIEWS</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.screnbuttactive} onPress={() => navigation.navigate('closedscreen')}>
-            <Text style={styles.screbuttonactive}>Closed</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{ paddingRight: width * 0.25, marginVertical: height * 0.02, }}>
-          <Text style={styles.jobsrch}>
-            Now it’s easy to find your next job 💼
-          </Text>
-        </View>
-        <View style={styles.inpmain}>
-          <View style={styles.inpbox}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Feather name="search" color={"#fff"} size={15} />
-              <TextInput
-                placeholder='Search jobs, Company'
-                placeholderTextColor={"#fff"}
-                style={{ color: "#fff" }}
-              />
+          <View style={{ flexDirection: "row", justifyContent: "space-between", marginVertical: height * 0.03, }}>
+            <TouchableOpacity style={styles.screnbutt}>
+              <Text style={styles.screbutton}>Discover</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.screnbuttactive} onPress={() => navigation.navigate('pending')}>
+              <Text style={styles.screbuttonactive}>Saved</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.screnbuttactive} onPress={() => navigation.navigate('appliedscreen')}>
+              <Text style={styles.screbuttonactive}>Applied</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.screnbuttactive}>
+              <Text style={styles.screbuttonactive}>INTERVIEWS</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.screnbuttactive} onPress={() => navigation.navigate('closedscreen')}>
+              <Text style={styles.screbuttonactive}>Closed</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{ paddingRight: width * 0.25, marginVertical: height * 0.02, }}>
+            <Text style={styles.jobsrch}>
+              Now it’s easy to find your next job 💼
+            </Text>
+          </View>
+          <View style={styles.inpmain}>
+            <View style={styles.inpbox}>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Feather name="search" color={"#fff"} size={15} />
+                <TextInput
+                  placeholder='Search jobs, Company'
+                  placeholderTextColor={"#fff"}
+                  style={{ color: "#fff" }}
+                />
+              </View>
             </View>
+            <TouchableOpacity style={styles.fltrbtn} onPress={() => navigation.navigate('specialscreen')}>
+              <Feather name="sliders" color={"#fff"} size={25} />
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.fltrbtn} onPress={() => navigation.navigate('specialscreen')}>
-            <Feather name="sliders" color={"#fff"} size={25} />
-          </TouchableOpacity>
-        </View>
 
-        <ScrollView showsVerticalScrollIndicator={false}>
-        {jobsData && jobsData.length > 0 ? (
-  jobsData.map((job, index) => (
-    <View key={index} style={styles.shap}>
-      <ImageBackground
-        style={{
-          width: width * 0.94,
-          height: height * 0.3,
-          paddingTop: height * 0.039,
-          paddingHorizontal: width * 0.03,
-        }}
-        resizeMode='contain'
-        source={Bg}>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            {jobsData && jobsData.length > 0 ? (
+              jobsData.map((job, index) => (
+                <View key={index} style={styles.shap}>
+                  <ImageBackground
+                    style={{
+                      width: width * 0.94,
+                      height: height * 0.3,
+                      paddingTop: height * 0.039,
+                      paddingHorizontal: width * 0.03,
+                    }}
+                    resizeMode='contain'
+                    source={Bg}>
 
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <View style={styles.iconimage} >
-              {/* Replace Images.dp with job.picture */}
-              <Image style={{ width: "100%", height: "100%" }} resizeMode='center' source={{ uri: `${baseprofileurl}${job.user.picture}` }}  />
-            </View>
-            <View style={{ marginHorizontal: width * 0.03, }}>
-              {/* Replace 'SumatoSoft' with job.title */}
-              <Text style={styles.designation}>{job.title}</Text>
-              <Text style={styles.companyname}>{job.user.name}</Text>
-            </View>
-          </View>
-          <TouchableOpacity onPress={() => navigation.navigate("jobdeatilview",{id})}
-            style={{ flexDirection: "row", alignItems: "center", marginBottom: height * 0.035, marginRight: width * 0.01, }}>
-            <Text style={styles.vietex}>View</Text>
-            <Feather name='arrow-up-right' size={20} />
-          </TouchableOpacity>
-        </View>
+                    <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                      <View style={{ flexDirection: "row", alignItems: "center" }}>
+                        <View style={styles.iconimage} >
+                          {/* Replace Images.dp with job.picture */}
+                          <Image style={{ width: "100%", height: "100%" }} resizeMode='center' source={{ uri: `${baseprofileurl}${job.user.picture}` }} />
+                        </View>
+                        <View style={{ marginHorizontal: width * 0.03, }}>
+                          {/* Replace 'SumatoSoft' with job.title */}
+                          <Text style={styles.designation}>{job.title}</Text>
+                          <Text style={styles.companyname}>{job.user.name}</Text>
+                        </View>
+                      </View>
+                      <TouchableOpacity onPress={() => navigation.navigate("jobdeatilview", { id })}
+                        style={{ flexDirection: "row", alignItems: "center", marginBottom: height * 0.035, marginRight: width * 0.01, }}>
+                        <Text style={styles.vietex}>View</Text>
+                        <Feather name='arrow-up-right' size={20} color={"white"} style={{ bottom: height * 0.01, }} />
+                      </TouchableOpacity>
+                    </View>
 
-        <View style={{ flexDirection: "row", marginVertical: height * 0.01, }}>
-          {/* Replace 'New York' with job.location */}
-          <View style={styles.descri}>
-            <Feather name='map-pin' />
-            <Text style={styles.tstyle}>{job.location}</Text>
-          </View>
-          <View style={styles.descri}>
-            <Entypo name='graduation-cap' />
-            {/* Replace '3 years exp.' with job.experience */}
-            <Text style={styles.tstyle}>exp:{job.experience} </Text>
-          </View>
-          <View style={styles.descri}>
-            <Ionicons name="time-outline" />
-            {/* Replace 'Fulltime' with job.type */}
-            <Text style={styles.tstyle}>{job.type}</Text>
-          </View>
-        </View>
+                    <View style={{ flexDirection: "row", marginVertical: height * 0.01, }}>
+                      {/* Replace 'New York' with job.location */}
+                      <View style={styles.descri}>
+                        <Feather name='map-pin' />
+                        <Text style={styles.tstyle}>{job.location}</Text>
+                      </View>
+                      <View style={styles.descri}>
+                        <Entypo name='graduation-cap' />
+                        {/* Replace '3 years exp.' with job.experience */}
+                        <Text style={styles.tstyle}>exp:{job.experience} </Text>
+                      </View>
+                      <View style={styles.descri}>
+                        <Ionicons name="time-outline" />
+                        {/* Replace 'Fulltime' with job.type */}
+                        <Text style={styles.tstyle}>{job.type}</Text>
+                      </View>
+                    </View>
 
-        <View style={{marginVertical:height*0.013,}}>
-          {/* Replace this static description with job.description */}
-          <Text style={styles.description}>{job.description}</Text>
-        </View>
+                    <View style={{ marginVertical: height * 0.013, }}>
+                      {/* Replace this static description with job.description */}
+                      <Text style={styles.description}>{job.description}</Text>
+                    </View>
 
-        <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: height * 0.05, paddingHorizontal: width * 0.02, }}>
-          <View style={{ flexDirection: "row" }}>
-            <Entypo name='back-in-time' size={20} color={"#000"} />
-            {/* Calculate and replace 'Posted 5 days ago' with actual post duration based on job.createdAt */}
-            <Text style={styles.postduration}>Posted {calculateDaysAgo(job.createdAt)} days ago</Text>
-          </View>
-          <View>
-            {/* Uncomment and use job.salary if available */}
-            <Text style={styles.postsalary}>{job.travel}km/m</Text>
-          </View>
-        </View>
-      </ImageBackground>
-    </View>
-  ))
-) : (
-  <Text>No jobs available</Text>
-)}
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: height * 0.05, paddingHorizontal: width * 0.02, }}>
+                      <View style={{ flexDirection: "row" }}>
+                        <Entypo name='back-in-time' size={20} color={"#000"} />
+                        {/* Calculate and replace 'Posted 5 days ago' with actual post duration based on job.createdAt */}
+                        <Text style={styles.postduration}>Posted {calculateDaysAgo(job.createdAt)} days ago</Text>
+                      </View>
+                      <View>
+                        {/* Uncomment and use job.salary if available */}
+                        <Text style={styles.postsalary}>{job.travel}km/m</Text>
+                      </View>
+                    </View>
+                  </ImageBackground>
+                </View>
+              ))
+            ) : (
+              <Text>No jobs available</Text>
+            )}
 
-        {/* {jobsData && jobsData.length > 0 ? ( jobsData.map((job, index) => {
+            {/* {jobsData && jobsData.length > 0 ? ( jobsData.map((job, index) => {
            <View key={index}  style={styles.shap}>
            <ImageBackground style={{
              width: width * 0.94,
@@ -222,23 +223,26 @@ const[id,setId]=useState();
                </View>
                <View>
                  {/* <Text style={styles.postsalary}>$25K/mo</Text> */}
-               {/* </View>
+            {/* </View>
              </View>
            </ImageBackground>
          </View>
       
           })):( <Text>No jobs available</Text>)} */}
-          
-
-
-        </ScrollView>
 
 
 
+          </ScrollView>
 
 
-      </SafeAreaView>
-    </ImageBackground>
+
+
+
+        </SafeAreaView>
+      </ImageBackground>
+      }
+    </>
+
   )
 }
 
@@ -343,7 +347,7 @@ const styles = StyleSheet.create({
     height: height * 0.06,
     backgroundColor: "#fff",
     borderRadius: 10,
-    overflow:"hidden"
+    overflow: "hidden"
   },
   designation: {
     fontSize: calculateFontSize(15),
@@ -359,6 +363,7 @@ const styles = StyleSheet.create({
     fontSize: calculateFontSize(15),
     color: '#ffff',
     fontWeight: 'bold',
+    bottom: height * 0.01,
 
   },
   descri: {

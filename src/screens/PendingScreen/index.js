@@ -94,9 +94,9 @@ function Pendingjobscreens({navigation}) {
                 <Text style={styles.companyname}>{job.user.name}</Text>
               </View>
             </View>
-            <TouchableOpacity onPress={() => navigation.navigate("jobdeatilview")} style={{ flexDirection: "row", alignItems: "center", marginBottom: height * 0.035, marginRight: width * 0.01, }}>
+            <TouchableOpacity onPress={() => navigation.navigate("jobdeatilview")} style={{ flexDirection: "row", alignItems: "center",marginBottom:height*0.025 }}>
               <Text style={styles.vietex}>View</Text>
-              <Feather name='arrow-up-right' size={20} />
+              <Feather name='arrow-up-right' size={20} color={"white"} style={{   bottom:height*0.01,}} />
             </TouchableOpacity>
           </View>
           <View style={{ flexDirection: "row", marginVertical: height * 0.01, }}>
@@ -185,6 +185,7 @@ const styles = StyleSheet.create({
     fontSize: calculateFontSize(15),
     color: '#ffff',
     fontWeight: 'bold',
+    bottom:height*0.01,
   },
   descri: {
     backgroundColor: 'rgba(255, 255, 255, 0.5)',
