@@ -324,10 +324,11 @@ const RegistertalentProfile = () => {
         );
         const token = response.data.token;
         const type = response.data.user.role;
-        console.log(token, type, '====>');
+       
+        // console.log(userId,'userid====>');
         if (response.status === 200) {
           dispatch({type: 'LOGIN_SUCCESS', payload: {token, type}});
-          // dispatch(setUserData(token, type))
+       
           setload(false);
           setModalVisible(true);
         } else {

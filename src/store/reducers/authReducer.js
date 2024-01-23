@@ -2,6 +2,8 @@
 const initialState = {
   token: null,
   type: null,
+
+  
   // ... other state elements
 };
 
@@ -12,6 +14,7 @@ const authReducer = (state = initialState, action) => {
         ...state,
         token: action.payload.token,
         type: action.payload.type,
+    
       };
     case 'LOGOUT':
       return initialState;
