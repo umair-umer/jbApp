@@ -58,6 +58,7 @@ import Editprofileexperiancescreen from './Editexperianceprofilescreen';
 import ResumeGanratescreen from './GenrateResume';
 import Genrateresumeform from './Genrateresumeform';
 import Resumepreview from './Genrateresumepreviewscreen';
+import { TalentSearch } from './talentsearch';
 
 
 
@@ -123,5 +124,7 @@ export {
   Editprofileexperiancescreen,
   ResumeGanratescreen,
   Genrateresumeform,
-  Resumepreview
+  Resumepreview,
+  TalentSearch
+
 };

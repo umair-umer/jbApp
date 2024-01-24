@@ -62,7 +62,9 @@ import {
   Editprofileexperiancescreen,
   ResumeGanratescreen,
   Genrateresumeform,
-  Resumepreview
+  Resumepreview,
+  TalentSearch,
+ 
 } from '../screens';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -353,7 +355,7 @@ function CompanyBottomTab() {
 
       <Tab.Screen
         name="Talent search"
-        component={Jobserandcompanyprofile}
+        component={TalentSearch}
         options={{
           tabBarIcon: ({ color, size }) => (
             <FontAwesome6 name="briefcase" size={size} color={color} />

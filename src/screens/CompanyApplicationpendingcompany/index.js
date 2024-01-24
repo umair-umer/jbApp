@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {
   TouchableOpacity,
   ScrollView,
@@ -16,8 +16,9 @@ import Images from '../../config/im';
 import {calculateFontSize} from '../../config/font';
 import {CustomeforgetHeader} from '../../Components';
 import Swipeable from 'react-native-swipeable';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 const {width, height} = Dimensions.get('window');
-
 const PendingapplicantsData = [
   {
     id: 1,
@@ -52,9 +53,35 @@ const PendingapplicantsData = [
   // Add more data as needed
 ];
 
-function Companyappliationpendingscreen(navigation) {
+function Companyappliationpendingscreen({navigation,route}) {
+ const {id}=route.params;
+ console.log(id,"panding application screen");
+ 
   const [data, setData] = useState(PendingapplicantsData);
+  const { token } = useSelector((state) => state.auth); // If you are using Redux to store your token
+  const [applications, setApplications] = useState([]); 
+  const [isLoading, setIsLoading] = useState(true);
 
+  useEffect(() => {
+    const fetchApplications = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get(`https://jobbookbackend.azurewebsites.net/api/v1/jobbook/company/home/applications/${id}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`, // Use your actual token
+          },
+        });
+        setApplications(response.data.data); // Assuming 'data' contains the applications array
+        console.log(applications,"====>app"); // For debugging
+      } catch (error) {
+        console.error('Error fetching applications:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchApplications();
+  }, [token]); 
   const renderApplicantItem = ({item}) => {
     const leftContent = [
       <TouchableOpacity style={styles.sendButton} key="send">
@@ -130,11 +157,11 @@ function Companyappliationpendingscreen(navigation) {
               <Text style={styles.shortlist}>{item.location}</Text>
             </TouchableOpacity>
 
-            {item.skills.map((skill, index) => (
+            {/* {item.skills.map((skill, index) => (
               <Text style={styles.rej} key={index}>
                 {skill}
               </Text>
-            ))}
+            ))} */}
           </View>
         </View>
       </Swipeable>
@@ -150,9 +177,9 @@ function Companyappliationpendingscreen(navigation) {
       />
 
       <FlatList
-        data={PendingapplicantsData}
-        keyExtractor={item => item.id.toString()}
-        renderItem={renderApplicantItem}
+       data={applications}
+       keyExtractor={(item) => item?.id?.toString() || 'default-value'} // Use optional chaining and provide a default value
+       renderItem={renderApplicantItem}
       />
     </SafeAreaView>
   );

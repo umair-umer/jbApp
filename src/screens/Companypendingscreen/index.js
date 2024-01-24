@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   TouchableOpacity,
   ScrollView,
@@ -16,23 +16,53 @@ import Images from '../../config/im';
 import {calculateFontSize} from '../../config/font';
 import {CustomeforgetHeader} from '../../Components';
 const {width, height} = Dimensions.get('window');
+import axios from 'axios';
+import { useSelector } from 'react-redux'
+function Companyapplicationstatus({navigation,route}) {
+  const  {id} =route.params;
+  console.log(id,"status");
 
-function Companyapplicationstatus({navigation}) {
+  const [stats, setStats] = useState("");
+  
+// console.log(stats.data,"))");
+  const { token } = useSelector(state => state.auth);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      console.log(id,"=====beforeresponce");
+      try {
+        const response = await axios.get(`https://jobbookbackend.azurewebsites.net/api/v1/jobbook/company/home/stats/${id}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        setStats(response.data);
+        console.log(response.data,"=====hola");
+      } catch (error) {
+        console.error('Error fetching stats:', error);
+      }
+    };
+
+    fetchStats();
+  }, [id, token]); // This effect depends on `id` and `token` and will rerun if they change
+
+
+  const goToNextScreen = () => {
+    navigation.navigate('pendingview',{id});
+  };
   return (
     <SafeAreaView style={styles.mainCon}>
       <CustomeforgetHeader
         company={true}
         source={Images.arrow}
-        heading={'25 Applicants'}
+        heading={`${stats?.data?.totalCount || 0} Applicants`}
       />
 
       <View style={styles.contents}>
         <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('pendingview');
-          }}
+          onPress={goToNextScreen}
           style={styles.blucontent}>
-          <Text style={styles.txt}>10</Text>
+          <Text style={styles.txt}>{stats?.data?.totalCount || 0}</Text>
           <Text style={styles.txt1}>pending</Text>
         </TouchableOpacity>
 
@@ -41,7 +71,7 @@ function Companyapplicationstatus({navigation}) {
           onPress={() => {
             navigation.navigate('shortview');
           }}>
-          <Text style={styles.txt}>10</Text>
+          <Text style={styles.txt}>{stats?.data?.shortlistCount || 0}</Text>
           <Text style={styles.txt1}>shortlisted</Text>
         </TouchableOpacity>
 
@@ -50,7 +80,7 @@ function Companyapplicationstatus({navigation}) {
           onPress={() => {
             navigation.navigate('rejectedview');
           }}>
-          <Text style={styles.txt}>05</Text>
+          <Text style={styles.txt}>{stats?.data?.rejectedCount || 0}</Text>
           <Text style={styles.txt1}>rejected</Text>
         </TouchableOpacity>
 
