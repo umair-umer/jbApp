@@ -53,14 +53,14 @@ const Jobdetail = ({ navigation ,route}) => {
     );
     const handleToggleSave = async () => {
         try {
-            let action = isSaved ? "unsave" : "save"; // Determine action based on current state
+            let action = isSaved ? "unsave" : "save"; 
             const response = await axios.post(
                 `https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/home/saveToggle/${id}`,
                 JSON.stringify({ action }),
                 {
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`, // Use your actual token
+                        'Authorization': `Bearer ${token}`, 
                     },
                 }
             );

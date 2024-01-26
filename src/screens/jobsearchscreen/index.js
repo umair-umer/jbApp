@@ -123,7 +123,7 @@ const JobsearchScreen = ({ navigation }) => {
                           <Text style={styles.companyname}>{job.user.name}</Text>
                         </View>
                       </View>
-                      <TouchableOpacity onPress={() => navigation.navigate("jobdeatilview", { id })}
+                      <TouchableOpacity onPress={() => navigation.navigate("jobdeatilview", { id:job._id })}
                         style={{ flexDirection: "row", alignItems: "center", marginBottom: height * 0.035, marginRight: width * 0.01, }}>
                         <Text style={styles.vietex}>View</Text>
                         <Feather name='arrow-up-right' size={20} color={"white"} style={{ bottom: height * 0.01, }} />

@@ -138,12 +138,12 @@ const LoginScreen = ({ navigation }) => {
       const token = response.data.token;
       const type = response.data.user.role;
       console.log(token, type,success, "====>");
-      setload(false)
       if (success) {
         // setload(true)
         dispatch({ type: 'LOGIN_SUCCESS', payload: { token, type } });
 
         navigation.navigate("home")
+        setload(false)
       }
     } catch (error) {
       console.log('Login Error:', error.response.data.error);
@@ -156,7 +156,7 @@ const LoginScreen = ({ navigation }) => {
 
   const closemodal = () => {
     setModalVisiblerrr(false);
-    console.log(isModalVisible);
+    // console.log(isModalVisible);
 };
 
 

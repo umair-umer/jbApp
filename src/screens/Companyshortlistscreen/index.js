@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   TouchableOpacity,
   ScrollView,
@@ -16,6 +16,8 @@ import Images from '../../config/im';
 import {calculateFontSize} from '../../config/font';
 import {CustomeforgetHeader} from '../../Components';
 import Swipeable from 'react-native-swipeable';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 const {width, height} = Dimensions.get('window');
 
 const shortlistedApplicantsData = [
@@ -52,37 +54,55 @@ const shortlistedApplicantsData = [
   // Add more data as needed
 ];
 
-function Companyshortlistedjob({navigation}) {
+function Companyshortlistedjob({navigation,route}) {
+  const { id } = route.params;
+  console.log(id, "panding application screen");
+
   const [data, setData] = useState(shortlistedApplicantsData);
-  const renderApplicantItem = ({item}) => {
-    const rightButtons = [
-        <TouchableOpacity
-          style={styles.deleteButton}
-        >
-          <View style={styles.imgICon}>
-           <Image 
-            source={Images.RejectIcon}
-            style={{width:"100%",height:"100%"}}
-            resizeMode='center'
-           />
-          </View>
-          <Text style={styles.deleteButtonText}>Reject</Text>
-        </TouchableOpacity>,
-      ];
+  const { token } = useSelector((state) => state.auth); // If you are using Redux to store your token
+  const [applications, setApplications] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [applicationId, setapplicationId] = useState()
+  useEffect(() => {
+    const fetchApplications = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get(`https://jobbookbackend.azurewebsites.net/api/v1/jobbook/company/home/applications/${id}?status=accepted`, {
+          headers: {
+            'Authorization': `Bearer ${token}`, 
+          },
+        });
+        setApplications(response.data.data); 
+        console.log(applications, "====>shortlistapp");
+ 
+
+      } catch (error) {
+        console.error('Error fetching applications:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchApplications();
+  }, [ token]);
+
+
+  const renderApplicantItem = ({ item }) => {
+    
 
     return (
-      <Swipeable rightButtons={rightButtons} rightButtonWidth={width * 0.2}>
+     
         <View style={styles.pendingApliictaionview}>
           <View style={styles.pendview}>
             <View style={styles.imgeTextdiv}>
               <View style={styles.imsmalpendin}>
                 <Image
                   resizeMode="cover"
-                  style={{width: '100%', height: '100%'}}
+                  style={{ width: '100%', height: '100%' }}
                   source={item.image}
                 />
               </View>
-              <View style={{paddingHorizontal: width * 0.02}}>
+              <View style={{ paddingHorizontal: width * 0.02 }}>
                 <Text style={styles.aplicantname}>{item.name}</Text>
                 <Text
                   style={
@@ -91,11 +111,11 @@ function Companyshortlistedjob({navigation}) {
               </View>
             </View>
 
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <View style={styles.loadIcon}>
                 <Image
                   source={Images.Loadingimage}
-                  style={{width: '100%', height: '100%'}}
+                  style={{ width: '100%', height: '100%' }}
                   resizeMode="center"
                 />
               </View>
@@ -107,34 +127,33 @@ function Companyshortlistedjob({navigation}) {
               <Text style={styles.shortlist}>{item.location}</Text>
             </TouchableOpacity>
 
-            {item.skills.map((skill, index) => (
+            {/* {item.skills.map((skill, index) => (
               <Text style={styles.rej} key={index}>
                 {skill}
               </Text>
-            ))}
+            ))} */}
           </View>
         </View>
-      </Swipeable>
+   
     );
   };
-
-
   return (
     <SafeAreaView style={styles.mainCon}>
       <CustomeforgetHeader
         onPress={() => navigation.goBack()}
         company={true}
         source={Images.arrow}
-        heading={'Shortlisted Applicants'}
+        heading={'Shortlist applicants '}
       />
 
       <FlatList
-        data={shortlistedApplicantsData}
-        keyExtractor={item => item.id.toString()}
+        data={applications}
+        keyExtractor={(item) => item?.id?.toString() || 'default-value'} // Use optional chaining and provide a default value
         renderItem={renderApplicantItem}
       />
     </SafeAreaView>
   );
+
 }
 
 const styles = StyleSheet.create({

@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   TouchableOpacity,
   ScrollView,
@@ -13,12 +13,12 @@ import {
   Button,
 } from 'react-native';
 import Images from '../../config/im';
-import {calculateFontSize} from '../../config/font';
-import {CustomeforgetHeader} from '../../Components';
+import { calculateFontSize } from '../../config/font';
+import { CustomeforgetHeader } from '../../Components';
 import Swipeable from 'react-native-swipeable';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 const PendingapplicantsData = [
   {
     id: 1,
@@ -53,26 +53,28 @@ const PendingapplicantsData = [
   // Add more data as needed
 ];
 
-function Companyappliationpendingscreen({navigation,route}) {
- const {id}=route.params;
- console.log(id,"panding application screen");
- 
+function Companyappliationpendingscreen({ navigation, route }) {
+  const { id } = route.params;
+  console.log(id, "panding application screen");
+
   const [data, setData] = useState(PendingapplicantsData);
   const { token } = useSelector((state) => state.auth); // If you are using Redux to store your token
-  const [applications, setApplications] = useState([]); 
+  const [applications, setApplications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [applicationId, setapplicationId] = useState()
   useEffect(() => {
     const fetchApplications = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(`https://jobbookbackend.azurewebsites.net/api/v1/jobbook/company/home/applications/${id}`, {
+        const response = await axios.get(`https://jobbookbackend.azurewebsites.net/api/v1/jobbook/company/home/applications/${id}?status=pending`, {
           headers: {
-            'Authorization': `Bearer ${token}`, // Use your actual token
+            'Authorization': `Bearer ${token}`, 
           },
         });
-        setApplications(response.data.data); // Assuming 'data' contains the applications array
-        console.log(applications,"====>app"); // For debugging
+        setApplications(response.data.data); 
+        console.log(applications, "====>app");
+ 
+
       } catch (error) {
         console.error('Error fetching applications:', error);
       } finally {
@@ -81,26 +83,66 @@ function Companyappliationpendingscreen({navigation,route}) {
     };
 
     fetchApplications();
-  }, [token]); 
-  const renderApplicantItem = ({item}) => {
-    const leftContent = [
-      <TouchableOpacity style={styles.sendButton} key="send">
-        <View style={styles.imgIcon}>
-          <Image
-            source={Images.SendIcon}
-            style={{ width: '100%', height: '100%' }}
-            resizeMode="center"
-          />
-        </View>
-        <Text style={styles.sendButtonText}>Send</Text>
-      </TouchableOpacity>,
-    ];
+  }, [ token]);
+  const updateApplicationStatus = async (applicationId, newStatus) => {
+    try {
+      setapplicationId(applicationId); // For debugging
+      console.log(applicationId, newStatus, "-->");
+      const response = await axios.put(
+        `https://jobbookbackend.azurewebsites.net/api/v1/jobbook/company/home/applicationUpdate/${applicationId}`,
+        { status: newStatus },
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        }
+      );
+      console.log('Status update response:', response.data);
+      // Update the UI after status update
+      setApplications(prevApplications =>
+        prevApplications.filter(app => app.id !== applicationId)
+      );
+    } catch (error) {
+      console.error('Error updating application status:', error);
+    }
+  };
+
+  const handleReject = (applicationId) => {
+    updateApplicationStatus(applicationId, 'rejected');
+  };
+
+  const handleShortlist = (applicationId) => {
+    updateApplicationStatus(applicationId, 'accepted');
+  };
+
+  const renderApplicantItem = ({ item }) => {
+    // const leftContent = [
+    //   <TouchableOpacity 
+    //   // style={styles.deleteButton}
+    //   onPress={() => handleReject(item.id)}
+    //    style={styles.sendButton} 
+    //    key="send"
+    //    >
+    //     <View style={styles.imgIcon}>
+    //       <Image
+    //         source={Images.SendIcon}
+    //         style={{ width: '100%', height: '100%' }}
+    //         resizeMode="center"
+    //       />
+    //     </View>
+    //     <Text style={styles.sendButtonText}>Send</Text>
+    //   </TouchableOpacity>,
+    // ];
     const rightButtons = [
-      <TouchableOpacity style={styles.deleteButton}>
+      <TouchableOpacity
+        style={styles.deleteButton}
+        onPress={() => handleReject(item._id)}
+      // style={styles.deleteButton}
+      >
         <View style={styles.imgICon}>
           <Image
             source={Images.RejectIcon}
-            style={{width: '100%', height: '100%'}}
+            style={{ width: '100%', height: '100%' }}
             resizeMode="center"
           />
         </View>
@@ -108,7 +150,11 @@ function Companyappliationpendingscreen({navigation,route}) {
       </TouchableOpacity>,
     ];
     const leftButtons = [
-      <TouchableOpacity style={styles.sendButton} key="send">
+      <TouchableOpacity
+        style={styles.sendButton}
+        // style={styles.sendButton}
+        onPress={() => handleShortlist(item._id)}
+        key="send">
         <View style={styles.sendICon}>
           <Image
             source={Images.SendICon}
@@ -128,11 +174,11 @@ function Companyappliationpendingscreen({navigation,route}) {
               <View style={styles.imsmalpendin}>
                 <Image
                   resizeMode="cover"
-                  style={{width: '100%', height: '100%'}}
+                  style={{ width: '100%', height: '100%' }}
                   source={item.image}
                 />
               </View>
-              <View style={{paddingHorizontal: width * 0.02}}>
+              <View style={{ paddingHorizontal: width * 0.02 }}>
                 <Text style={styles.aplicantname}>{item.name}</Text>
                 <Text
                   style={
@@ -141,11 +187,11 @@ function Companyappliationpendingscreen({navigation,route}) {
               </View>
             </View>
 
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <View style={styles.loadIcon}>
                 <Image
                   source={Images.Loadingimage}
-                  style={{width: '100%', height: '100%'}}
+                  style={{ width: '100%', height: '100%' }}
                   resizeMode="center"
                 />
               </View>
@@ -177,14 +223,14 @@ function Companyappliationpendingscreen({navigation,route}) {
       />
 
       <FlatList
-       data={applications}
-       keyExtractor={(item) => item?.id?.toString() || 'default-value'} // Use optional chaining and provide a default value
-       renderItem={renderApplicantItem}
+        data={applications}
+        keyExtractor={(item) => item?.id?.toString() || 'default-value'} // Use optional chaining and provide a default value
+        renderItem={renderApplicantItem}
       />
     </SafeAreaView>
   );
 
- 
+
 }
 
 const styles = StyleSheet.create({
@@ -295,30 +341,30 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
-  imgICon:{
+  imgICon: {
 
-       width:width*0.1,
-       height:height * 0.07
+    width: width * 0.1,
+    height: height * 0.07
   },
-  sendICon:{
-    width:width*0.09,
-    height:height * 0.08,
-    marginRight:10
-     
+  sendICon: {
+    width: width * 0.09,
+    height: height * 0.08,
+    marginRight: 10
+
   },
   sendButton: {
     backgroundColor: 'rgba(0, 154, 140,0.4)',
-    justifyContent:"center",
+    justifyContent: "center",
     alignItems: 'flex-end',
     // width: width * 0.3,
     height: '100%',
-    paddingHorizontal:10,
+    paddingHorizontal: 10,
   },
   sendButtonText: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize:calculateFontSize(12),
-    marginLeft:60
+    fontSize: calculateFontSize(12),
+    marginLeft: 60
   },
 });
 export default Companyappliationpendingscreen;
