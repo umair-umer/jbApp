@@ -64,6 +64,7 @@ import {
   Genrateresumeform,
   Resumepreview,
   TalentSearch,
+  UpdateProfileTalent,
  
 } from '../screens';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -143,8 +144,10 @@ function Nav() {
         <Stack.Screen name="letpayment" component={Letsaddyourcard} />
         <Stack.Screen name="addcardlist" component={Addcardlistscreen} />
         <Stack.Screen name="myprofileverifyscreen" component={Verfymyprofilesettingscreen} />
-        <Stack.Screen name="myprofileditskillsscreen" component={Editprofileskillscreen} />
-        <Stack.Screen name="myprofileditexperiancescreen" component={Editprofileexperiancescreen} />
+        <Stack.Screen name="UpdateProfiletalent" component={UpdateProfileTalent} />
+        {/*
+        {/* <Stack.Screen name="myprofileditskillsscreen" component={Editprofileskillscreen} />
+        <Stack.Screen name="myprofileditexperiancescreen" component={Editprofileexperiancescreen} /> */}
 
         <Stack.Screen name="userchatroomscreen" component={ChatRoom} />
         <Stack.Screen name="videocallscreen" component={Videocall} />

@@ -40,9 +40,9 @@ const CusTomDrawer = ({ navigation }) => {
         console.log(response.data.data, "====>getprofile")
         // Handle the successful response and update userData state
         // const { name, email ,picture} = response.data.data; // Update this with your actual response structure
-        const name = response.data.data.name;
-        const email = response.data.data.email;
-        const picture = response.data.data.picture;
+        const name = response.data.data[0].name;
+        const email = response.data.data[0].email;
+        const picture = response.data.data[0].picture;
         setUserData({ name, email, picture });
         console.log(userData, "===>userdata");
       })

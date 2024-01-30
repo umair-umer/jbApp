@@ -59,7 +59,7 @@ import ResumeGanratescreen from './GenrateResume';
 import Genrateresumeform from './Genrateresumeform';
 import Resumepreview from './Genrateresumepreviewscreen';
 import { TalentSearch } from './talentsearch';
-
+import UpdateProfileTalent from './updateprofiletalent';
 
 
 
@@ -125,6 +125,8 @@ export {
   ResumeGanratescreen,
   Genrateresumeform,
   Resumepreview,
-  TalentSearch
+  TalentSearch,
+UpdateProfileTalent
+
 
 };

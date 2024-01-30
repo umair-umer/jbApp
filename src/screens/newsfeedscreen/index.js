@@ -14,12 +14,12 @@ const { width, height } = Dimensions.get('window');
 const NewsFeed = ({ navigation, onPress, route }) => {
     const [show, setshow] = useState(false)
     const [isModalVisible, setModalVisible] = useState(false);
-    const [userData, setUserData] = useState({
+    const [userData, setUserData] = useState([{
         // name: '',
         // email: '',
         picture: "",
-        // Add other user data properties here
-    });
+   
+    }]);
     const [isload, setload] = useState();
 
     const [posts, setPosts] = useState([]);
@@ -34,7 +34,7 @@ const NewsFeed = ({ navigation, onPress, route }) => {
                 headers: { "Authorization": `Bearer ${token}` },
             });
             // Update userData with the fetched data
-            setUserData({ picture: response.data.data.picture });
+            setUserData({ picture: response.data.data[0].picture });
             setload(false)
         } catch (error) {
             console.error('Error fetching user data:', error.response);
@@ -196,7 +196,7 @@ const NewsFeed = ({ navigation, onPress, route }) => {
             {isload ? <Loader /> : <SafeAreaView style={styles.container}>
 
 
-                <CustomeHeader source={{ uri: `${baseprofileurl}${userData.picture}` }} title={"jobbooks"} iconsource1={Images.searchicon} onPressNotification={() => navigation.navigate('notifyscreen')} iconsource2={Images.notificationicon} iconsource3={Images.fobox} />
+                <CustomeHeader source={{ uri:`${baseprofileurl}${userData.picture}` }} title={"jobbooks"} iconsource1={Images.searchicon} onPressNotification={() => navigation.navigate('notifyscreen')} iconsource2={Images.notificationicon} iconsource3={Images.fobox} />
                 <View>
                     <FlatList
                         data={sliderData}
