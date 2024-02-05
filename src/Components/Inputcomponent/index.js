@@ -110,6 +110,7 @@ smsicon: {
 input: {
     paddingHorizontal: width * 0.03,
     width: width * 0.75,
+    color:"#fff"
     
 },
 iconconatinerRight: {

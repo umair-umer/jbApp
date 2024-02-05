@@ -195,7 +195,7 @@
 //     left: width * 0.08,
 //   },
 // });
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -217,13 +217,36 @@ const {width, height} = Dimensions.get('window');
 import axios from 'axios';
 import Loader from '../../Components/Loader';
 import {useDispatch} from 'react-redux';
-
+import  AsyncStorage  from '@react-native-async-storage/async-storage';
+import { requestUserPermission } from '../../config/utilities/notification';
 const RegistertalentProfile = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const route = useRoute();
   const profileType = route.params.profileType;
   console.log(profileType, '====>profiletype');
+  const [fcmToken, setFcmToken] = useState('');
+
+  // Function to request permission and fetch FCM token
+  const fetchFcmToken = async () => {
+    await requestUserPermission(); // Make sure this function is properly defined to request permissions
+    
+    try {
+      const token = await AsyncStorage.getItem('fcmToken');
+      if (token) {
+        setFcmToken(token); // Save the FCM token in the component's state
+        console.log('FCM Token:', token);
+      } else {
+        console.log('No FCM Token found');
+        // You might want to call getFcmToken function here if no token is found
+      }
+    } catch (error) {
+      console.error('Error fetching FCM Token:', error);
+    }
+  };
+  useEffect(() => {
+    fetchFcmToken();
+  }, []);
   const [ISload, setload] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -301,7 +324,7 @@ const RegistertalentProfile = () => {
       formData.append('phone', mobile);
       formData.append('location', Location);
       formData.append('website', Website);
-      // formData.append('device_token', 'g45yu56u65');
+      formData.append('device_token', fcmToken);
       formData.append('role', profileType);
 
       if (profileImage) {
@@ -322,6 +345,7 @@ const RegistertalentProfile = () => {
             },
           },
         );
+        console.log(response,"====>registration");
         const token = response.data.token;
         const type = response.data.user.role;
        

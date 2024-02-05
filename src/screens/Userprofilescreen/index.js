@@ -10,6 +10,7 @@ import {
   ImageBackground,
   ScrollView,
 } from 'react-native';
+
 const { width, height } = Dimensions.get('window');
 import { calculateFontSize } from '../../config/font';
 import Feather from 'react-native-vector-icons/dist/Feather';
@@ -23,6 +24,7 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import { useRoute } from '@react-navigation/native';
 import { baseprofileurl } from '../../config/utilities';
 import moment from 'moment';
+import Loader from '../../Components/Loader';
 const Profilescreen = ({ navigation }) => {
 
   const [employmentType, setEmploymentType] = useState('');
@@ -30,6 +32,7 @@ const Profilescreen = ({ navigation }) => {
   const [employmentDate, setEmploymentDate] = useState('');
   const [skills, setSkills] = useState([]);
   const [newsData, setNewsData] = useState([]);
+  const [load, setloader] = useState(false)
 
   // useEffect(() => {
   //   if (route.params?.selectedJobs) {
@@ -83,7 +86,7 @@ const Profilescreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    // Make an Axios GET request to your API endpoint with the token
+    setloader(true)
     axios
       .get(
         'https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/profile',
@@ -97,6 +100,7 @@ const Profilescreen = ({ navigation }) => {
         console.log(response.data.data[0].experience
 
           , '====>getprofile');
+        setloader(false)
         // Handle the successful response and update userData state
         // const { name, email ,picture} = response.data.data; // Update this with your actual response structure
         const name = response.data.data[0].name;
@@ -107,8 +111,8 @@ const Profilescreen = ({ navigation }) => {
         const skills = response.data.data[0].skills;
         const about = response.data.data[0].about;
         const experience = Array.isArray(response.data.data[0].experience)
-        ? response.data.data[0].experience
-        : []; // Default to an empty array if not already an array
+          ? response.data.data[0].experience
+          : []; // Default to an empty array if not already an array
         phone;
         setUserData({ name, email, picture, phone, appliedJobsCount, skills, experience, about });
 
@@ -187,52 +191,52 @@ const Profilescreen = ({ navigation }) => {
             <View style={{ paddingHorizontal: width * 0.02 }}>
               <Text style={styles.workexperdive}>work experience </Text>
               {Array.isArray(userData.experience) && userData.experience.map((exp, index) => (
-             <>
-                <View
-                key={index}
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}>
-                <View style={styles.wrkexperience}>
-                  <View style={styles.dpPic}>
-                    <Image
-                      resizeMode="center"
-                      source={Images.user}
-                      style={styles.img}
-                    />
-                  </View>
-                  <View style={{ paddingHorizontal: width * 0.03 }}>
-                    <Text style={styles.aboutmehead}>{exp.company}</Text>
-                    <Text style={styles.wrkexp}>{exp.title}</Text>
-                    <Text style={styles.wrkexp}>
-  {moment(exp.from).format('YYYY-MM-DD')} - {moment(exp.to).format('YYYY-MM-DD')}
-</Text>
-                  </View>
-                </View>
+                <>
+                  <View
+                    key={index}
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}>
+                    <View style={styles.wrkexperience}>
+                      <View style={styles.dpPic}>
+                        <Image
+                          resizeMode="center"
+                          source={Images.user}
+                          style={styles.img}
+                        />
+                      </View>
+                      <View style={{ paddingHorizontal: width * 0.03 }}>
+                        <Text style={styles.aboutmehead}>{exp.company}</Text>
+                        <Text style={styles.wrkexp}>{exp.title}</Text>
+                        <Text style={styles.wrkexp}>
+                          {moment(exp.from).format('YYYY-MM-DD')} - {moment(exp.to).format('YYYY-MM-DD')}
+                        </Text>
+                      </View>
+                    </View>
 
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('UpdateProfiletalent')
-                  }>
-                  <Feather
-                    name="edit"
-                    color="#fff"
-                    size={calculateFontSize(20)}
-                  />
-                </TouchableOpacity>
-              </View>
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate('UpdateProfiletalent')
+                      }>
+                      <Feather
+                        name="edit"
+                        color="#fff"
+                        size={calculateFontSize(20)}
+                      />
+                    </TouchableOpacity>
+                  </View>
 
-              <View
-                style={{
-                  borderBottomWidth: 1,
-                  marginVertical: height * 0.04,
-                  borderBottomColor: '#fff',
-                }}></View>
-             </>
+                  <View
+                    style={{
+                      borderBottomWidth: 1,
+                      marginVertical: height * 0.04,
+                      borderBottomColor: '#fff',
+                    }}></View>
+                </>
               ))}
-           
+
             </View>
           </View>
         );
@@ -502,123 +506,127 @@ const Profilescreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.bgresi}>
-        <ImageBackground
-          resizeMode="cover"
-          style={[{ width: '100%', height: '100%' }, styles.bg]}
-          source={Images.Profileimgbg}>
-          <View
-            style={{
-              paddingVertical: height * 0.01,
-              paddingHorizontal: width * 0.03,
-            }}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <AntDesign name="left" color={'#fff'} size={22} />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.heder}>
-            <Text style={styles.profiletextheader}>Profile</Text>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              paddingHorizontal: width * 0.04,
-            }}>
-            <View style={styles.prof}>
-              <View>
-                <View style={styles.profileimage}>
-                  {profileImage ? (
-                    <Image
-                      style={{ width: '100%', height: '100%', borderRadius: 100 }}
-                      source={{ uri: `${baseprofileurl}${userData.picture}` }}
-                      resizeMode="cover"
-                    />
-                  ) : (
-                    <Image
-                      resizeMode="cover"
-                      style={{ width: '1005', height: '100%', borderRadius: 100 }}
-                      source={{ uri: `${baseprofileurl}${userData.picture}` }}
-                    />
-                  )}
-                </View>
-                <TouchableOpacity
-                  style={styles.editprofilebutton}
-                  onPress={handleChoosePhoto}>
-                  <FontAwesome5 name="edit" color="#fff" />
+    <>
+      {
+        load ? <Loader /> : <SafeAreaView style={styles.container}>
+          <View style={styles.bgresi}>
+            <ImageBackground
+              resizeMode="cover"
+              style={[{ width: '100%', height: '100%' }, styles.bg]}
+              source={Images.Profileimgbg}>
+              <View
+                style={{
+                  paddingVertical: height * 0.01,
+                  paddingHorizontal: width * 0.03,
+                }}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <AntDesign name="left" color={'#fff'} size={22} />
                 </TouchableOpacity>
               </View>
-              <View style={{ marginHorizontal: width * 0.05 }}>
-                <Text style={styles.prname}>{userData.name}</Text>
-                <Text style={styles.premail}>{userData.email}</Text>
-                <Text style={styles.prnumb}>{userData.phone}</Text>
+              <View style={styles.heder}>
+                <Text style={styles.profiletextheader}>Profile</Text>
               </View>
-            </View>
-            <TouchableOpacity>
-              <AntDesign
-                name="setting"
-                color="#fff"
-                size={calculateFontSize(22)}
-                onPress={() => navigation.navigate('userprofilesetting')}
-              />
-            </TouchableOpacity>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              paddingHorizontal: width * 0.04,
-              marginTop: height * 0.02,
-            }}>
-            <View style={styles.vbgcon}>
-              <Text style={styles.probgtext}>{userData.appliedJobsCount}</Text>
-              <Text style={styles.probgtext}>Job Applied</Text>
-            </View>
-            <View style={styles.vbgcon1}>
-              <Text style={styles.probgtext}>19/20/2023</Text>
-              <Text style={styles.probgtext}>member Since</Text>
-            </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  paddingHorizontal: width * 0.04,
+                }}>
+                <View style={styles.prof}>
+                  <View>
+                    <View style={styles.profileimage}>
+                      {profileImage ? (
+                        <Image
+                          style={{ width: '100%', height: '100%', borderRadius: 100 }}
+                          source={{ uri: `${baseprofileurl}${userData.picture}` }}
+                          resizeMode="cover"
+                        />
+                      ) : (
+                        <Image
+                          resizeMode="cover"
+                          style={{ width: '1005', height: '100%', borderRadius: 100 }}
+                          source={{ uri: `${baseprofileurl}${userData.picture}` }}
+                        />
+                      )}
+                    </View>
+                    <TouchableOpacity
+                      style={styles.editprofilebutton}
+                      onPress={handleChoosePhoto}>
+                      <FontAwesome5 name="edit" color="#fff" />
+                    </TouchableOpacity>
+                  </View>
+                  <View style={{ marginHorizontal: width * 0.05 }}>
+                    <Text style={styles.prname}>{userData.name}</Text>
+                    <Text style={styles.premail}>{userData.email}</Text>
+                    <Text style={styles.prnumb}>{userData.phone}</Text>
+                  </View>
+                </View>
+                <TouchableOpacity>
+                  <AntDesign
+                    name="setting"
+                    color="#fff"
+                    size={calculateFontSize(22)}
+                    onPress={() => navigation.navigate('userprofilesetting')}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  paddingHorizontal: width * 0.04,
+                  marginTop: height * 0.02,
+                }}>
+                <View style={styles.vbgcon}>
+                  <Text style={styles.probgtext}>{userData.appliedJobsCount}</Text>
+                  <Text style={styles.probgtext}>Job Applied</Text>
+                </View>
+                <View style={styles.vbgcon1}>
+                  <Text style={styles.probgtext}>19/20/2023</Text>
+                  <Text style={styles.probgtext}>member Since</Text>
+                </View>
 
-            <View style={styles.vbgcon}>
-              <Text style={styles.probgtext}>30</Text>
-              <Text style={styles.probgtext}>interview</Text>
+                <View style={styles.vbgcon}>
+                  <Text style={styles.probgtext}>30</Text>
+                  <Text style={styles.probgtext}>interview</Text>
+                </View>
+              </View>
+            </ImageBackground>
+          </View>
+          <View style={{ marginTop: height * 0.02, alignItems: 'center' }}>
+            <View style={styles.tabcontainer}>
+              <TouchableOpacity
+                style={[
+                  styles.tabtextcontainer,
+                  selectedTab === 'About_me' && { backgroundColor: '#2BADA1' },
+                ]}
+                onPress={() => handleTabPress('About_me')}>
+                <Text style={styles.tab}>About Me</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.tabtextcontainer,
+                  selectedTab === 'Post' && { backgroundColor: '#2BADA1' },
+                ]}
+                onPress={() => handleTabPress('Post')}>
+                <Text style={styles.tab}>Post</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.tabtextcontainer,
+                  selectedTab === 'Jobs' && { backgroundColor: '#2BADA1' },
+                ]}
+                onPress={() => handleTabPress('Jobs')}>
+                <Text style={styles.tab}>Jobs</Text>
+              </TouchableOpacity>
             </View>
           </View>
-        </ImageBackground>
-      </View>
-      <View style={{ marginTop: height * 0.02, alignItems: 'center' }}>
-        <View style={styles.tabcontainer}>
-          <TouchableOpacity
-            style={[
-              styles.tabtextcontainer,
-              selectedTab === 'About_me' && { backgroundColor: '#2BADA1' },
-            ]}
-            onPress={() => handleTabPress('About_me')}>
-            <Text style={styles.tab}>About Me</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.tabtextcontainer,
-              selectedTab === 'Post' && { backgroundColor: '#2BADA1' },
-            ]}
-            onPress={() => handleTabPress('Post')}>
-            <Text style={styles.tab}>Post</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.tabtextcontainer,
-              selectedTab === 'Jobs' && { backgroundColor: '#2BADA1' },
-            ]}
-            onPress={() => handleTabPress('Jobs')}>
-            <Text style={styles.tab}>Jobs</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      <ScrollView showsVerticalScrollIndicator={false}>{renderTabContent()}</ScrollView>
-    </SafeAreaView>
+          <ScrollView showsVerticalScrollIndicator={false}>{renderTabContent()}</ScrollView>
+        </SafeAreaView>
+      }
+    </>
   );
 };
 

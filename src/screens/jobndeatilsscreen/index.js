@@ -13,11 +13,42 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import IMG from '../../assets/dp.png'
 import ICON from '../../assets/icon.png'
 import { useSelector } from 'react-redux';
+import { baseprofileurl } from '../../config/utilities';
 const Jobdetail = ({ navigation ,route}) => {
+   
     const {id}=route.params;
     console.log(id,"viewjobdetail");
     const { token, type } = useSelector((state) => state.auth);
- 
+    useEffect(() => {
+        // Make an Axios GET request to your API endpoint with the token
+        axios
+          .get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/profile', {
+            headers: {
+              "Authorization": `Bearer ${token}`,
+            },
+          })
+          .then((response) => {
+            console.log(response.data.data, "====>getprofile")
+            // Handle the successful response and update userData state
+            // const { name, email ,picture} = response.data.data; // Update this with your actual response structure
+            const name = response.data.data[0].name;
+            const email = response.data.data[0].email;
+            const picture = response.data.data[0].picture;
+            setUserData({ name, email, picture });
+            console.log(userData, "===>userdata");
+          })
+          .catch((error) => {
+            // Handle any errors here
+            console.error('Error fetching user data:', error);
+          });
+      }, [token]);
+      const [userData, setUserData] = useState({
+        name: '',
+        email: '',
+        picture: "",
+    
+      });
+      
     const [isSaved, setIsSaved] = useState(false); 
     const jobDetailsData = {
         title: 'Ux Designer',
@@ -80,9 +111,11 @@ const Jobdetail = ({ navigation ,route}) => {
                         <Ionicons name="chevron-back" color="#fff" size={30} />
                     </TouchableOpacity>
                     <Text style={styles.headname}>Job Details</Text>
-                    <TouchableOpacity style={styles.profileconainter} onPress={() => navigation.openDrawer()}>
-                        <Image resizeMode='contain' style={{ width: "100%", height: "100%" }} source={Images.pro} />
-                    </TouchableOpacity>
+                    <View style={styles.profileconainter} >
+                        <Image resizeMode='cover' style={{ width: "100%", height: "100%" }}
+                            source={{ uri:`${baseprofileurl}${userData.picture}` }}
+                          />
+                    </View>
                 </View>
 
                 {/* Main Section */}
@@ -251,7 +284,8 @@ const styles = StyleSheet.create({
         height: height * 0.06,
         borderRadius: 100,
         padding: 3,
-        borderColor: "#1EC5B6"
+        borderColor: "#1EC5B6",
+        overflow:"hidden"
         // overflow:"hidden"
     },
     main: {

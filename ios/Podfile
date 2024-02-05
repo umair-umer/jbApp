@@ -9,7 +9,6 @@ require Pod::Executable.execute_command('node', ['-p',
   pod 'GoogleUtilities', :modular_headers => true
   pod 'FirebaseCore', :modular_headers => true
   pod 'FBSDKCoreKit', :modular_headers => true
-
   # pod 'react-native-fbsdk-next', :path => '../node_modules/react-native-fbsdk-next'
 
 platform :ios, min_ios_version_supported

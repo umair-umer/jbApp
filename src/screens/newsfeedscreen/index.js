@@ -18,7 +18,7 @@ const NewsFeed = ({ navigation, onPress, route }) => {
         // name: '',
         // email: '',
         picture: "",
-   
+
     }]);
     const [isload, setload] = useState();
 
@@ -26,22 +26,7 @@ const NewsFeed = ({ navigation, onPress, route }) => {
     const profileType = route.params
     console.log(route, "===>newsfeed");
     const { token } = useSelector((state) => state.auth); // Get the token from Redux store
-    console.log(token, "reduxtokennewsfeed");
-    const fetchUserData = async () => {
-        setload(true)
-        try {
-            const response = await axios.get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/profile', {
-                headers: { "Authorization": `Bearer ${token}` },
-            });
-            // Update userData with the fetched data
-            setUserData({ picture: response.data.data[0].picture });
-            setload(false)
-        } catch (error) {
-            console.error('Error fetching user data:', error.response);
-            setload(false)
-
-        }
-    };
+  
 
     const fetchPosts = async () => {
         setload(true)
@@ -51,12 +36,12 @@ const NewsFeed = ({ navigation, onPress, route }) => {
                 headers: { "Authorization": `Bearer ${token}` },
             });
             setPosts(response.data.data);
-            console.log(response.data,"====>hhg");
-        setload(false)
+            console.log(response.data, "====>hhg");
+            setload(false)
 
         } catch (error) {
             console.error('Error fetching post data:', error);
-        setload(false)
+            setload(false)
 
         }
     };
@@ -64,7 +49,6 @@ const NewsFeed = ({ navigation, onPress, route }) => {
     useFocusEffect(
         React.useCallback(() => {
 
-            fetchUserData();
             fetchPosts();
             return () => {
 
@@ -85,7 +69,7 @@ const NewsFeed = ({ navigation, onPress, route }) => {
     }));
 
 
- 
+
 
     const renderSliderItem = ({ item }) => (
         <View style={styles.sliedercontaintbox}>
@@ -101,7 +85,7 @@ const NewsFeed = ({ navigation, onPress, route }) => {
             </View>
         </View>
     );
-  
+
     //     // Fetch user data as before
 
     //     // Fetch post data
@@ -124,11 +108,11 @@ const NewsFeed = ({ navigation, onPress, route }) => {
     //     fetchPosts();
     // }, [token]);
 
-    const renderPostItem = ({ item }) =>{
+    const renderPostItem = ({ item }) => {
         const createdAtTimestamp = moment(item.createdAt)
         const currentTime = moment();
         const hoursAgo = currentTime.diff(createdAtTimestamp, 'hours');
-        return(  (
+        return ((
             <View style={styles.postcontainermain}>
                 <View style={styles.postcontainer}>
                     <View style={styles.mianrow}>
@@ -146,12 +130,14 @@ const NewsFeed = ({ navigation, onPress, route }) => {
                                 </View>
                             </View>
                         </View>
-                        <View style={styles.viewprocontainer}>
+                      <TouchableOpacity onPress={()=>{navigation.navigate("postViewpro")}}>
+                      <View style={styles.viewprocontainer}>
                             <View style={styles.proview}>
                                 <Image style={{ width: "100%", height: "100%" }} resizeMode='center' source={Images.viewpro} />
                             </View>
                             <Text style={styles.vietext}>view profile</Text>
                         </View>
+                      </TouchableOpacity>
                     </View>
                     <View style={styles.typcontainer}>
                         <Text style={styles.textphyra}>
@@ -168,7 +154,7 @@ const NewsFeed = ({ navigation, onPress, route }) => {
                         <Text style={styles.googleques}>{item.title}</Text>
                         <Text style={styles.youlink}>{item.tags}</Text>
                     </View>
-    
+
                 </View>
                 <View style={styles.feedbackcontainer}>
                     <View style={styles.pcontainer}>
@@ -187,8 +173,8 @@ const NewsFeed = ({ navigation, onPress, route }) => {
             </View>
         ))
     }
-    
-  
+
+
 
 
     return (
@@ -196,7 +182,7 @@ const NewsFeed = ({ navigation, onPress, route }) => {
             {isload ? <Loader /> : <SafeAreaView style={styles.container}>
 
 
-                <CustomeHeader source={{ uri:`${baseprofileurl}${userData.picture}` }} title={"jobbooks"} iconsource1={Images.searchicon} onPressNotification={() => navigation.navigate('notifyscreen')} iconsource2={Images.notificationicon} iconsource3={Images.fobox} />
+                <CustomeHeader source={{ uri: `${baseprofileurl}${userData.picture}` }} title={"jobbooks"} iconsource1={Images.searchicon} onPressNotification={() => navigation.navigate('notifyscreen')} iconsource2={Images.notificationicon} iconsource3={Images.fobox} />
                 <View>
                     <FlatList
                         data={sliderData}
@@ -218,10 +204,11 @@ const NewsFeed = ({ navigation, onPress, route }) => {
                 <TouchableOpacity onPress={toggleModal} style={styles.modalbutton}>
                     <Text style={styles.plus}>+</Text>
                 </TouchableOpacity>
-                <CustomModal home={true} isModalVisible={isModalVisible} onPress={toggleModal} onPressNewfeed={() => navigation.navigate("addnewfeedscreen")}
-                    Addnewpost={() => { navigation.navigate("addnewfroumscreen") }}
-                    onPressGeneratecv={() => navigation.navigate("resumegenratescreen")}
-                    onPresspost={() => navigation.navigate("codeverified")}
+                <CustomModal home={true} isModalVisible={isModalVisible} onPress={toggleModal}
+                    onPressNewfeed={() => {navigation.navigate("addnewfeedscreen"),setModalVisible(false)}}
+                    Addnewpost={() => { navigation.navigate("addnewfroumscreen"),setModalVisible(false) }}
+                    onPressGeneratecv={() => {navigation.navigate("resumegenratescreen"),setModalVisible(false)}}
+                    onPresspost={() => {navigation.navigate("codeverified"),setModalVisible(false)}}
                 />
             </SafeAreaView>}
         </>
@@ -325,7 +312,7 @@ const styles = StyleSheet.create({
         fontWeight: "500",
         color: "#AFAFAF",
         fontFamily: "Poppins",
-        marginHorizontal:width*0.01,
+        marginHorizontal: width * 0.01,
 
 
     },

@@ -120,7 +120,7 @@ const CusTomDrawer = ({ navigation }) => {
               <Ionicons color={'#fff'} size={25} name="document-text-outline" />
               <Text style={styles.editbutton}>Generate CV </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonroutes}>
+            <TouchableOpacity style={styles.buttonroutes} onPress={()=>navigation.navigate("pending")}>
               <Ionicons color={'#fff'} size={25} name="bookmarks-outline" />
               <Text style={styles.editbutton}>saved</Text>
             </TouchableOpacity>

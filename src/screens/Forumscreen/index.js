@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   TouchableOpacity,
   Modal,
@@ -14,8 +14,8 @@ import {
   ScrollView
 } from 'react-native';
 import Images from '../../config/im';
-import {calculateFontSize} from '../../config/font';
-const {width, height} = Dimensions.get('window');
+import { calculateFontSize } from '../../config/font';
+const { width, height } = Dimensions.get('window');
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
@@ -32,53 +32,39 @@ import { baseprofileurl } from '../../config/utilities';
 import moment from 'moment';
 import { useFocusEffect } from '@react-navigation/native';
 
-const ForumScreen = ({navigation,route,onPress}) => {
+const ForumScreen = ({ navigation, route, onPress }) => {
   const { token } = useSelector((state) => state.auth); // Get the token from Redux store
   console.log(token, "reduxtokenforem")
   const [selectedTab, setSelectedTab] = useState('Popular');
   const [data, setData] = useState([
-    {id: '1', topic: '##c', quantity: '30 post'},
-    {id: '2', topic: 'Java', quantity: '10 post'},
-    {id: '3', topic: 'SQL', quantity: '10 post'},
-    {id: '3', topic: 'php', quantity: '10 post'},
-    {id: '3', topic: 'Node', quantity: '10 post'},
-    {id: '3', topic: 'React-native', quantity: '10 post'},
+    { id: '1', topic: '##c', quantity: '30 post' },
+    { id: '2', topic: 'Java', quantity: '10 post' },
+    { id: '3', topic: 'SQL', quantity: '10 post' },
+    { id: '3', topic: 'php', quantity: '10 post' },
+    { id: '3', topic: 'Node', quantity: '10 post' },
+    { id: '3', topic: 'React-native', quantity: '10 post' },
     // Add more data items as needed
   ]);
- 
+
   const [userData, setUserData] = useState({
     // name: '',
     // email: '',
     picture: "",
     // Add other user data properties here
-});
-const [forumData, setForumData] = useState([]);
-const [isload, setload] = useState();
-  const fetchUserData = async () => {
-    setload(true)
-    try {
-        const response = await axios.get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/profile', {
-            headers: { "Authorization": `Bearer ${token}` },
-        });
-        // Update userData with the fetched data
-        setUserData({ picture: response.data.data.picture });
-        setload(false)
-    } catch (error) {
-        console.error('Error fetching user data:', error.response);
-        setload(false)
+  });
+  const [forumData, setForumData] = useState([]);
+  const [isload, setload] = useState();
 
-    }
-};
- 
+
   const fetchForumData = async () => {
     setload(true)
     try {
       const response = await axios.get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/forum/fetch', {
-        headers: { 
-          'Authorization':` Bearer ${token}`
+        headers: {
+          'Authorization': ` Bearer ${token}`
         }
       });
-      console.log(response.data.data,"foreumdata"); // Handle the response data as needed
+      console.log(response.data.data, "foreumdata"); // Handle the response data as needed
       setload(false)
       setForumData(response.data.data)
     } catch (error) {
@@ -87,23 +73,20 @@ const [isload, setload] = useState();
       // Handle error appropriately
     }
   };
-  // useEffect(() => {
-  //   fetchUserData();
-  //   fetchForumData();
-  // }, [token]); 
+
   useFocusEffect(
     React.useCallback(() => {
 
-      fetchUserData();
+      // fetchUserData();
       fetchForumData();
-        return () => {
+      return () => {
 
-        };
+      };
     }, [token])
-);
+  );
 
 
-  const renderTopicItem = ({item}) => (
+  const renderTopicItem = ({ item }) => (
     <ImageBackground
       style={styles.bg}
       resizeMode="stretch"
@@ -148,97 +131,97 @@ const [isload, setload] = useState();
     },
     // Add more data items as needed
 
-    
+
   ]);
-  
+
   const [isModalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
     console.log(isModalVisible);
-};
+  };
 
 
-const renderItem = ({item}) => {
- 
-  const createdAtTimestamp = moment(item.createdAt)
-  const currentTime = moment();
-  const hoursAgo = currentTime.diff(createdAtTimestamp, 'hours');
- return (
+  const renderItem = ({ item }) => {
 
-   <ScrollView>
-     <TouchableOpacity
-      onPress={() => navigation.navigate('Vpost', {post: item})}
-      style={{marginVertical: height * 0.02}}>
-      <View style={styles.postmaincontainer}>
-        <View style={styles.flex}>
-          <View style={styles.posttimename}>
-            <View style={styles.propst}>
-              <Image
-                style={{width: '100%', height: '100%'}}
-                resizeMode="center"
-                source={Images.profpost}
-              />
+    const createdAtTimestamp = moment(item.createdAt)
+    const currentTime = moment();
+    const hoursAgo = currentTime.diff(createdAtTimestamp, 'hours');
+    return (
+
+      <ScrollView>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Vpost', { post: item })}
+          style={{ marginVertical: height * 0.02 }}>
+          <View style={styles.postmaincontainer}>
+            <View style={styles.flex}>
+              <View style={styles.posttimename}>
+                <View style={styles.propst}>
+                  <Image
+                    style={{ width: '100%', height: '100%' }}
+                    resizeMode="center"
+                    source={Images.profpost}
+                  />
+                </View>
+                <View>
+                  <Text style={styles.tname}>{item.title}</Text>
+                  <Text style={styles.tpostname}>
+                    {item.user.name} {hoursAgo === 0 ? 'just now' : `${hoursAgo} hour${hoursAgo > 1 ? 's' : ''} ago`}
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.savicon}>
+                <Image
+                  resizeMode="center"
+                  style={{ width: '100%', height: '100%' }}
+                  source={Images.sicon}
+                />
+              </View>
             </View>
-            <View>
-              <Text style={styles.tname}>{item.title}</Text>
-              <Text style={styles.tpostname}>
-              {item.user.name} {hoursAgo === 0 ? 'just now' : `${hoursAgo} hour${hoursAgo > 1 ? 's' : ''} ago`}
-              </Text>
+            <View style={styles.payracontainer}>
+              <Text style={styles.descri}>{item.description}</Text>
             </View>
           </View>
-          <View style={styles.savicon}>
-            <Image
-              resizeMode="center"
-              style={{width: '100%', height: '100%'}}
-              source={Images.sicon}
-            />
+          <View style={styles.containerViewlikecoment}>
+            <View style={styles.flex}>
+              <TouchableOpacity>
+                <Feather name="thumbs-up" color="#2D5B57" size={20} />
+              </TouchableOpacity>
+              <Text style={styles.like}>{item.likes} votes</Text>
+            </View>
+            <View style={styles.flex}>
+              <TouchableOpacity>
+                <MaterialCommunityIcons
+                  name="message-outline"
+                  color="#2D5B57"
+                  size={20}
+                />
+              </TouchableOpacity>
+              <Text style={styles.like}>{item.comments} votes</Text>
+            </View>
+            <View style={styles.flex}>
+              <TouchableOpacity>
+                <Feather name="eye" color="#2D5B57" size={20} />
+              </TouchableOpacity>
+              <Text style={styles.like}>{item.views} votes</Text>
+            </View>
           </View>
-        </View>
-        <View style={styles.payracontainer}>
-          <Text style={styles.descri}>{item.description}</Text>
-        </View>
-      </View>
-      <View style={styles.containerViewlikecoment}>
-        <View style={styles.flex}>
-          <TouchableOpacity>
-            <Feather name="thumbs-up" color="#2D5B57" size={20} />
-          </TouchableOpacity>
-          <Text style={styles.like}>{item.likes} votes</Text>
-        </View>
-        <View style={styles.flex}>
-          <TouchableOpacity>
-            <MaterialCommunityIcons
-              name="message-outline"
-              color="#2D5B57"
-              size={20}
-            />
-          </TouchableOpacity>
-          <Text style={styles.like}>{item.comments} votes</Text>
-        </View>
-        <View style={styles.flex}>
-          <TouchableOpacity>
-            <Feather name="eye" color="#2D5B57" size={20} />
-          </TouchableOpacity>
-          <Text style={styles.like}>{item.views} votes</Text>
-        </View>
-      </View>
-    </TouchableOpacity>
-   </ScrollView>
-  );
-}
+        </TouchableOpacity>
+      </ScrollView>
+    );
+  }
 
 
   const handleTabPress = tab => {
     setSelectedTab(tab);
   };
 
-  const sliderData = Array.from({length: 10}, (_, index) => ({
+  const sliderData = Array.from({ length: 10 }, (_, index) => ({
     id: `slider_${index}`,
     offer: '50% off',
     description: 'Take any courses',
   }));
 
-  const renderSliderItem = ({item}) => (
+  const renderSliderItem = ({ item }) => (
     <View style={styles.sliedercontaintbox}>
       <View style={styles.texrtcontant}>
         <Text style={styles.offer}>{item.offer}</Text>
@@ -250,7 +233,7 @@ const renderItem = ({item}) => {
       <View style={styles.clientimage}>
         <Image
           resizeMode="contain"
-          style={{width: '100%', height: '100%'}}
+          style={{ width: '100%', height: '100%' }}
           source={Images.client}
         />
       </View>
@@ -260,10 +243,10 @@ const renderItem = ({item}) => {
     switch (selectedTab) {
       case 'Popular':
         return (
-          <View style={{flex: 1, paddingBottom: height * 0.35}}>
+          <View style={{ flex: 1, paddingBottom: height * 0.35 }}>
             <Text style={styles.popular}>Popular Topics</Text>
 
-            <View style={{flexDirection: 'row'}}>
+            <View style={{ flexDirection: 'row' }}>
               <FlatList
                 data={data}
                 renderItem={renderTopicItem}
@@ -305,84 +288,92 @@ const renderItem = ({item}) => {
   };
 
   return (
-  <>
-  {isload ? <Loader/>:  <View style={styles.container}>
-      <CustomeHeader
-        title={'jobbooks'}
-        source={{ uri: `${baseprofileurl}${userData.picture}` }}
-        iconsource1={Images.searchicon}
-        iconsource2={Images.notificationicon}
-        onPressNotification={()=>navigation.navigate('notifyscreen')}
-        iconsource3={Images.fobox}
-      />
-      <View>
-        <FlatList
-          data={sliderData}
-          renderItem={renderSliderItem}
-          keyExtractor={item => item.id}
-          horizontal
-          showsHorizontalScrollIndicator={false}
+    <>
+      {isload ? <Loader /> : <View style={styles.container}>
+        <CustomeHeader
+          title={'jobbooks'}
+          source={{ uri: `${baseprofileurl}${userData.picture}` }}
+          iconsource1={Images.searchicon}
+          iconsource2={Images.notificationicon}
+          onPressNotification={() => navigation.navigate('notifyscreen')}
+          iconsource3={Images.fobox}
         />
-      </View>
-      <View style={{flexDirection: 'row', marginVertical: 20}}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <TouchableOpacity
-            style={[
-              styles.frommslide,
-              selectedTab === 'Popular' && {backgroundColor: '#fff'},
-            ]}
-            onPress={() => handleTabPress('Popular')}>
-            <Text
-              style={{color: selectedTab === 'Popular' ? '#009A8C' : '#fff'}}>
-              Popular
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.frommslideNonactive,
-              selectedTab === 'Newest' && {backgroundColor: '#fff'},
-            ]}
-            onPress={() => handleTabPress('Newest')}>
-            <Text
-              style={{color: selectedTab === 'Newest' ? '#009A8C' : '#fff'}}>
-              Newest
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.frommslideNonactive,
-              selectedTab === 'Following' && {backgroundColor: '#fff'},
-            ]}
-            onPress={() => handleTabPress('Following')}>
-            <Text
-              style={{color: selectedTab === 'Following' ? '#009A8C' : '#fff'}}>
-              Following
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.frommslideNonactive,
-              selectedTab === 'Recommended' && {backgroundColor: '#fff'},
-            ]}
-            onPress={() => handleTabPress('Recommended')}>
-            <Text
-              style={{
-                color: selectedTab === 'Recommended' ? '#009A8C' : '#fff',
-              }}>
-              Recommended
-            </Text>
-          </TouchableOpacity>
-        </ScrollView>
-      </View>
-          <TouchableOpacity onPress={toggleModal} style={styles.modalbutton}>
-                <Text style={styles.plus}>+</Text>
+        <View>
+          <FlatList
+            data={sliderData}
+            renderItem={renderSliderItem}
+            keyExtractor={item => item.id}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          />
+        </View>
+        <View style={{ flexDirection: 'row', marginVertical: 20 }}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <TouchableOpacity
+              style={[
+                styles.frommslide,
+                selectedTab === 'Popular' && { backgroundColor: '#fff' },
+              ]}
+              onPress={() => handleTabPress('Popular')}>
+              <Text
+                style={{ color: selectedTab === 'Popular' ? '#009A8C' : '#fff' }}>
+                Popular
+              </Text>
             </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.frommslideNonactive,
+                selectedTab === 'Newest' && { backgroundColor: '#fff' },
+              ]}
+              onPress={() => handleTabPress('Newest')}>
+              <Text
+                style={{ color: selectedTab === 'Newest' ? '#009A8C' : '#fff' }}>
+                Newest
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.frommslideNonactive,
+                selectedTab === 'Following' && { backgroundColor: '#fff' },
+              ]}
+              onPress={() => handleTabPress('Following')}>
+              <Text
+                style={{ color: selectedTab === 'Following' ? '#009A8C' : '#fff' }}>
+                Following
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.frommslideNonactive,
+                selectedTab === 'Recommended' && { backgroundColor: '#fff' },
+              ]}
+              onPress={() => handleTabPress('Recommended')}>
+              <Text
+                style={{
+                  color: selectedTab === 'Recommended' ? '#009A8C' : '#fff',
+                }}>
+                Recommended
+              </Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </View>
+        <TouchableOpacity onPress={toggleModal} style={styles.modalbutton}>
+          <Text style={styles.plus}>+</Text>
+        </TouchableOpacity>
 
-      {renderTabContent()}
-      <CustomModal home={true}  isModalVisible={isModalVisible} onPress={toggleModal}  onPressGeneratecv={()=>navigation.navigate("resumegenratescreen")} Addnewpost={() => { navigation.navigate("addnewfroumscreen") }} />
-      
-    </View>}
-  </>
+        {renderTabContent()}
+        <CustomModal home={true}
+          isModalVisible={isModalVisible} onPress={toggleModal}
+          onPressNewfeed={() => { navigation.navigate("addnewfeedscreen"), setModalVisible(false) }}
+          Addnewpost={() => { navigation.navigate("addnewfroumscreen"), setModalVisible(false) }}
+          onPressGeneratecv={() => { navigation.navigate("resumegenratescreen"), setModalVisible(false) }}
+          onPresspost={() => { navigation.navigate("codeverified"), setModalVisible(false) }}
+
+
+        />
+
+      </View>}
+    </>
   );
 };
 
@@ -403,14 +394,14 @@ const styles = StyleSheet.create({
     marginHorizontal: width * 0.01,
     marginVertical: height * 0.03,
     shadowColor: "#000",
-shadowOffset: {
-	width: 0,
-	height: 2,
-},
-shadowOpacity: 0.25,
-shadowRadius: 3.84,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
 
-elevation: 6,
+    elevation: 6,
   },
   textbutton: {
     fontSize: calculateFontSize(10),
@@ -461,14 +452,14 @@ elevation: 6,
     borderRadius: 10,
     marginHorizontal: 10,
     shadowColor: "#000",
-shadowOffset: {
-	width: 0,
-	height: 2,
-},
-shadowOpacity: 0.25,
-shadowRadius: 3.84,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
 
-elevation: 5,
+    elevation: 5,
   },
   popular: {
     fontSize: calculateFontSize(20),
@@ -484,7 +475,7 @@ elevation: 5,
     padding: 10,
     marginRight: width * 0.03,
     marginVertical: height * 0.03,
-    
+
   },
   topic: {
     fontSize: calculateFontSize(15),
@@ -508,14 +499,14 @@ elevation: 5,
     paddingHorizontal: width * 0.02,
     paddingVertical: height * 0.02,
     shadowColor: "#000",
-shadowOffset: {
-	width: 0,
-	height: 2,
-},
-shadowOpacity: 0.25,
-shadowRadius: 3.84,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
 
-elevation: 8,
+    elevation: 8,
   },
   propst: {
     width: width * 0.12,
@@ -550,7 +541,7 @@ elevation: 8,
     borderBottomRightRadius: 10,
     borderBottomLeftRadius: 10,
     paddingHorizontal: width * 0.03,
-    padding:10
+    padding: 10
   },
   like: {
     fontSize: calculateFontSize(15),
@@ -584,23 +575,23 @@ elevation: 8,
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center", shadowColor: "#000",
-    zIndex:1,
+    zIndex: 1,
     shadowOffset: {
-        width: 0,
-        height: 7,
+      width: 0,
+      height: 7,
     },
     shadowOpacity: 0.41,
     shadowRadius: 9.11,
 
     elevation: 4,
 
-},
-plus: {
-  fontSize: calculateFontSize(30),
-  fontWeight: "500",
-  color: "#fff",
-  fontFamily:"Poppins",
+  },
+  plus: {
+    fontSize: calculateFontSize(30),
+    fontWeight: "500",
+    color: "#fff",
+    fontFamily: "Poppins",
 
-}
+  }
 
 });

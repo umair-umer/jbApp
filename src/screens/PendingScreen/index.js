@@ -87,7 +87,7 @@ function Pendingjobscreens({navigation}) {
           <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <View style={styles.iconimage} >
-                <Image style={{ width: "100%", height: "100%" }} resizeMode='center'  source={{ uri: `${baseprofileurl}${job.user.picture}` }}/>
+                <Image style={{ width: "100%", height: "100%" }} resizeMode='cover'  source={{ uri: `${baseprofileurl}${job.user.picture}` }}/>
               </View>
               <View style={{ marginHorizontal: width * 0.03, }}>
                 <Text style={styles.designation}>{job.title}</Text>
@@ -170,6 +170,7 @@ const styles = StyleSheet.create({
     height: height * 0.06,
     backgroundColor: '#fff',
     borderRadius: 10,
+    overflow:"hidden"
   },
   designation: {
     fontSize: calculateFontSize(15),

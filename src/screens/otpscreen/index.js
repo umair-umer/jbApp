@@ -18,11 +18,44 @@ import {
   CustomeforgetHeader,
 } from '../../Components';
 const {width, height} = Dimensions.get('window');
-
-const OtpScreen = ({navigation}) => {
+import axios from 'axios';
+import qs from 'qs';
+const OtpScreen = ({navigation,route}) => {
+  const {email}=route.params;
+  console.log(email);
   const [otp, setOtp] = useState(['', '', '', '']);
   const otpInputRefs = [];
+  const [username, setUsername] = useState('');
+  
 
+  const verifyOTP = async () => {
+    const data = qs.stringify({
+      'username': email,
+      'code': otp,
+    });
+
+    const config = {
+      method: 'post',
+      url: 'https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/verify-otp',
+      headers: { 
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data : data,
+      maxBodyLength: Infinity,
+    };
+
+    try {
+      const response = await axios.request(config);
+      console.log(JSON.stringify(response.data));
+      Alert.alert("Success", "OTP verified successfully.");
+      navigation.navigate('newpassscreen');
+      // Here, handle the success scenario, like navigating to another screen
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Error", "Failed to verify OTP.");
+      // Here, handle the error scenario
+    }
+  };
   const handleOtpChange = (index, value) => {
     if (isNaN(value)) {
       return;
@@ -70,9 +103,7 @@ const OtpScreen = ({navigation}) => {
         <CustomeButton
           title={'Verify'}
           nonbg={true}
-          onPress={() => {
-            navigation.navigate('newpassscreen');
-          }}
+          onPress={verifyOTP}
         />
       </View>
     </SafeAreaView>
@@ -100,6 +131,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: calculateFontSize(25),
     fontFamily: 'Poppins',
+    color:"#fff"
   },
   butcontainer: {
     flex: 1,

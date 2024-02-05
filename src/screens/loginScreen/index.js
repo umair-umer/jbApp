@@ -16,7 +16,28 @@ import { setUserData } from '../../store/actions/authActions';
 import qs from 'qs';
 import axios from 'axios';
 import Loader from '../../Components/Loader';
+import { requestUserPermission } from '../../config/utilities/notification';
+import  AsyncStorage  from '@react-native-async-storage/async-storage';
 const LoginScreen = ({ navigation }) => {
+  const [fcmToken, setFcmToken] = useState('');
+
+  // Function to request permission and fetch FCM token
+  const fetchFcmToken = async () => {
+    await requestUserPermission(); // Make sure this function is properly defined to request permissions
+    
+    try {
+      const token = await AsyncStorage.getItem('fcmToken');
+      if (token) {
+        setFcmToken(token); // Save the FCM token in the component's state
+        console.log('FCM Token:', token);
+      } else {
+        console.log('No FCM Token found');
+        // You might want to call getFcmToken function here if no token is found
+      }
+    } catch (error) {
+      console.error('Error fetching FCM Token:', error);
+    }
+  };
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [isload, setload] = useState(false)
@@ -25,6 +46,7 @@ const LoginScreen = ({ navigation }) => {
   const [isModalVisibleerr, setModalVisiblerrr] = useState(false);
   const dispatch = useDispatch()
   useEffect(() => {
+    fetchFcmToken();
     GoogleSignin.configure({
       // webClientId: '279422402146-fjbr8fvn654r5l0c7em1doa4nru1jn2m.apps.googleusercontent.com',
     
@@ -121,7 +143,7 @@ const LoginScreen = ({ navigation }) => {
   };
   const handleLogin = async () => {
     setload(true)
-    const data = qs.stringify({ 'username': email, 'password': password });
+    const data = qs.stringify({ 'username': email, 'password': password,"device_token":fcmToken });
     const config = {
       method: 'post',
       url: 'https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/login',

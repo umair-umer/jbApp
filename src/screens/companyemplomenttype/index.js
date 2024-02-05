@@ -16,7 +16,7 @@ import Images from '../../config/im';
 
 function Employetypescreen({navigation}) {
   const [selectedType, setSelectedType] = useState(null);
-  const [salaryRange, setSalaryRange] = useState([50000, 100000]); // Initial salary range
+  const [salaryRange, setSalaryRange] = useState([0, 100000]); // Initial salary range
   const jobTypes = [
     {label: 'Full time', value: 'fulltime'},
     {label: 'Part time', value: 'parttime'},

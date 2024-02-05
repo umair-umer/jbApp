@@ -50,14 +50,42 @@ const JobsearchScreen = ({ navigation }) => {
 
     fetchData();
   }, [token]);
+  useEffect(() => {
+    // Make an Axios GET request to your API endpoint with the token
+    axios
+      .get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/profile', {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data.data, "====>getprofile")
+        // Handle the successful response and update userData state
+        // const { name, email ,picture} = response.data.data; // Update this with your actual response structure
+        const name = response.data.data[0].name;
+        const email = response.data.data[0].email;
+        const picture = response.data.data[0].picture;
+        setUserData({ name, email, picture });
+        console.log(userData, "===>userdata");
+      })
+      .catch((error) => {
+        // Handle any errors here
+        console.error('Error fetching user data:', error);
+      });
+  }, [token]);
+  const [userData, setUserData] = useState({
+    name: '',
+    email: '',
+    picture: "",
 
+  });
 
   return (
     <>
       {isLoading ? <Loader /> : <ImageBackground style={styles.backgroundImage} source={Images.jsbg} resizeMode='cover'>
         <View style={styles.line}></View>
         <SafeAreaView style={styles.container}>
-          <CustomeHeader iconsource3={Images.setting} />
+          <CustomeHeader iconsource={{ uri:`${baseprofileurl}${userData.picture}` }} iconsource3={Images.setting} />
 
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginVertical: height * 0.03, }}>
             <TouchableOpacity style={styles.screnbutt}>
@@ -115,7 +143,7 @@ const JobsearchScreen = ({ navigation }) => {
                       <View style={{ flexDirection: "row", alignItems: "center" }}>
                         <View style={styles.iconimage} >
                           {/* Replace Images.dp with job.picture */}
-                          <Image style={{ width: "100%", height: "100%" }} resizeMode='center' source={{ uri: `${baseprofileurl}${job.user.picture}` }} />
+                          <Image style={{ width: "100%", height: "100%" }} resizeMode='cover' source={{ uri: `${baseprofileurl}${job.user.picture}` }} />
                         </View>
                         <View style={{ marginHorizontal: width * 0.03, }}>
                           {/* Replace 'SumatoSoft' with job.title */}

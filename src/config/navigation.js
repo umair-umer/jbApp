@@ -65,7 +65,7 @@ import {
   Resumepreview,
   TalentSearch,
   UpdateProfileTalent,
- 
+  POstUPloderprofile
 } from '../screens';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -136,7 +136,8 @@ function Nav() {
         <Stack.Screen name="pending" component={Pendingjobscreens} />
         <Stack.Screen name="appliedscreen" component={Appliedjobscreen} />
         <Stack.Screen name="closedscreen" component={Closejobscreen} />
-
+        <Stack.Screen name="postViewpro" component={POstUPloderprofile} />
+        
         <Stack.Screen name="userprofilescreen" component={Profilescreen} />
         <Stack.Screen name="userprofilesetting" component={Myprofilesettingscreen} />
         <Stack.Screen name="Purchaseprofilescreen" component={Purcahsecoursescreen} />

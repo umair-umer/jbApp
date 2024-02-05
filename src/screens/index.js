@@ -60,6 +60,7 @@ import Genrateresumeform from './Genrateresumeform';
 import Resumepreview from './Genrateresumepreviewscreen';
 import { TalentSearch } from './talentsearch';
 import UpdateProfileTalent from './updateprofiletalent';
+import { POstUPloderprofile } from './postuploderperofileview';
 
 
 
@@ -126,7 +127,8 @@ export {
   Genrateresumeform,
   Resumepreview,
   TalentSearch,
-UpdateProfileTalent
+UpdateProfileTalent,
+POstUPloderprofile
 
 
 };

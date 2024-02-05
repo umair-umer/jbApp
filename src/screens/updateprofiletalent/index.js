@@ -7,9 +7,11 @@ import { calculateFontSize } from '../../config/font';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import Loader from '../../Components/Loader';
+
 const UpdateProfileTalent = ({ navigation }) => {
     const { token } = useSelector((state) => state.auth); // Get the token from Redux store
-
+const[load,setloder]=useState('')
     const [text, setText] = useState('');
     const [skills, setSkills] = useState([]);
     const [skillInput, setSkillInput] = useState('');
@@ -63,7 +65,8 @@ const UpdateProfileTalent = ({ navigation }) => {
         formData.append('experience', experienceJSON); // Add the experience as a JSON string
         
         try {
-          // Axios PUT request configuration
+            setloder(true)
+
           const config = {
             method: 'put',
             url: 'https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/update-profile',
@@ -76,17 +79,22 @@ const UpdateProfileTalent = ({ navigation }) => {
           // Axios PUT request
           const response = await axios(config);
           console.log(response.data, "====update");
+          setloder(false)
+          navigation.goBack()
       
           // Handle response here, e.g., showing a success message or navigating
         } catch (error) {
           console.error(error);
+          setloder(false)
+
           // Handle error here, e.g., showing an error message
         }
         console.log(text,experiences,skills);
       }, [text, skills, experiences, token]);
 
     return (
-        <ScrollView style={styles.container}>
+      <>
+      {load ?<Loader/>:  <ScrollView style={styles.container}>
             <View style={styles.container2}>
 
                 <View style={styles.hed}>
@@ -193,7 +201,8 @@ const UpdateProfileTalent = ({ navigation }) => {
                 <CustomeButton onPress={handleSubmit} nonbg={true} title="save" />
 
             </View>
-        </ScrollView>
+        </ScrollView>}
+      </>
 
     )
 }
