@@ -82,10 +82,11 @@ const JobsearchScreen = ({ navigation }) => {
 
   return (
     <>
-      {isLoading ? <Loader /> : <ImageBackground style={styles.backgroundImage} source={Images.jsbg} resizeMode='cover'>
-        <View style={styles.line}></View>
+      {isLoading ? <Loader /> :
+       <ImageBackground style={styles.backgroundImage} source={Images.jsbg} resizeMode='cover'>
         <SafeAreaView style={styles.container}>
           <CustomeHeader iconsource={{ uri:`${baseprofileurl}${userData.picture}` }} iconsource3={Images.setting} />
+        <View style={styles.line}></View>
 
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginVertical: height * 0.03, }}>
             <TouchableOpacity style={styles.screnbutt}>
@@ -104,19 +105,35 @@ const JobsearchScreen = ({ navigation }) => {
               <Text style={styles.screbuttonactive}>Closed</Text>
             </TouchableOpacity>
           </View>
-          <View style={{ paddingRight: width * 0.25, marginVertical: height * 0.02, }}>
+          <View style={{ paddingRight: width * 0.25, marginVertical: height * 0.02,  ...Platform.select({
+      ios: {
+        padding: 10, 
+        
+      },
+  
+    }) }}>
             <Text style={styles.jobsrch}>
               Now it’s easy to find your next job 💼
             </Text>
           </View>
           <View style={styles.inpmain}>
             <View style={styles.inpbox}>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Feather name="search" color={"#fff"} size={15} />
+              <View style={{ flexDirection: "row", alignItems: "center", ...Platform.select({
+                    ios: {
+                      paddingTop:height*0.02,
+                    },
+                
+                  })  }}>
+                <Feather name="search" color={"#fff"} size={15} style={{...Platform.select({
+                    ios: {
+                     marginHorizontal:width*0.02,
+                    },
+                
+                  })}} />
                 <TextInput
                   placeholder='Search jobs, Company'
                   placeholderTextColor={"#fff"}
-                  style={{ color: "#fff" }}
+                  style={{ color: "#fff", }}
                 />
               </View>
             </View>
@@ -199,64 +216,7 @@ const JobsearchScreen = ({ navigation }) => {
               <Text>No jobs available</Text>
             )}
 
-            {/* {jobsData && jobsData.length > 0 ? ( jobsData.map((job, index) => {
-           <View key={index}  style={styles.shap}>
-           <ImageBackground style={{
-             width: width * 0.94,
-             height: height * 0.3,
-             paddingTop: height * 0.039,
-             paddingHorizontal: width * 0.03,
-           }} resizeMode='contain' source={Bg}>
-
-             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-               <View style={{ flexDirection: "row", alignItems: "center" }}>
-                 <View style={styles.iconimage} >
-                   <Image style={{ width: "100%", height: "100%" }} resizeMode='center' source={Images.dp} />
-                 </View>
-                 <View style={{ marginHorizontal: width * 0.03, }}>
-                   <Text style={styles.designation}>{job.title}</Text>
-                   <Text style={styles.companyname}>{job.name}</Text>
-                 </View>
-               </View>
-               <TouchableOpacity onPress={() => navigation.navigate("jobdeatilview")}
-                 style={{ flexDirection: "row", alignItems: "center", marginBottom: height * 0.035, marginRight: width * 0.01, }}>
-                 <Text style={styles.vietex}>View</Text>
-                 <Feather name='arrow-up-right' size={20} />
-               </TouchableOpacity>
-             </View>
-             <View style={{ flexDirection: "row", marginVertical: height * 0.01, }}>
-               <View style={styles.descri}>
-                 <Feather name='map-pin' />
-                 <Text style={styles.tstyle}>New York</Text>
-
-               </View>
-               <View style={styles.descri}>
-                 <Entypo name='graduation-cap' /><Text style={styles.tstyle}>3 years exp.</Text>
-               </View>
-               <View style={styles.descri}>
-                 <Ionicons name="time-outline" /><Text style={styles.tstyle}>Fulltime</Text>
-               </View>
-             </View>
-
-             <View >
-               <Text style={styles.description}>SumatoSoft is an award-winning mobile and web app development company with its headquarters in Karachi. We are currently on the lookout for highly motivated Software Engineers.</Text>
-             </View>
-
-             <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: height * 0.05, paddingHorizontal: width * 0.02, }}>
-               <View style={{
-                 flexDirection
-                   : "row"
-               }}>
-                 <Entypo name='back-in-time' size={20} color={"#000"} /><Text style={styles.postduration}>Posted 5 days ago</Text>
-               </View>
-               <View>
-                 {/* <Text style={styles.postsalary}>$25K/mo</Text> */}
-            {/* </View>
-             </View>
-           </ImageBackground>
-         </View>
-      
-          })):( <Text>No jobs available</Text>)} */}
+       
 
 
 
@@ -279,6 +239,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
+    ...Platform.select({
+      ios: {
+        padding: 5, 
+        
+      },
+  
+    })
   },
   backgroundImage: {
     width: '100%',
@@ -342,7 +309,14 @@ const styles = StyleSheet.create({
   inpmain: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center"
+    alignItems: "center",
+    ...Platform.select({
+      ios: {
+        padding: 5, 
+        
+      },
+  
+    })
   },
   inpbox: {
 

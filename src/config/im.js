@@ -74,6 +74,7 @@ import Resume6 from '../assets/Resume6.png'
 import Preview from '../assets/Previewresume.png'
 import saveicon from'../assets/saveicon.png'
 import fil from "../assets/fil.png"
+import b from "../assets/b.png"
 
 const Images = {
   bg,
@@ -150,7 +151,8 @@ const Images = {
   Resume6,
   Preview,
   saveicon,
-  fil
+  fil,
+  b
 
 };
 

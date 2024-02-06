@@ -188,7 +188,7 @@ const Profilescreen = ({ navigation }) => {
                 ))
               ) : null}
             </View>
-            <View style={{ paddingHorizontal: width * 0.02 }}>
+            <View style={{ paddingHorizontal: width * 0.01 }}>
               <Text style={styles.workexperdive}>work experience </Text>
               {Array.isArray(userData.experience) && userData.experience.map((exp, index) => (
                 <>

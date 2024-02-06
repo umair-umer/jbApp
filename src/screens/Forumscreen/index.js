@@ -243,7 +243,13 @@ const ForumScreen = ({ navigation, route, onPress }) => {
     switch (selectedTab) {
       case 'Popular':
         return (
-          <View style={{ flex: 1, paddingBottom: height * 0.35 }}>
+          <View style={{ flex: 1, paddingBottom: height * 0.35,  ...Platform.select({
+            ios: {
+              paddingHorizontal:width*0.03, 
+           
+            },
+        
+          }), }}>
             <Text style={styles.popular}>Popular Topics</Text>
 
             <View style={{ flexDirection: 'row' }}>
@@ -289,7 +295,7 @@ const ForumScreen = ({ navigation, route, onPress }) => {
 
   return (
     <>
-      {isload ? <Loader /> : <View style={styles.container}>
+      {isload ? <Loader /> : <SafeAreaView style={styles.container}>
         <CustomeHeader
           title={'jobbooks'}
           source={{ uri: `${baseprofileurl}${userData.picture}` }}
@@ -307,7 +313,13 @@ const ForumScreen = ({ navigation, route, onPress }) => {
             showsHorizontalScrollIndicator={false}
           />
         </View>
-        <View style={{ flexDirection: 'row', marginVertical: 20 }}>
+        <View style={{ flexDirection: 'row', marginVertical: 20,   ...Platform.select({
+      ios: {
+        padding: 5, 
+        borderRadius: 10,
+      },
+  
+    }), }}>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <TouchableOpacity
               style={[
@@ -372,7 +384,7 @@ const ForumScreen = ({ navigation, route, onPress }) => {
 
         />
 
-      </View>}
+      </SafeAreaView>}
     </>
   );
 };
@@ -383,6 +395,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#009A8C',
     padding: 10,
+    ...Platform.select({
+      ios: {
+        padding: 10, 
+     
+      },
+  
+    }),
   },
   sliedercontaintbox: {
     backgroundColor: '#FF9228',
@@ -442,6 +461,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     borderRadius: 10,
+  
   },
   frommslideNonactive: {
     backgroundColor: '#2FB5A8',
@@ -460,6 +480,13 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
 
     elevation: 5,
+    ...Platform.select({
+      ios: {
+        padding: 5, 
+        borderRadius: 10,
+      },
+  
+    }),
   },
   popular: {
     fontSize: calculateFontSize(20),

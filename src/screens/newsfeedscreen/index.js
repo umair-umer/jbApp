@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TouchableOpacity, Modal, View, Text, ImageBackground, SafeAreaView, StyleSheet, Image, Dimensions, FlatList } from 'react-native';
+import { Platform,TouchableOpacity, Modal, View, Text, ImageBackground, SafeAreaView, StyleSheet, Image, Dimensions, FlatList } from 'react-native';
 import Images from '../../config/im';
 import { calculateFontSize } from '../../config/font';
 import { CustomeButton, Inputcomponent, CustomeforgetHeader, CustomModal, CustomeHeader } from '../../Components';
@@ -182,7 +182,7 @@ const NewsFeed = ({ navigation, onPress, route }) => {
             {isload ? <Loader /> : <SafeAreaView style={styles.container}>
 
 
-                <CustomeHeader source={{ uri: `${baseprofileurl}${userData.picture}` }} title={"jobbooks"} iconsource1={Images.searchicon} onPressNotification={() => navigation.navigate('notifyscreen')} iconsource2={Images.notificationicon} iconsource3={Images.fobox} />
+                <CustomeHeader  title={"jobbooks"} iconsource1={Images.searchicon} onPressNotification={() => navigation.navigate('notifyscreen')} iconsource2={Images.notificationicon} iconsource3={Images.fobox} />
                 <View>
                     <FlatList
                         data={sliderData}
@@ -192,7 +192,7 @@ const NewsFeed = ({ navigation, onPress, route }) => {
                         showsHorizontalScrollIndicator={false}
                     />
                 </View>
-                <View style={{ paddingBottom: 210 }}>
+                <View style={styles.padbottom}>
 
                     <FlatList
                         data={posts}
@@ -221,7 +221,18 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#009A8C",
-        padding: 10,
+        padding: 10, 
+     
+    },
+    padbottom:{
+        paddingBottom: 210 ,
+        ...Platform.select({
+            ios: {
+              padding: 10, 
+           
+            },
+        
+          }),
     },
     sliedercontaintbox: {
         backgroundColor: "#FF9228",
