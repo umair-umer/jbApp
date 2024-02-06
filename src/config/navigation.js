@@ -146,7 +146,6 @@ function Nav() {
 
         <Stack.Screen name="userchatroomscreen" component={ChatRoom} />
         <Stack.Screen name="videocallscreen" component={Videocall} />
-
         <Stack.Screen name="notifyscreen" component={Notificationscreen} />
 
         <Stack.Screen name="specialscreen" component={Specialization} />
