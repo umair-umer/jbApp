@@ -12,7 +12,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		886CEBBE2B3DDC43007EA071 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 886CEBBD2B3DDC43007EA071 /* GoogleService-Info.plist */; };
+		88D656C32B7AC93B00D2E5BD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 88D656C22B7AC93B00D2E5BD /* GoogleService-Info.plist */; };
 		BC334DE0AFA565E85A136CB7 /* libPods-jobbook.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EAAE69201093868117A029DD /* libPods-jobbook.a */; };
 		E19C3FAEA8A05A86BD376E5F /* libPods-jobbook-jobbookTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 153DFEE7E62AB441C37E0407 /* libPods-jobbook-jobbookTests.a */; };
 /* End PBXBuildFile section */
@@ -41,7 +41,7 @@
 		2F367123355316625AAB9F04 /* Pods-jobbook-jobbookTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-jobbook-jobbookTests.debug.xcconfig"; path = "Target Support Files/Pods-jobbook-jobbookTests/Pods-jobbook-jobbookTests.debug.xcconfig"; sourceTree = "<group>"; };
 		3F32732A80AD372BDAC996B1 /* Pods-jobbook-jobbookTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-jobbook-jobbookTests.release.xcconfig"; path = "Target Support Files/Pods-jobbook-jobbookTests/Pods-jobbook-jobbookTests.release.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = jobbook/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		886CEBBD2B3DDC43007EA071 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../GoogleService-Info.plist"; sourceTree = "<group>"; };
+		88D656C22B7AC93B00D2E5BD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		AD04F5318592F1B7C6C0AB27 /* Pods-jobbook.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-jobbook.debug.xcconfig"; path = "Target Support Files/Pods-jobbook/Pods-jobbook.debug.xcconfig"; sourceTree = "<group>"; };
 		EAAE69201093868117A029DD /* libPods-jobbook.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-jobbook.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -88,7 +88,7 @@
 		13B07FAE1A68108700A75B9A /* jobbook */ = {
 			isa = PBXGroup;
 			children = (
-				886CEBBD2B3DDC43007EA071 /* GoogleService-Info.plist */,
+				88D656C22B7AC93B00D2E5BD /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -248,7 +248,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				886CEBBE2B3DDC43007EA071 /* GoogleService-Info.plist in Resources */,
+				88D656C32B7AC93B00D2E5BD /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -503,8 +503,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3M2YS7WQ2R;
+				DEVELOPMENT_TEAM = Z4MHA8924X;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = jobbook/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -520,6 +522,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.jobbook;
 				PRODUCT_NAME = jobbook;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -532,8 +535,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3M2YS7WQ2R;
+				DEVELOPMENT_TEAM = Z4MHA8924X;
 				INFOPLIST_FILE = jobbook/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -548,6 +553,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.jobbook;
 				PRODUCT_NAME = jobbook;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
