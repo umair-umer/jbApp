@@ -97,9 +97,7 @@ const Profilescreen = ({ navigation }) => {
         },
       )
       .then(response => {
-        console.log(response.data.data[0].experience
-
-          , '====>getprofile');
+      
         setloader(false)
         // Handle the successful response and update userData state
         // const { name, email ,picture} = response.data.data; // Update this with your actual response structure

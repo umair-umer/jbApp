@@ -59,12 +59,12 @@ const ForumScreen = ({ navigation, route, onPress }) => {
   const fetchForumData = async () => {
     setload(true)
     try {
-      const response = await axios.get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/forum/fetch', {
+      const response = await axios.get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/home/fourms', {
         headers: {
           'Authorization': ` Bearer ${token}`
         }
       });
-      console.log(response.data.data, "foreumdata"); // Handle the response data as needed
+      console.log(response.data.data, "foreumdata"); 
       setload(false)
       setForumData(response.data.data)
     } catch (error) {

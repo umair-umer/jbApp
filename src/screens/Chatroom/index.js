@@ -87,7 +87,7 @@ const ChatRoom = ({ route, navigation }) => {
                     <FontAwesome name="send" size={calculateFontSize(23)} color="#009A8C" />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={endVideoCall}>
-                    <Text>End Call</Text>
+                    {/* <Text>End Call</Text> */}
                 </TouchableOpacity>
             </View>
      

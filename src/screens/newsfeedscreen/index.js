@@ -14,17 +14,12 @@ const { width, height } = Dimensions.get('window');
 const NewsFeed = ({ navigation, onPress, route }) => {
     const [show, setshow] = useState(false)
     const [isModalVisible, setModalVisible] = useState(false);
-    const [userData, setUserData] = useState([{
-        // name: '',
-        // email: '',
-        picture: "",
-
-    }]);
+  
     const [isload, setload] = useState();
 
     const [posts, setPosts] = useState([]);
     const profileType = route.params
-    console.log(route, "===>newsfeed");
+    // console.log(route, "===>newsfeed");
     const { token } = useSelector((state) => state.auth); // Get the token from Redux store
   
 
@@ -36,7 +31,7 @@ const NewsFeed = ({ navigation, onPress, route }) => {
                 headers: { "Authorization": `Bearer ${token}` },
             });
             setPosts(response.data.data);
-            console.log(response.data, "====>hhg");
+            console.log(response.data.data,"====>holllllllllla");
             setload(false)
 
         } catch (error) {
@@ -86,27 +81,7 @@ const NewsFeed = ({ navigation, onPress, route }) => {
         </View>
     );
 
-    //     // Fetch user data as before
 
-    //     // Fetch post data
-    //     const fetchPosts = async () => {
-    //         try {
-    //             const response = await axios.get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/news/fetch', {
-    //                 headers: {
-    //                     "Authorization": `Bearer ${token}`,
-    //                 },
-    //             });
-    //             setPosts(response.data.data);
-    //             console.log(response.data.data, "====> newsdata");
-    //             // If you want to log a specific item, ensure the array is not empty
-
-    //         } catch (error) {
-    //             console.error('Error fetching post data:', error);
-    //         }
-    //     };
-
-    //     fetchPosts();
-    // }, [token]);
 
     const renderPostItem = ({ item }) => {
         const createdAtTimestamp = moment(item.createdAt)
@@ -130,7 +105,7 @@ const NewsFeed = ({ navigation, onPress, route }) => {
                                 </View>
                             </View>
                         </View>
-                      <TouchableOpacity onPress={()=>{navigation.navigate("postViewpro")}}>
+                      <TouchableOpacity onPress={()=>{navigation.navigate("postViewpro",{id:item.user._id,})}}>
                       <View style={styles.viewprocontainer}>
                             <View style={styles.proview}>
                                 <Image style={{ width: "100%", height: "100%" }} resizeMode='center' source={Images.viewpro} />
