@@ -18,8 +18,8 @@ function Salaryexpscreen({navigation,route}) {
   const  data2= route.params;
   console.log(data2,"slary screen");
   const [selectedType, setSelectedType] = useState(null);
-  const [inputValue, setInputValue] = useState('');
-  const [inputValueto, setInputValueto] = useState('');
+  const [inputValue, setInputValue] = useState();
+  const [inputValueto, setInputValueto] = useState();
   const jobTypes = [
     {label: 'Daily', value: 'daily'},
     {label: 'Weekly', value: 'weekly'},
@@ -31,10 +31,13 @@ function Salaryexpscreen({navigation,route}) {
     setSelectedType(value);
   };
   const handleInputChange = (text) => {
-    setInputValue(text);
+    const number = parseFloat(text); 
+    setInputValue(isNaN(number) ? null : number);
   };
+
   const handleInputChangeTo = (text) => {
-    setInputValueto(text);
+    const number = parseFloat(text); 
+    setInputValueto(isNaN(number) ? null : number);
   };
   const handleNext=()=>{
    navigation.navigate('jobCategory',{data2:data2,selectedType,inputValueto,inputValue})
@@ -55,14 +58,16 @@ function Salaryexpscreen({navigation,route}) {
           placeholderTextColor="#fff"
           style={styles.inp}
           onChangeText={handleInputChange}
-          value={inputValue}
+          value={inputValue ? inputValue.toString() : ''} // Convert number to string for TextInput
+          keyboardType="numeric" // Show numeric keyboard
         />
         <TextInput
           placeholder="To"
           placeholderTextColor="#fff"
           style={styles.inp}
           onChangeText={handleInputChangeTo}
-          value={inputValueto}
+          value={inputValueto ? inputValueto.toString() : ''} // Convert number to string for TextInput
+          keyboardType="numeric" // Show numeric keyboard
         />
       </View>
       <View style={styles.type}>

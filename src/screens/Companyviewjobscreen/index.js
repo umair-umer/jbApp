@@ -44,7 +44,8 @@ function Companymyjob({navigation}) {
             'Authorization': `Bearer ${token}`, // Use your actual token
           },
         });
-        setJobs(response.data.data); // Assuming 'data' contains the jobs array
+        setJobs(response.data.data); 
+console.log(response.data.data,"<><><><>");
         console.log(response.data.data[0]._id,"=====>"); // Assuming 'data' contains the jobs array
       } catch (error) {
         console.error('Error fetching jobs:', error);
@@ -157,7 +158,7 @@ function Companymyjob({navigation}) {
                 <Text style={styles.postduration}>Posted {calculateDaysAgo(job.createdAt)} days ago</Text>
               </View>
               <View>
-                <Text style={styles.postsalary}>${job.salary}K/mo</Text>
+                <Text style={styles.postsalary}>${job.salMax} ${job.salMin}/mon</Text>
               </View>
             </View>
           </ImageBackground>

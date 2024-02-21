@@ -14,42 +14,74 @@ import { useSelector } from 'react-redux';
 import { calculateDaysAgo } from '../../config/utilities/hours';
 import { baseprofileurl } from '../../config/utilities';
 import Loader from '../../Components/Loader';
-
-const JobsearchScreen = ({ navigation }) => {
+import { useFocusEffect } from '@react-navigation/native';
+const JobsearchScreen = ({ navigation,route }) => {
+  const { salaryRange, selectedJobType, selectedJob, selectedLocation } = route.params || {};
+ 
+  console.log(
+    // route.params,
+    salaryRange, selectedJobType, selectedJob, selectedLocation,
+    // salaryRange,selectedJobType,selectedJob,selectedLocation
+    "alll");
   const { token, type } = useSelector((state) => state.auth);
   const [jobsData, setJobsData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [id, setId] = useState();
+  const [ignoreFilters, setIgnoreFilters] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  // This effect runs every time the screen comes into focus
+  useFocusEffect(
+    React.useCallback(() => {
+      // Decide whether to ignore filters based on your logic
+      // For example, you might want to ignore filters based on a specific condition or parameter
+      setIgnoreFilters(true); // This will ignore filters for the current focus
+
+      return () => {
+        // Optional cleanup actions
+        setIgnoreFilters(false); // Reset the flag when the screen goes out of focus
+      };
+    }, [])
+  );
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-
-      const baseURL = type === 'company'
-        ? 'https://jobbookbackend.azurewebsites.net/api/v1/jobbook/company/home/jobs'
-        : 'https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/home/jobs';
-      const config = {
-        method: 'get',
-        url: baseURL,
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      };
-
+      const { salaryRange, selectedJobType, selectedJob, selectedLocation } = ignoreFilters ? {} : route.params || {};
+      const baseURL = `https://jobbookbackend.azurewebsites.net/api/v1/jobbook/${type}/home/jobs`;
+  
+      let queryParams = new URLSearchParams();
+      if (searchQuery) queryParams.append('title', searchQuery);
+      if (selectedJob) queryParams.append('title', selectedJob);
+      if (selectedLocation) queryParams.append('location', selectedLocation);
+      if (salaryRange) {
+        queryParams.append('salMin', salaryRange[0]);
+        queryParams.append('salMax', salaryRange[1]);
+      }
+      if (selectedJobType) queryParams.append('type', selectedJobType);
+  
+      const fullUrl = `${baseURL}?${queryParams}`;
+      console.log("Final URL with Query Params:", fullUrl); // Log the final URL
       try {
-        const response = await axios(config);
-        setJobsData(response.data.data);
-        //  setId(response.data.data[0]._id);
-      } catch (err) {
-        console.error("Error fetching data: ", err);
-        setError(err);
+        const response = await axios.get(fullUrl, {
+          headers: { 'Authorization': `Bearer ${token}` },
+        });
+        console.log("API Response:", response.data); // Debugging: Inspect the response structure
+        // Assuming the jobs data is directly under 'data' key in the response
+        setJobsData(response.data.data || []); 
+        console.log(jobsData,"===jobdata");
+        // Fallback to an empty array if data is undefined
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
+        setError(error);
       } finally {
         setIsLoading(false);
       }
     };
-
+  
     fetchData();
-  }, [token]);
+  }, [ignoreFilters,token, selectedJob, selectedLocation, salaryRange, selectedJobType, type]);
+
+
   useEffect(() => {
     // Make an Axios GET request to your API endpoint with the token
     axios
@@ -134,10 +166,12 @@ const JobsearchScreen = ({ navigation }) => {
                   placeholder='Search jobs, Company'
                   placeholderTextColor={"#fff"}
                   style={{ color: "#fff", }}
+                  value={searchQuery}
+                  onChangeText={setSearchQuery}
                 />
               </View>
             </View>
-            <TouchableOpacity style={styles.fltrbtn} onPress={() => navigation.navigate('specialscreen')}>
+            <TouchableOpacity style={styles.fltrbtn} onPress={() => navigation.navigate('seachingscreen')}>
               <Feather name="sliders" color={"#fff"} size={25} />
             </TouchableOpacity>
           </View>
@@ -206,7 +240,7 @@ const JobsearchScreen = ({ navigation }) => {
                       </View>
                       <View>
                         {/* Uncomment and use job.salary if available */}
-                        <Text style={styles.postsalary}>{job.travel}km/m</Text>
+                        <Text style={styles.postsalary}>${job.salMax} ${job.salMin}/mon</Text>
                       </View>
                     </View>
                   </ImageBackground>

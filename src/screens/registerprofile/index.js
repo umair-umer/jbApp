@@ -208,7 +208,7 @@ import {
   Dimensions,
 } from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
-import {CustomModal, CustomeButton, Inputcomponent} from '../../Components';
+import {CustomModal, CustomeButton, Inputcomponent,CustomErrorModal} from '../../Components';
 import Images from '../../config/im';
 import {calculateFontSize} from '../../config/font';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -269,6 +269,7 @@ const RegistertalentProfile = () => {
   const [isModalVisiblesucess, setModalVisiblesucess] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
+  const [isModalVisibleerr, setModalVisiblerrr] = useState(false);
 
   const [nameError, setNameError] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -365,6 +366,7 @@ const RegistertalentProfile = () => {
         console.error('Registration error:', error.response.data.error);
         setload(false)
         setErrro(error.response.data.error)
+        setModalVisiblerrr(true)
         // setModalVisible(true);
       }
     }
@@ -376,7 +378,11 @@ const RegistertalentProfile = () => {
     setModalVisible(false);
     console.log(isModalVisible);
 };
-
+const closemodal = () => {
+  setModalVisiblerrr(false);
+  setload(false)
+  console.log(isModalVisible);
+};
   const handleregistersucess = () => {
     // setUserType(UserType);
 
@@ -542,14 +548,16 @@ const RegistertalentProfile = () => {
               )}
             </ScrollView>
           </KeyboardAvoidingView>
-          <CustomModal
-            status="profile Registered successfully "
-            statusTwo="You can now configure your profile through the launcher or by adding details on the profile page later on."
-            isModalVisible={isModalVisible}
-            onPress={handleregistersucess}
-          />
         </SafeAreaView>
       )}
+        <CustomErrorModal onPressclose={closemodal} error={error} isModalVisible={isModalVisibleerr} />
+
+      {/* <CustomModal
+        status="profile Registered successfully "
+        statusTwo="You can now configure your profile through the launcher or by adding details on the profile page later on."
+        isModalVisible={isModalVisible}
+        onPress={handleregistersucess}
+      /> */}
     </>
   );
 };

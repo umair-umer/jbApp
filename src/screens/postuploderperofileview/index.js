@@ -210,7 +210,7 @@ export const POstUPloderprofile = ({navigation,route}) => {
             }}>
             Education
           </Text>
-  <TouchableOpacity
+  <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
@@ -238,7 +238,7 @@ export const POstUPloderprofile = ({navigation,route}) => {
                 <Text style={{color: '#CBC2C2'}}>Dec 2022 - Present</Text>
               </View>
             </View>
-          </TouchableOpacity>
+          </View>
           
         </View>
       
@@ -254,7 +254,7 @@ export const POstUPloderprofile = ({navigation,route}) => {
             }}>
             Skills
           </Text>
-          <TouchableOpacity
+          <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
@@ -282,7 +282,7 @@ export const POstUPloderprofile = ({navigation,route}) => {
                 </View>
               </View>
             </View>
-          </TouchableOpacity>
+          </View>
         
         </View>
     
@@ -298,7 +298,7 @@ export const POstUPloderprofile = ({navigation,route}) => {
             }}>
             Languages
           </Text>
-          <TouchableOpacity
+          <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
@@ -318,7 +318,7 @@ export const POstUPloderprofile = ({navigation,route}) => {
                 </Text>
               </View>
             </View>
-          </TouchableOpacity>
+          </View>
         
         </View>
 

@@ -66,7 +66,8 @@ function CompanyLocationPhoto({navigation,route}) {
     data.append('type', routeParams.typeseclect);
     data.append('travel', [routeParams.mileRange]);
     data.append('location', routeParams.placelocation);
-    data.append('salary', [routeParams.inputValue, routeParams.inputValueto]);
+    data.append('salMin', routeParams.inputValue);
+    data.append('salMax', routeParams.inputValueto);
     data.append('salaryMode', routeParams.selectedTyperoutien);
     data.append('speciality', 'ergh4r5uy'); // Example, change as needed
     data.append('category', routeParams.selectedCategories);

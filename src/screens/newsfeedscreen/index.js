@@ -9,6 +9,7 @@ import moment from 'moment';
 import { baseprofileurl } from '../../config/utilities';
 import { useFocusEffect } from '@react-navigation/native';
 import Loader from '../../Components/Loader';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const { width, height } = Dimensions.get('window');
 const NewsFeed = ({ navigation, onPress, route }) => {
@@ -19,7 +20,7 @@ const NewsFeed = ({ navigation, onPress, route }) => {
 
     const [posts, setPosts] = useState([]);
     const profileType = route.params
-    // console.log(route, "===>newsfeed");
+    
     const { token } = useSelector((state) => state.auth); // Get the token from Redux store
   
 
@@ -99,7 +100,8 @@ const NewsFeed = ({ navigation, onPress, route }) => {
                                 <Text style={styles.gtext}>{item.user.name}</Text>
                                 <View style={styles.timercontainer}>
                                     <View style={styles.timerimage}>
-                                        <Image resizeMode="center" style={{ width: "100%", height: "100%" }} source={Images.timericon} />
+                                           {Platform.OS =="ios" ?<Ionicons size={10} name='time-outline'/>:
+                                           <Image resizeMode="center" style={{ width: "100%", height: "100%" }} source={Images.timericon} /> }
                                     </View>
                                     <Text style={styles.gtextime}>{hoursAgo === 0 ? 'just now' : `${hoursAgo} hour${hoursAgo > 1 ? 's' : ''} ago`}</Text>
                                 </View>
@@ -306,6 +308,12 @@ const styles = StyleSheet.create({
         width: width * 0.05,
         height: height * 0.02,
         overflow: "hidden",
+        ...Platform.select({
+            ios: {
+              width: 'auto',
+              height: 'auto',
+              // any other specific styles for iOS
+        },})
 
     },
     timercontainer: {

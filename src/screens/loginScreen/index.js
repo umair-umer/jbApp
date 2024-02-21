@@ -171,6 +171,7 @@ const LoginScreen = ({ navigation }) => {
       console.log('Login Error:', error.response.data.error);
       setErrro(error.response.data.error)
       setModalVisiblerrr(true)
+
       // Handle the error (e.g., show an error message)
     }
   };
@@ -178,7 +179,8 @@ const LoginScreen = ({ navigation }) => {
 
   const closemodal = () => {
     setModalVisiblerrr(false);
-    // console.log(isModalVisible);
+    setload(false)
+    console.log(isModalVisible);
 };
 
 
@@ -220,8 +222,8 @@ const LoginScreen = ({ navigation }) => {
           </View>
         </TouchableOpacity>
         <Text style={styles.alreadymember} >Already a member ? <Text style={styles.login}>Login</Text></Text>
-        <CustomErrorModal onPressclose={closemodal} error={error} isModalVisible={isModalVisibleerr} />
       </SafeAreaView>}
+        <CustomErrorModal onPressclose={closemodal} error={error} isModalVisible={isModalVisibleerr} />
     </>
 
   )

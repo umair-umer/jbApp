@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dimensions, 
         Text, 
         View,
@@ -7,6 +7,8 @@ import { Dimensions,
 import { CustomeButton } from '../../Components';
 import { calculateFontSize } from '../../config/font';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 const{width,height}=Dimensions.get("window")
 
 
@@ -19,12 +21,20 @@ const allCategories = [
     'Office Administration',
     'Armed Security Guard',
   ]
+function Prefrencescreen({navigation,route}) {
+  const {selectedJob,selectedLocation,}=route.params;
+  console.log(route.params,"prefecnce");
+  const { token, type } = useSelector((state) => state.auth);
 
-function Prefrencescreen({navigation}) {
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [showAllCategories, setShowAllCategories] = useState(false);
     const [selectedJobType, setSelectedJobType] = useState(null);
-    const [salaryRange, setSalaryRange] = useState([50000, 100000]); // Initial salary range
+    const [salaryRange, setSalaryRange] = useState([0, 0]);
+    const [jobData, setJobData] = useState([]); // State to store job data
+
+
+    
+    // Initial salary range
     const toggleCategories = () => {
       setShowAllCategories(!showAllCategories);
     };
@@ -39,14 +49,21 @@ function Prefrencescreen({navigation}) {
       'Full-time',
       'Part-time',
       'Freelance',
+      
+      'Contract'
     ];
   
     const handleJobTypeSelect = (jobType) => {
       setSelectedJobType(jobType);
+      console.log(selectedJobType,"jobtype");
     };
   
     const handleSalaryChange = (values) => {
-      setSalaryRange(values);
+      // Assuming values are received as strings, convert them to numbers
+      const minSalary = parseInt(values[0]);
+      const maxSalary = parseInt(values[1]);
+      setSalaryRange([minSalary, maxSalary]);
+      console.log(salaryRange.minSalary,"salaryrange");
     };
 
     const applyFilter = () => {
@@ -54,7 +71,7 @@ function Prefrencescreen({navigation}) {
       console.log('Selected Category:', selectedCategory);
       console.log('Selected Job Type:', selectedJobType);
       console.log('Salary Range:', salaryRange);
-    navigation.navigate('newsfeed')
+    navigation.navigate('Jobapplicants',{selectedJob:selectedJob,selectedLocation:selectedLocation,salaryRange,selectedJobType})
 
     };
 
@@ -80,15 +97,15 @@ function Prefrencescreen({navigation}) {
               </TouchableOpacity>
             </View>
   
-            <View style={styles.search}>
+            {/* <View style={styles.search}>
               <TextInput
                 placeholder="Search location"
                 placeholderTextColor={"#000"}
                 style={styles.inp}
               />
-            </View>
+            </View> */}
   
-            <View style={styles.jobCategory}>
+            {/* <View style={styles.jobCategory}>
               <Text style={styles.txt}>Job Categories</Text>
               {categoriesToShow.map((category) => (
                 <View style={styles.categoryItem} key={category}>
@@ -101,7 +118,7 @@ function Prefrencescreen({navigation}) {
                   <Text style={styles.moreBtn}>+ More</Text>
                 </TouchableOpacity>
               )}
-            </View>
+            </View> */}
   
             <View style={styles.lineCon}>
               <View style={styles.lane}></View>
@@ -182,11 +199,13 @@ const styles = StyleSheet.create({
     content:{
 
           width:"100%",
-          height:"auto",
+          height:height*0.99,
           backgroundColor:"#fff",
-          marginTop:height*0.09,
+          // marginTop:height*0.09,
           borderTopLeftRadius:30,
-          borderTopRightRadius:30
+          borderTopRightRadius:30,
+          position:"relative",
+          top:height*0.25
     },
     cenbtn:{
         width:width*0.09,

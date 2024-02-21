@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Text, View, StyleSheet, Dimensions, TextInput, FlatList,TouchableOpacity } from 'react-native';
 const { width, height } = Dimensions.get("window");
 import { CustomeButton } from '../../Components';
 import { calculateFontSize } from '../../config/font';
-
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 
 const initialJobs = [
@@ -15,53 +16,40 @@ const initialJobs = [
     'America',
     'UAE'
   ];
-  
   function Loctionsearching({navigation,route}) {
-    const locationsearch=route.params;
-    console.log(locationsearch,"locationsearch");
-      const [searchText, setSearchText] = useState('');
-      const [searchResults, setSearchResults] = useState([]);
-      const [selectedJob, setSelectedJob] = useState(null);
-    
-      const handleSearch = (text) => {
-        setSearchText(text);
-        const filteredJobs = initialJobs.filter(job => job.toLowerCase().includes(text.toLowerCase()));
-        setSearchResults(filteredJobs);
-      };
-    
-      const handleJobSelect = (job) => {
-        setSelectedJob(job);
-        navigation.navigate('prefscreen',{selectedJob})
-      };
-    
-      const handleRemoveSelectedJob = () => {
-          setSelectedJob(null);
-        };
+    const {selectedJob}=route.params;
+    console.log(selectedJob,"locationsearch");
+  const { token, type } = useSelector((state) => state.auth);
+
+    const [searchText, setSearchText] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
+    const [selectedLocation, setSelectedLocation] = useState(null);
   
-        const renderJobItem = ({ item }) => {
-          const isInitialJob = initialJobs.includes(item);
-          const backgroundColor = isInitialJob ? 'rgba(12, 104, 96, 0.6)' : '#1C75BC';
-        
-          return (
-            <TouchableOpacity
-              style={{
-                ...styles.searchResultItem,
-                backgroundColor,
-              }}
-              onPress={() => handleJobSelect(item)}
-            >
-              <Text style={{color:"#fff",fontWeight:"600",paddingHorizontal:width*0.02}}>{item}</Text>
-              {selectedJob === item && (
-                <TouchableOpacity
-                  style={styles.removeButton}
-                  onPress={handleRemoveSelectedJob}
-                >
-                  <Text style={styles.removeButtonText}>X</Text>
-                </TouchableOpacity>
-              )}
-            </TouchableOpacity>
-          );
-        };
+    const handleSearch = (text) => {
+      setSearchText(text);
+      const filteredLocations = initialJobs.filter(job => job.toLowerCase().includes(text.toLowerCase()));
+      setSearchResults(text ? [text, ...filteredLocations] : []);
+    };
+  
+    const handleLocationSelect = (location) => {
+      setSelectedLocation(location);
+      console.log(location,"09099");
+   
+     
+    };
+  
+    const renderLocationItem = ({ item }) => {
+      const backgroundColor = item === selectedLocation ? '#1C75BC' : 'rgba(12, 104, 96, 0.6)';
+  
+      return (
+        <TouchableOpacity
+          style={[styles.searchResultItem, { backgroundColor }]}
+          onPress={() => handleLocationSelect(item)}
+        >
+          <Text style={{ color: "#fff", fontWeight: "600", paddingHorizontal: width * 0.02 }}>{item}</Text>
+        </TouchableOpacity>
+      );
+    };
     return (
       <View style={styles.mainCon}>
       <View style={styles.heading}>
@@ -85,7 +73,7 @@ const initialJobs = [
       <FlatList
         data={searchResults}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={renderJobItem}
+        renderItem={renderLocationItem}
         numColumns={2}  
       />
   
@@ -97,7 +85,7 @@ const initialJobs = [
   
   <View style={styles.btncon}>
   
-<CustomeButton title={'Search'} nonbg={true} onPress={()=>navigation.navigate('prefscreen')}/>
+<CustomeButton title={'Search'} nonbg={true} onPress={()=> navigation.navigate('prefscreen', {selectedJob:selectedJob,selectedLocation:selectedLocation })}/>
   </View>
   
   </View>

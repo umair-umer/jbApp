@@ -505,11 +505,9 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Z4MHA8924X;
+				DEVELOPMENT_TEAM = Z4MHA8924X;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = jobbook/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = jobbook;
@@ -526,7 +524,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.jobbookbundleId.com;
 				PRODUCT_NAME = jobbook;
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = jobprov;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -545,11 +542,9 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Z4MHA8924X;
+				DEVELOPMENT_TEAM = Z4MHA8924X;
 				INFOPLIST_FILE = jobbook/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = jobbook;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -565,7 +560,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.jobbookbundleId.com;
 				PRODUCT_NAME = jobbook;
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = jobprov;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
