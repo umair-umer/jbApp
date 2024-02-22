@@ -14,7 +14,7 @@ import { useSelector } from 'react-redux';
 import { calculateDaysAgo } from '../../config/utilities/hours';
 import { baseprofileurl } from '../../config/utilities';
 import Loader from '../../Components/Loader';
-
+baseprofileurl
 const PendingapplicantsData = [
     {
       id: 1,
@@ -59,11 +59,33 @@ const PendingapplicantsData = [
     // Add more data as needed
   ];
 export const TalentSearch = ({navigation}) => {
-    const [data, setData] = useState(PendingapplicantsData);
+    const [data, setData] = useState([]);
+  const { token, type } = useSelector((state) => state.auth);
 
+    useEffect(() => {
+      const fetchData = async () => {
+          const config = {
+              method: 'get',
+              url: 'https://jobbookbackend.azurewebsites.net/api/v1/jobbook/company/home/talents',
+              headers: { 
+                  'Authorization': `Bearer ${token}`
+              }
+          };
+
+          try {
+              const response = await axios(config);
+              setData(response.data.data); 
+              console.log(response.data.data);// Adjust according to the shape of your response
+          } catch (error) {
+              console.error('Failed to fetch data:', error);
+              // Handle error appropriately in your UI
+          }
+      };
+
+      fetchData();
+  }, []); // Empty dependency array means this effect runs once on mount
     const renderApplicantItem = ({item}) => {
-      
-    
+      const titles = item.experience.map(exp => exp.title).join(',');
         return (
         
             <View style={styles.pendingApliictaionview}>
@@ -73,7 +95,7 @@ export const TalentSearch = ({navigation}) => {
                     <Image
                       resizeMode="cover"
                       style={{width: '100%', height: '100%'}}
-                      source={item.image}
+                      source={{uri:`${baseprofileurl}${item.picture}`}}
                     />
                   </View>
                   <View style={{paddingHorizontal: width * 0.02}}>
@@ -81,31 +103,22 @@ export const TalentSearch = ({navigation}) => {
                     <Text
                       style={
                         styles.aplicantjobtitle
-                      }>{`${item.jobTitle} . ${item.salary}`}</Text>
+                      }>
+                        {titles}
+                        </Text>
                   </View>
                 </View>
     
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <View style={styles.loadIcon}>
-                    <Image
-                      source={Images.Loadingimage}
-                      style={{width: '100%', height: '100%'}}
-                      resizeMode="center"
-                    />
-                  </View>
-                  <Text style={styles.durationtime}>{`${item.progress}%`}</Text>
-                </View>
+             
               </View>
               <View style={styles.rsView}>
                 <TouchableOpacity>
-                  <Text style={styles.shortlist}>{item.location}</Text>
+                  <Text style={styles.shortlist}>{item.skills}</Text>
                 </TouchableOpacity>
     
-                {item.skills.map((skill, index) => (
-                  <Text style={styles.rej} key={index}>
-                    {skill}
-                  </Text>
-                ))}
+               
+                
+    
               </View>
             </View>
         
@@ -129,38 +142,16 @@ export const TalentSearch = ({navigation}) => {
           <TouchableOpacity style={styles.screnbuttactive} onPress={() => navigation.navigate('jobview')}>
             <Text style={styles.screbuttonactive}>Posted Jobs</Text>
           </TouchableOpacity>
-          {/* <TouchableOpacity style={styles.screnbuttactive} onPress={() => navigation.navigate('appliedscreen')}>
-            <Text style={styles.screbuttonactive}>Applied</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.screnbuttactive}>
-            <Text style={styles.screbuttonactive}>INTERVIEWS</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.screnbuttactive} onPress={() => navigation.navigate('closedscreen')}>
-            <Text style={styles.screbuttonactive}>Closed</Text>
-          </TouchableOpacity> */}
+         
         </View>
        
-        {/* <View style={styles.inpmain}>
-          <View style={styles.inpbox}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Feather name="search" color={"#fff"} size={15} />
-              <TextInput
-                placeholder='Search jobs, Company'
-                placeholderTextColor={"#fff"}
-                style={{ color: "#fff" }}
-              />
-            </View>
-          </View>
-          <TouchableOpacity style={styles.fltrbtn} onPress={() => navigation.navigate('specialscreen')}>
-            <Feather name="sliders" color={"#fff"} size={25} />
-          </TouchableOpacity>
-        </View> */}
+    
 
     
      <View style={{paddingBottom:height*0.30}}>
      <FlatList
-        data={PendingapplicantsData}
-        keyExtractor={item => item.id.toString()}
+        data={data}
+        keyExtractor={(item) => String(item.id || item._id)}
         renderItem={renderApplicantItem}
         showsVerticalScrollIndicator={false}
       />
@@ -171,6 +162,7 @@ export const TalentSearch = ({navigation}) => {
  
 
       </SafeAreaView>
+      
     </ImageBackground>
 
   </>
@@ -186,6 +178,8 @@ const styles = StyleSheet.create({
       width: '100%',
       height: '100%',
       justifyContent: 'space-between', // To create space between top and bottom items
+      flex:1,
+
     },
     bgImage: {
       width: width * 0.90,

@@ -76,6 +76,8 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import CusTomDrawer from './customesidebar';
 import { useSelector, useDispatch } from 'react-redux';
+import { getFcmToken, requestUserPermission } from './utilities/notification';
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -83,7 +85,7 @@ const Drawer = createDrawerNavigator();
 
 function Nav() {
 
-  // const token = useSelector(state => state.auth.token); 
+
   const { token, type } = useSelector((state) => state.auth);
 
 
