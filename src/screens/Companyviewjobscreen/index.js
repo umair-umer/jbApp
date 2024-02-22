@@ -61,7 +61,7 @@ console.log(response.data.data,"<><><><>");
   return (
     <SafeAreaView style={styles.mainCon}>
       <CustomeforgetHeader
-        onPress={() => navigation.goBack()}
+        onPress={() => navigation.navigate("Companyhome")}
         company={true}
         source={Images.arrow}
         heading={'My Jobs'}

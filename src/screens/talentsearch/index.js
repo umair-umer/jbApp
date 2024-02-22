@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontfamily: 'poppins',
         fontWeight: '500',
-        fontSize: calculateFontSize(16),
+        fontSize: calculateFontSize(19),
         textTransform: 'capitalize',
       },
       aplicantjobtitle: {
