@@ -18,6 +18,7 @@ import { CustomeforgetHeader } from '../../Components';
 import Swipeable from 'react-native-swipeable';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { base } from '../../config/utilities';
 const { width, height } = Dimensions.get('window');
 const PendingapplicantsData = [
   {
@@ -66,7 +67,7 @@ function Companyappliationpendingscreen({ navigation, route }) {
     const fetchApplications = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(`https://jobbookbackend.azurewebsites.net/api/v1/jobbook/company/home/applications/${id}?status=pending`, {
+        const response = await axios.get(`${base}/company/home/applications/${id}?status=pending`, {
           headers: {
             'Authorization': `Bearer ${token}`, 
           },
@@ -89,7 +90,7 @@ function Companyappliationpendingscreen({ navigation, route }) {
       setapplicationId(applicationId); // For debugging
       console.log(applicationId, newStatus, "-->");
       const response = await axios.put(
-        `https://jobbookbackend.azurewebsites.net/api/v1/jobbook/company/home/applicationUpdate/${applicationId}`,
+        `base/api/v1/jobbook/company/home/applicationUpdate/${applicationId}`,
         { status: newStatus },
         {
           headers: {

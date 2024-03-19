@@ -6,7 +6,12 @@ module.exports = {
         platforms: {
           ios: null,
         },
-      }
+      },
+      'react-native-flipper': {
+        platforms: {
+          ios: null,
+        },
+      },
     },
     assets: ['./assets/fonts'], // This line specifies the fonts directory
   };

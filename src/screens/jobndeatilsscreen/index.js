@@ -13,16 +13,19 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import IMG from '../../assets/dp.png'
 import ICON from '../../assets/icon.png'
 import { useSelector } from 'react-redux';
-import { baseprofileurl } from '../../config/utilities';
+import { base, baseprofileurl } from '../../config/utilities';
 const Jobdetail = ({ navigation ,route}) => {
    
-    const {id}=route.params;
-    console.log(id,"viewjobdetail");
+    // const {iid}=route?.params?.appliedJobs;
+    // const {description}=route?.params?.appliedJobs;
+    console.log(route.params.appliedJobs,"jkdhskfh");
+    
+    // console.log(id,"viewjobdetail");
     const { token, type } = useSelector((state) => state.auth);
     useEffect(() => {
         // Make an Axios GET request to your API endpoint with the token
         axios
-          .get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/profile', {
+          .get(`${base}/auth/profile`, {
             headers: {
               "Authorization": `Bearer ${token}`,
             },
@@ -86,7 +89,7 @@ const Jobdetail = ({ navigation ,route}) => {
         try {
             let action = isSaved ? "unsave" : "save"; 
             const response = await axios.post(
-                `https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/home/saveToggle/${id}`,
+                `${base}/talent/home/saveToggle/${iid}`,
                 JSON.stringify({ action }),
                 {
                     headers: {
@@ -200,7 +203,7 @@ const Jobdetail = ({ navigation ,route}) => {
                             <Text style={styles.txttt}>{userInformation.name}</Text>
                         </View>
                         <View>
-                            <Text style={styles.destext}>{userInformation.description}</Text>
+                            {/* <Text style={styles.destext}>{description}</Text> */}
                         </View>
                     </View>
 
@@ -235,7 +238,7 @@ const Jobdetail = ({ navigation ,route}) => {
 </ScrollView>
 
        <View style={styles.btnbox}> 
-        <TouchableOpacity style={styles.btn}>
+        <TouchableOpacity style={styles.btn} onPress={handleToggleSave}>
             <Text style={styles.btntxt}>
                 Save
             </Text>

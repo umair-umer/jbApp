@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   TouchableOpacity,
   TextInput,
@@ -15,48 +15,48 @@ import Images from '../../config/im';
 import {calculateFontSize} from '../../config/font';
 import {CustomeButton, CustomeforgetHeader} from '../../Components';
 import Entypo from 'react-native-vector-icons/Entypo';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 import axios from 'axios';
-import { baseprofileurl } from '../../config/utilities';
+import {base, baseprofileurl} from '../../config/utilities';
 const {width, height} = Dimensions.get('window');
-export const POstUPloderprofile = ({navigation,route}) => {
-    const {id}=route.params;
-    console.log(id,"postdata");
-  const { token, type } = useSelector((state) => state.auth);
+export const POstUPloderprofile = ({navigation, route}) => {
+  const {id} = route.params;
+  console.log(id, 'postdata');
+  const {token, type} = useSelector(state => state.auth);
 
-    const [profileData, setProfileData] = useState({});
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
-  
-    useEffect(() => {
-      const fetchData = async () => {
-        const config = {
-          method: 'get',
-          url: `https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/user-profile?userId=${id}`,
-          headers: { 
-            'Authorization': `Bearer ${token}`
-          }
-        };
-  
-        try {
-          const response = await axios.request(config);
-          console.log(response.data.data[0],"progileuser");
-          setProfileData(response.data.data[0]);
-          setIsLoading(false);
-        } catch (error) {
-          console.log(error);
-          setError(error);
-          setIsLoading(false);
-        }
+  const [profileData, setProfileData] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const config = {
+        method: 'get',
+        url: `${base}/auth/user-profile?userId=${id}`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       };
-  
-      fetchData();
-    }, []); 
-    const formatDate = (dateString) => {
-        if (!dateString) return 'Present';
-        const date = new Date(dateString);
-        return date.toLocaleDateString();
-      };
+
+      try {
+        const response = await axios.request(config);
+        console.log(response.data.data[0], 'progileuser');
+        setProfileData(response.data.data[0]);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+        setError(error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+  const formatDate = dateString => {
+    if (!dateString) return 'Present';
+    const date = new Date(dateString);
+    return date.toLocaleDateString();
+  };
   return (
     <SafeAreaView style={styles.conatiner}>
       <Image
@@ -87,13 +87,13 @@ export const POstUPloderprofile = ({navigation,route}) => {
 
       <View style={styles.proimg}>
         <Image
-          source={{uri:`${baseprofileurl}${profileData.picture}`}}
+          source={{uri: `${baseprofileurl}${profileData.picture}`}}
           style={{width: '100%', height: '100%'}}
           resizeMode="cover"
         />
       </View>
       <ScrollView style={styles.scrollcontain}>
-        <View style={{paddingVertical:height*0.02,}}>
+        <View style={{paddingVertical: height * 0.02}}>
           <Text style={styles.prname}>{profileData.name}</Text>
           <Text style={styles.position}>Creative Director </Text>
           <Text style={styles.companyname}>The Company Media Office </Text>
@@ -113,22 +113,22 @@ export const POstUPloderprofile = ({navigation,route}) => {
             </TouchableOpacity>
           </View> */}
         </View>
-     
+
         <View style={{borderBottomWidth: 1, borderBottomColor: '#fff'}} />
         <View style={styles.procon}>
-           <View style={{flexDirection:"row",justifyContent:"space-between"}}>
-          <Text
-            style={{
-              color: '#fff',
-              fontSize: calculateFontSize(16),
-              fontWeight: '700',
-            }}>
-           About
-          </Text>
-          {/* <TouchableOpacity style={styles.manageBtn}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text
+              style={{
+                color: '#fff',
+                fontSize: calculateFontSize(16),
+                fontWeight: '700',
+              }}>
+              About
+            </Text>
+            {/* <TouchableOpacity style={styles.manageBtn}>
               <Text style={{color: '#fff',fontSize:calculateFontSize(12)}}>Follow</Text>
             </TouchableOpacity> */}
-            </View>
+          </View>
           <View
             style={{
               flexDirection: 'row',
@@ -143,64 +143,65 @@ export const POstUPloderprofile = ({navigation,route}) => {
                 <Text style={{color: '#CCC4C4', fontWeight: '300'}}>
                   Connected 3 year 1 month
                 </Text> */}
-                <Text style={{color: '#fff'}}>
-                 {profileData.about}
-                </Text>
+                <Text style={{color: '#fff'}}>{profileData.about}</Text>
               </View>
             </View>
           </View>
         </View>
         <View style={{borderBottomWidth: 1, borderBottomColor: '#fff'}} />
         <View style={styles.procon}>
-        <Text style={styles.heading}>Experience</Text>
-        {profileData.experience && profileData.experience.length > 0 ? (
-          profileData.experience.map((item, index) => (
-            <View
-            key={index}
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-            onPress={() => navigation.navigate('educationscreen')}>
-            <View style={styles.wrkexperience}>
-              <View style={styles.dpPic}>
-                <Image
-                  resizeMode="center"
-                  source={Images.user}
-                  style={styles.img}
-                />
-              </View>
-              <View style={{paddingHorizontal: width * 0.03}}>
-                <Text
-                  style={{
-                    color: '#fff',
-                    fontSize: calculateFontSize(16),
-                    fontWeight: '700',
-                  }}>
-                  {item.title || "N/A"} {/* Use N/A if title is null or empty */}
-                </Text>
-                <Text style={{color: '#fff'}}>
-                {item.company || "N/A"} {/* Use N/A if company is null or empty */}
+          <Text style={styles.heading}>Experience</Text>
+          {profileData.experience && profileData.experience.length > 0 ? (
+            profileData.experience.map((item, index) => (
+              <View
+                key={index}
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+                onPress={() => navigation.navigate('educationscreen')}>
+                <View style={styles.wrkexperience}>
+                  <View style={styles.dpPic}>
+                    <Image
+                      resizeMode="center"
+                      source={Images.user}
+                      style={styles.img}
+                    />
+                  </View>
+                  <View style={{paddingHorizontal: width * 0.03}}>
+                    <Text
+                      style={{
+                        color: '#fff',
+                        fontSize: calculateFontSize(16),
+                        fontWeight: '700',
+                      }}>
+                      {item.title || 'N/A'}{' '}
+                      {/* Use N/A if title is null or empty */}
                     </Text>
-                <Text style={{color: '#fff'}}>
-                {item.from ? new Date(item.from).toLocaleDateString() : "N/A"} - 
-                  {item.to ? new Date(item.to).toLocaleDateString() : "Present"}
-                </Text>
+                    <Text style={{color: '#fff'}}>
+                      {item.company || 'N/A'}{' '}
+                      {/* Use N/A if company is null or empty */}
+                    </Text>
+                    <Text style={{color: '#fff'}}>
+                      {item.from
+                        ? new Date(item.from).toLocaleDateString()
+                        : 'N/A'}{' '}
+                      -
+                      {item.to
+                        ? new Date(item.to).toLocaleDateString()
+                        : 'Present'}
+                    </Text>
+                  </View>
+                </View>
               </View>
-            </View>
-       
-          </View>
-          
-          ))
-        ) : (
-          <Text style={styles.noExperience}>No experience listed</Text>
-        )}
-      </View>
+            ))
+          ) : (
+            <Text style={styles.noExperience}>No experience listed</Text>
+          )}
+        </View>
         <View style={{borderBottomWidth: 1, borderBottomColor: '#fff'}} />
 
-      
-      
         <View style={styles.procon}>
           <Text
             style={{
@@ -210,7 +211,7 @@ export const POstUPloderprofile = ({navigation,route}) => {
             }}>
             Education
           </Text>
-  <View
+          <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
@@ -239,11 +240,8 @@ export const POstUPloderprofile = ({navigation,route}) => {
               </View>
             </View>
           </View>
-          
         </View>
-      
 
-        
         <View style={{borderBottomWidth: 1, borderBottomColor: '#fff'}} />
         <View style={styles.procon}>
           <Text
@@ -263,7 +261,6 @@ export const POstUPloderprofile = ({navigation,route}) => {
             onPress={() => navigation.navigate('educationscreen')}>
             <View style={styles.wrkexperience}>
               <View style={{paddingHorizontal: width * 0.03}}>
-           
                 <Text
                   style={{
                     color: '#fff',
@@ -272,23 +269,28 @@ export const POstUPloderprofile = ({navigation,route}) => {
                   }}>
                   Creative Strategy
                 </Text>
-              <View style={{flexDirection:"row",justifyContent:"center",alignItems:"center"}}>
-                <View style={{width: width * 0.03, 
-                  height: height * 0.015, 
-                  backgroundColor:"#fff", borderRadius:100,right:width * 0.01}}>
-
-                </View>
-                <Text style={{color: '#CBC2C2'}}>{profileData.skills}</Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <View
+                    style={{
+                      width: width * 0.03,
+                      height: height * 0.015,
+                      backgroundColor: '#fff',
+                      borderRadius: 100,
+                      right: width * 0.01,
+                    }}></View>
+                  <Text style={{color: '#CBC2C2'}}>{profileData.skills}</Text>
                 </View>
               </View>
             </View>
           </View>
-        
         </View>
-    
- 
-   
-       <View style={{borderBottomWidth: 1, borderBottomColor: '#fff'}} />
+
+        <View style={{borderBottomWidth: 1, borderBottomColor: '#fff'}} />
         <View style={styles.procon}>
           <Text
             style={{
@@ -307,7 +309,6 @@ export const POstUPloderprofile = ({navigation,route}) => {
             onPress={() => navigation.navigate('educationscreen')}>
             <View style={styles.wrkexperience}>
               <View style={{paddingHorizontal: width * 0.01}}>
-           
                 <Text
                   style={{
                     color: '#fff',
@@ -319,12 +320,7 @@ export const POstUPloderprofile = ({navigation,route}) => {
               </View>
             </View>
           </View>
-        
         </View>
-
-   
-
-
       </ScrollView>
     </SafeAreaView>
   );
@@ -474,7 +470,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#369F95',
     borderRadius: 20,
     alignItems: 'center',
-    justifyContent:"center"
+    justifyContent: 'center',
   },
   manageBtn: {
     width: width * 0.2,
@@ -484,21 +480,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#369F95',
     borderRadius: 20,
     alignItems: 'center',
-    justifyContent:"center",
+    justifyContent: 'center',
     marginHorizontal: width * 0.03,
   },
-  moreBtn:{
-    width: width *  0.06,
+  moreBtn: {
+    width: width * 0.06,
     height: height * 0.03,
-  //  padding:10,
+    //  padding:10,
     borderWidth: 1,
     borderColor: '#fff',
     backgroundColor: '#369F95',
     borderRadius: 20,
-    justifyContent:"center",
+    justifyContent: 'center',
     alignItems: 'center',
-   
-
   },
   heading: {
     color: '#fff',
@@ -510,6 +504,5 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 10,
     borderRadius: 5,
-  }, 
-
+  },
 });

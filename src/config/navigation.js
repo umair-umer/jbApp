@@ -67,6 +67,8 @@ import {
   UpdateProfileTalent,
   POstUPloderprofile
 } from '../screens';
+import 'react-native-gesture-handler'
+
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 const { width, height } = Dimensions.get('window');

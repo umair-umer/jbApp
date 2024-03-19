@@ -23,7 +23,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { calculateDaysAgo } from '../../config/utilities/hours';
-import { baseprofileurl } from '../../config/utilities';
+import { base, baseprofileurl } from '../../config/utilities';
 import Loader from '../../Components/Loader';
 function Pendingjobscreens({navigation}) {
 
@@ -37,13 +37,13 @@ function Pendingjobscreens({navigation}) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/home/jobs?filter=saved', {
+        const response = await axios.get(`${base}/talent/home/jobs?filter=saved`, {
           headers: {
             'Authorization': `Bearer ${token}`, // Replace with your token
           },
         });
         setAppliedJobs(response.data.data); // Assuming 'data.jobs' is the array of jobs
-        console.log(appliedJobs,"=========")
+        console.log(response.data.data,"=========")
     // Assuming 'data.jobs' is the array of jobs
         setLoading(false);
       } catch (error) {
@@ -78,7 +78,7 @@ function Pendingjobscreens({navigation}) {
           (
           <View  key={index} style={styles.shap}>
         <ImageBackground style={{
-          width: width * 0.91,
+          width: width * 0.9,
           height: height * 0.3,
           paddingTop: height * 0.039,
           paddingHorizontal: width * 0.03,
@@ -94,7 +94,7 @@ function Pendingjobscreens({navigation}) {
                 <Text style={styles.companyname}>{job.user.name}</Text>
               </View>
             </View>
-            <TouchableOpacity onPress={() => navigation.navigate("jobdeatilview")} style={{ flexDirection: "row", alignItems: "center",marginBottom:height*0.025 }}>
+            <TouchableOpacity onPress={() => navigation.navigate("jobdeatilview",{job:job._id,appliedJobs:job})} style={{ flexDirection: "row", alignItems: "center",marginBottom:height*0.025 }}>
               <Text style={styles.vietex}>View</Text>
               <Feather name='arrow-up-right' size={20} color={"white"} style={{   bottom:height*0.01,}} />
             </TouchableOpacity>
@@ -156,14 +156,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#fff',
     textTransform: 'capitalize',
-    // marginHorizontal: width * 0.01,
+    alignItems:"center",
     fontFamily: 'Poppins',
   },
   shap: {
     alignItems: 'center',
-    // backgroundColor: "red",
     marginVertical: height * 0.001,
-    // padding:10,
   },
   iconimage: {
     width: width * 0.13,

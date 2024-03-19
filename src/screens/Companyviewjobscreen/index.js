@@ -25,7 +25,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import Entypo from 'react-native-vector-icons/Entypo';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { baseprofileurl } from '../../config/utilities';
+import { base, baseprofileurl } from '../../config/utilities';
 
 function Companymyjob({ navigation }) {
 
@@ -39,7 +39,7 @@ function Companymyjob({ navigation }) {
     const fetchJobs = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/company/home/jobs?userId=true', {
+        const response = await axios.get(`${base}/company/home/jobs?userId=true`, {
           headers: {
             'Authorization': `Bearer ${token}`, // Use your actual token
           },

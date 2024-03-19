@@ -17,7 +17,11 @@ import Images from '../../config/im';
 import {calculateFontSize} from '../../config/font';
 const {width, height} = Dimensions.get('window');
 import {CustomeHeader} from '../../Components';
+
+
+
 function ResumeGanratescreen({navigation}) {
+  
   return (
     <ImageBackground
       style={styles.backgroundImage}
@@ -35,7 +39,10 @@ function ResumeGanratescreen({navigation}) {
         <View style={styles.tempCon}>
           <View style={styles.cvshowCon}>
             <TouchableOpacity style={styles.imgcon} 
-            onPress={()=>navigation.navigate('resumegenrateformscreen')}>
+            onPress={()=>navigation.navigate('resumegenrateformscreen',{
+              templateName: 'Resume1',
+              templateType: 'temp1'
+            })}>
               <Image
               source={Images.Resume1}
               style={{width:"100%",height:"100%"}}
@@ -45,7 +52,10 @@ function ResumeGanratescreen({navigation}) {
           </View>
           <View style={styles.cvshowCon}>
             <TouchableOpacity style={styles.imgcon}
-             onPress={()=>navigation.navigate('resumegenrateformscreen')}
+             onPress={()=>navigation.navigate('resumegenrateformscreen',{
+              templateName: 'Resume2',
+              templateType: 'temp2'
+             })}
             >
             <Image
               source={Images.Resume2}
@@ -57,7 +67,10 @@ function ResumeGanratescreen({navigation}) {
 
           <View style={styles.cvshowCon}>
             <TouchableOpacity style={styles.imgcon}  
-            onPress={()=>navigation.navigate('resumegenrateformscreen')}>
+            onPress={()=>navigation.navigate('resumegenrateformscreen',{
+              templateName: 'Resume3',
+              templateType: 'temp3'
+            })}>
             <Image
               source={Images.Resume3}
               style={{width:"100%",height:"100%"}}
@@ -68,7 +81,10 @@ function ResumeGanratescreen({navigation}) {
 
           <View style={styles.cvshowCon}>
             <TouchableOpacity style={styles.imgcon}  
-            onPress={()=>navigation.navigate('resumegenrateformscreen')}>
+            onPress={()=>navigation.navigate('resumegenrateformscreen',{
+              templateName: 'Resume4',
+              templateType: 'temp4'
+            })}>
             <Image
               source={Images.Resume4}
               style={{width:"100%",height:"100%"}}
@@ -79,7 +95,10 @@ function ResumeGanratescreen({navigation}) {
 
           <View style={styles.cvshowCon}>
             <TouchableOpacity style={styles.imgcon} 
-             onPress={()=>navigation.navigate('resumegenrateformscreen')}>
+             onPress={()=>navigation.navigate('resumegenrateformscreen',{
+              templateName: 'Resume5',
+              templateType: 'temp5'
+             })}>
             <Image
               source={Images.Resume5}
               style={{width:"100%",height:"100%"}}
@@ -90,7 +109,10 @@ function ResumeGanratescreen({navigation}) {
 
           <View style={styles.cvshowCon}>
             <TouchableOpacity style={styles.imgcon}
-             onPress={()=>navigation.navigate('resumegenrateformscreen')}>
+             onPress={()=>navigation.navigate('resumegenrateformscreen',{
+              templateName: 'Resume6',
+              templateType: 'temp6'
+             })}>
             <Image
               source={Images.Resume6}
               style={{width:"100%",height:"100%"}}

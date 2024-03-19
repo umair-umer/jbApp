@@ -39,7 +39,7 @@ import Mastercard from "../assets/Mastercard.png"
 import paypal from "../assets/paypal.png"
 import Documenticon from '../assets/Document1.png'
 import Iconupload from '../assets/uploadicon.png'
-import Profile from '../assets/profileimage.png'
+import Profile from '../assets/profileplaceholder.jpg'
 import Profileimgbg from '../assets/profilebg.png'
 import user from '../assets/Dpimage.png'
 import Icon from '../assets/telescopicon.png'
@@ -75,6 +75,9 @@ import Preview from '../assets/Previewresume.png'
 import saveicon from'../assets/saveicon.png'
 import fil from "../assets/fil.png"
 import b from "../assets/b.png"
+import facebook from "../assets/fb.png"
+import Profileplace from "../assets/profileplaceholder.jpg"
+
 
 const Images = {
   bg,
@@ -152,7 +155,9 @@ const Images = {
   Preview,
   saveicon,
   fil,
-  b
+  b,
+  facebook,
+  Profileplace
 
 };
 

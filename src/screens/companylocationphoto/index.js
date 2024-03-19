@@ -18,6 +18,7 @@ import Images from '../../config/im';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import Loader from '../../Components/Loader';
+import { base } from '../../config/utilities';
 
 function CompanyLocationPhoto({navigation,route}) {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -88,7 +89,7 @@ function CompanyLocationPhoto({navigation,route}) {
   
     let config = {
       method: 'post',
-      url: 'https://jobbookbackend.azurewebsites.net/api/v1/jobbook/company/job/create',
+      url: `${base}/company/job/create`,
       headers: { 
         'Authorization': `Bearer ${token}`,
         // Content-Type will be set automatically

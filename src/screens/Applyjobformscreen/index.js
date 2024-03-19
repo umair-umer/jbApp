@@ -7,6 +7,7 @@ import { CustomModal, CustomeButton } from '../../Components'
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Loader from '../../Components/Loader';
+import { base } from '../../config/utilities';
 
 function Applyjobscreen({ navigation, route }) {
     const { token } = useSelector((state) => state.auth);
@@ -69,7 +70,7 @@ function Applyjobscreen({ navigation, route }) {
         formData.append('details', message);
 
         try {
-            const response = await axios.post(`https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/home/apply/${id}`, formData, {
+            const response = await axios.post(`${base}/talent/home/apply/${id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${token}`, 

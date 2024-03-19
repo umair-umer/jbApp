@@ -69,12 +69,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'Poppins',
     textTransform: 'capitalize',
+    paddingHorizontal: width * 0.03
   },
   subTextProfile: {
     fontSize: calculateFontSize(10),
     color: '#fff',
     fontFamily: 'Poppins',
     textTransform: 'capitalize',
+    paddingHorizontal: width * 0.03
   },
   profileContainer: {
     justifyContent: 'center',

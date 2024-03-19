@@ -49,13 +49,13 @@ const CustomeforgetHeader = ({
             justifyContent: 'space-between',
             marginVertical: height * 0.03,
           }}>
-          <View style={styles.arrowimage}>
+          <TouchableOpacity onPress={()=>navigation.goBack()} style={styles.arrowimage}>
             <Image
               resizeMode="center"
               style={{width: '100%', height: '100%'}}
               source={source}
             />
-          </View>
+          </TouchableOpacity>
           <View style={styles.forgotpasshead}>
             <Text style={styles.sProfileText}>{head}</Text>
             <Text style={styles.subTextProfile}>{subhead}</Text>

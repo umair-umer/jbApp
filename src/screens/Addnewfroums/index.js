@@ -26,6 +26,7 @@ import { CustomeButton } from '../../Components';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Loader from '../../Components/Loader';
+import { base } from '../../config/utilities';
 
 const Addnewfroums = ({ navigation }) => {
   const { token } = useSelector((state) => state.auth); // Get the token from Redux store
@@ -42,7 +43,7 @@ const Addnewfroums = ({ navigation }) => {
     try {
       const response = await axios({
         method: 'post',
-        url: 'https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/forum/create',
+        url: `${base}/talent/forum/create`,
         data: data,
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -86,13 +87,13 @@ const Addnewfroums = ({ navigation }) => {
       </View>
       <View style={styles.margininbetween}>
         <TextInput
-          style={styles.inputdes}
+          style={styles.input}
           placeholder={'Add a Description...'}
           placeholderTextColor={'#fff'}
           value={description} // Bind value to state
           onChangeText={(text) => setDescription(text)}
           multiline={true}
-          numberOfLines={8}
+          numberOfLines={3}
           textAlignVertical="top"
         />
       </View>
@@ -135,12 +136,23 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     paddingHorizontal: width * 0.08,
     color: '#fff',
+    ...Platform.select({
+      ios:{
+        padding:height * 0.03,
+        justifyContent:"center",
+        alignItems:"center"
+      }
+    })
   },
   inputdes: {
     backgroundColor: '#1B5953',
     borderRadius: 10,
-
-    paddingHorizontal: width * 0.05,
+    paddingHorizontal: width * 0.06,
+    ...Platform.select({
+      ios:{
+        padding:height * 0.05
+      }
+    })
   },
   margininbetween: {
     marginVertical: height * 0.02,

@@ -13,7 +13,7 @@ const RegLogButton = ({navigation}) => {
                 <View style={styles.logoContainer}>
                     <Image resizeMode="cover" style={styles.logo} source={Images.logo} />
                 </View>
-                <Text style={styles.jobText}>Jobbooks</Text>
+                <Text style={styles.jobText}>Jobbook</Text>
                 <Text style={styles.welcomeText}>Powering Your Career Success</Text>
 
 

@@ -11,7 +11,8 @@ import {
   Dimensions,
   FlatList,
   ImageBackgroundBase,
-  ScrollView
+  ScrollView,
+  Platform
 } from 'react-native';
 import Images from '../../config/im';
 import { calculateFontSize } from '../../config/font';
@@ -28,7 +29,7 @@ import {
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Loader from '../../Components/Loader';
-import { baseprofileurl } from '../../config/utilities';
+import { base, baseprofileurl } from '../../config/utilities';
 import moment from 'moment';
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -59,7 +60,7 @@ const ForumScreen = ({ navigation, route, onPress }) => {
   const fetchForumData = async () => {
     setload(true)
     try {
-      const response = await axios.get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/home/fourms', {
+      const response = await axios.get(`${base}/talent/home/fourms`, {
         headers: {
           'Authorization': ` Bearer ${token}`
         }
@@ -172,7 +173,11 @@ const ForumScreen = ({ navigation, route, onPress }) => {
               <View style={styles.savicon}>
                 <Image
                   resizeMode="center"
-                  style={{ width: '100%', height: '100%' }}
+                  style={{ width: '100%', height: '100%',...Platform.select({
+                    ios:{
+                      width: '100%', height: '50%'
+                    }
+                  })}}
                   source={Images.sicon}
                 />
               </View>
@@ -538,6 +543,7 @@ const styles = StyleSheet.create({
   propst: {
     width: width * 0.12,
     height: height * 0.05,
+    
   },
   posttimename: {
     flexDirection: 'row',
@@ -546,6 +552,12 @@ const styles = StyleSheet.create({
   savicon: {
     width: width * 0.12,
     height: height * 0.04,
+    ...Platform.select({
+      ios:{
+        width: width * 0.12,
+        height: height * 0.02,
+      }
+    })
   },
   flex: {
     flexDirection: 'row',

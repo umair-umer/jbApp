@@ -5,7 +5,7 @@ import { calculateFontSize } from '../../config/font';
 import { CustomeButton, Inputcomponent,CustomeforgetHeader,CustomModal } from '../../Components';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
-import axios from 'axios';import { baseprofileurl } from '../../config/utilities';
+import axios from 'axios';import { base, baseprofileurl } from '../../config/utilities';
 const { width, height } = Dimensions.get('window');
 const CustomeHeader = ({iconsource1,iconsource2,iconsource3,title,onPress,onPressNotification,source}) => {
   const { token } = useSelector((state) => state.auth); // Get the token from Redux store
@@ -14,7 +14,7 @@ const CustomeHeader = ({iconsource1,iconsource2,iconsource3,title,onPress,onPres
     useEffect(() => {
         // Make an Axios GET request to your API endpoint with the token
         axios
-          .get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/profile', {
+          .get(`${base}/auth/profile`, {
             headers: {
               "Authorization": `Bearer ${token}`,
             },

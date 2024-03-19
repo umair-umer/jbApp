@@ -12,7 +12,7 @@ import IMG from '../../assets/dp.png'
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { calculateDaysAgo } from '../../config/utilities/hours';
-import { baseprofileurl } from '../../config/utilities';
+import { base, baseprofileurl } from '../../config/utilities';
 import Loader from '../../Components/Loader';
 baseprofileurl
 const PendingapplicantsData = [
@@ -66,7 +66,7 @@ export const TalentSearch = ({navigation}) => {
       const fetchData = async () => {
           const config = {
               method: 'get',
-              url: 'https://jobbookbackend.azurewebsites.net/api/v1/jobbook/company/home/talents',
+              url: `${base}/company/home/talents`,
               headers: { 
                   'Authorization': `Bearer ${token}`
               }

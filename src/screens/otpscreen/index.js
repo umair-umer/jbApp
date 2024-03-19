@@ -36,7 +36,7 @@ const OtpScreen = ({navigation,route}) => {
 
     const config = {
       method: 'post',
-      url: 'https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/verify-otp',
+      url: `${base}/api/v1/jobbook/auth/verify-otp`,
       headers: { 
         'Content-Type': 'application/x-www-form-urlencoded'
       },

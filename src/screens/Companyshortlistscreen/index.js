@@ -18,6 +18,7 @@ import {CustomeforgetHeader} from '../../Components';
 import Swipeable from 'react-native-swipeable';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import { base } from '../../config/utilities';
 const {width, height} = Dimensions.get('window');
 
 const shortlistedApplicantsData = [
@@ -67,7 +68,7 @@ function Companyshortlistedjob({navigation,route}) {
     const fetchApplications = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(`https://jobbookbackend.azurewebsites.net/api/v1/jobbook/company/home/applications/${id}?status=accepted`, {
+        const response = await axios.get(`${base}/company/home/applications/${id}?status=accepted`, {
           headers: {
             'Authorization': `Bearer ${token}`, 
           },

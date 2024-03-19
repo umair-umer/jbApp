@@ -4,13 +4,14 @@ import Images from '../../config/im';
 import { calculateFontSize } from '../../config/font';
 import { CustomeButton, Inputcomponent,CustomeforgetHeader } from '../../Components';
 import  axios  from 'axios';
+import { base } from '../../config/utilities';
 const { width, height } = Dimensions.get('window');
 const ForgetPassWord = ({navigation}) => {
 
     const [email, setEmail] = useState('');
 
     const sendForgotPasswordRequest = () => {
-        axios.post('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/forgot', {
+        axios.post(`${base}/api/v1/jobbook/auth/forgot`, {
             email: email,
         }, {
             headers: {
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
     },
     arrowimage: {
         width: width * 0.03,
-        height: height * 0.03,
+        height: height * 0.02,
 
     },
     sProfileText: {
@@ -72,6 +73,6 @@ const styles = StyleSheet.create({
         marginVertical:height*0.03,
     },
     inputheight:{
-        height:height*0.68
+        height:height*0.64
     }
 })

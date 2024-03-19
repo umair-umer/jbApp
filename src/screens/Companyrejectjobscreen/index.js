@@ -17,6 +17,7 @@ import {calculateFontSize} from '../../config/font';
 import {CustomeforgetHeader} from '../../Components';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import { base } from '../../config/utilities';
 const {width, height} = Dimensions.get('window');
 const shortlistedApplicantsData = [
   {
@@ -64,7 +65,7 @@ function Companyrejectedjob({navigation,route}) {
     const fetchApplications = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(`https://jobbookbackend.azurewebsites.net/api/v1/jobbook/company/home/applications/${id}?status=rejected`, {
+        const response = await axios.get(`${base}/company/home/applications/${id}?status=rejected`, {
           headers: {
             'Authorization': `Bearer ${token}`, 
           },

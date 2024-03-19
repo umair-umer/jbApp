@@ -22,7 +22,7 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { useRoute } from '@react-navigation/native';
-import { baseprofileurl } from '../../config/utilities';
+import { base, baseprofileurl } from '../../config/utilities';
 import moment from 'moment';
 import Loader from '../../Components/Loader';
 const Profilescreen = ({ navigation }) => {
@@ -69,7 +69,7 @@ const Profilescreen = ({ navigation }) => {
   const fetchNews = () => {
     const config = {
       method: 'get',
-      url: 'https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/home/news?userId=true',
+      url: `${base}/talent/home/news?userId=true`,
       headers: {
         'Authorization': `Bearer ${token}`, // Use the token from your Redux store
       },
@@ -89,7 +89,7 @@ const Profilescreen = ({ navigation }) => {
     setloader(true)
     axios
       .get(
-        'https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/profile',
+        'base/api/v1/jobbook/auth/profile',
         {
           headers: {
             Authorization: `Bearer ${token}`,

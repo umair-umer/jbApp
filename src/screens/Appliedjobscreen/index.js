@@ -10,7 +10,7 @@ import Entypo from 'react-native-vector-icons/Entypo'
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { calculateDaysAgo } from '../../config/utilities/hours';
-import { baseprofileurl } from '../../config/utilities';
+import { base, baseprofileurl } from '../../config/utilities';
 import Loader from '../../Components/Loader';
 
 function Appliedjobscreen({ navigation }) {
@@ -23,7 +23,7 @@ function Appliedjobscreen({ navigation }) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/home/jobs?filter=applied', {
+        const response = await axios.get(`${base}/talent/home/jobs?filter=applied`, {
           headers: {
             'Authorization': `Bearer ${token}`, // Replace with your token
           },

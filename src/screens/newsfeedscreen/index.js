@@ -6,7 +6,7 @@ import { CustomeButton, Inputcomponent, CustomeforgetHeader, CustomModal, Custom
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import moment from 'moment';
-import { baseprofileurl } from '../../config/utilities';
+import { base, baseprofileurl } from '../../config/utilities';
 import { useFocusEffect } from '@react-navigation/native';
 import Loader from '../../Components/Loader';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -28,7 +28,7 @@ const NewsFeed = ({ navigation, onPress, route }) => {
         setload(true)
 
         try {
-            const response = await axios.get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/home/news', {
+            const response = await axios.get(`${base}/talent/home/news`, {
                 headers: { "Authorization": `Bearer ${token}` },
             });
             setPosts(response.data.data);
@@ -94,14 +94,14 @@ const NewsFeed = ({ navigation, onPress, route }) => {
                     <View style={styles.mianrow}>
                         <View style={styles.gcontainer}>
                             <View style={styles.googimagecontainer}>
-                                <Image resizeMode="contain" style={{ width: "100%", height: "100%" }} source={{ uri: `${baseprofileurl}${item.user.picture}` }} />
+                                <Image resizeMode="cover" style={{ width: "100%", height: "100%" }} source={{ uri: `${baseprofileurl}${item.user.picture}` }} />
                             </View>
                             <View style={styles.texcontainer}>
                                 <Text style={styles.gtext}>{item.user.name}</Text>
                                 <View style={styles.timercontainer}>
                                     <View style={styles.timerimage}>
-                                           {Platform.OS =="ios" ?<Ionicons size={10} name='time-outline'/>:
-                                           <Image resizeMode="center" style={{ width: "100%", height: "100%" }} source={Images.timericon} /> }
+                                           <Ionicons size={10} name='time-outline'/>
+                                           {/* <Image resizeMode="center" style={{ width: "100%", height: "100%" }} source={Images.timericon} /> } */}
                                     </View>
                                     <Text style={styles.gtextime}>{hoursAgo === 0 ? 'just now' : `${hoursAgo} hour${hoursAgo > 1 ? 's' : ''} ago`}</Text>
                                 </View>
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     googimagecontainer: {
-        width: width * 0.10,
+        width: width * 0.11,
         height: height * 0.05,
         overflow: "hidden",
         borderRadius: 100,

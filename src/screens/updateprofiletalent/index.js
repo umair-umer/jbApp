@@ -8,6 +8,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import Loader from '../../Components/Loader';
+import { base } from '../../config/utilities';
 
 const UpdateProfileTalent = ({ navigation }) => {
     const { token } = useSelector((state) => state.auth); // Get the token from Redux store
@@ -69,7 +70,7 @@ const[load,setloder]=useState('')
 
           const config = {
             method: 'put',
-            url: 'https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/update-profile',
+            url: `${base}/auth/update-profile`,
             headers: {
               'Authorization': `Bearer ${token}`,
             },

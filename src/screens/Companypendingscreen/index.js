@@ -18,6 +18,7 @@ import { CustomeforgetHeader } from '../../Components';
 const { width, height } = Dimensions.get('window');
 import axios from 'axios';
 import { useSelector } from 'react-redux'
+import { base } from '../../config/utilities';
 function Companyapplicationstatus({ navigation, route }) {
   const { id } = route.params;
   console.log(id, "status");
@@ -31,7 +32,7 @@ function Companyapplicationstatus({ navigation, route }) {
     const fetchStats = async () => {
       console.log(id, "=====beforeresponce");
       try {
-        const response = await axios.get(`https://jobbookbackend.azurewebsites.net/api/v1/jobbook/company/home/stats/${id}`, {
+        const response = await axios.get(`${base}/company/home/stats/${id}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },

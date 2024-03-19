@@ -24,6 +24,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import Loader from '../../Components/Loader';
+import { base } from '../../config/utilities';
 
 const AddNewFeeds = ({ navigation }) => {
   const [title, setTitle] = useState('');
@@ -73,7 +74,7 @@ const AddNewFeeds = ({ navigation }) => {
       setload(true)
       let response = await axios({
         method: 'post',
-        url: 'https://jobbookbackend.azurewebsites.net/api/v1/jobbook/talent/news/create',
+        url: `${base}/talent/news/create`,
         data: formData,
         headers: {
           'Authorization': `Bearer ${token}`, // Dynamic token from Redux store
@@ -91,7 +92,9 @@ const AddNewFeeds = ({ navigation }) => {
 
   return (
   <>
-   {isload ?<Loader/> :<SafeAreaView style={styles.container}>
+   {isload ?<Loader/>:<SafeAreaView style={styles.container}>
+     
+     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.hedr}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Entypo name="cross" color="#fff" size={30} />
@@ -106,7 +109,7 @@ const AddNewFeeds = ({ navigation }) => {
       <View style={styles.margininbetween}>
         <TextInput
           style={styles.input}
-          placeholder={'add A title...'}
+          placeholder={'Add a title...'}
           placeholderTextColor={'#fff'}
           value={title}
           onChangeText={text => setTitle(text)} // Update the title state when text changes
@@ -114,13 +117,13 @@ const AddNewFeeds = ({ navigation }) => {
       </View>
       <View style={styles.margininbetween}>
         <TextInput
-          style={styles.inputdes}
-          placeholder={'add A DESCRIPTION...'}
+          style={styles.input}
+          placeholder={'Add a description...'}
           placeholderTextColor={'#fff'}
           value={description}
           onChangeText={text => setDescription(text)} // Update the description state when text changes
           multiline={true}
-          numberOfLines={8}
+          numberOfLines={2}
           textAlignVertical="top"
         />
       </View>
@@ -128,7 +131,7 @@ const AddNewFeeds = ({ navigation }) => {
         <Text style={styles.label}>Location</Text>
         <TextInput
           style={styles.input}
-          placeholder={'add A DESCRIPTION...'}
+          placeholder={'Add a Location...'}
           placeholderTextColor={'#fff'}
           value={location}
           onChangeText={text => setLocation(text)} // Update the location state when text changes
@@ -148,7 +151,7 @@ const AddNewFeeds = ({ navigation }) => {
         )}
       </View>
       <View style={styles.margininbetween}>
-        <Text style={styles.label}>add tags</Text>
+        <Text style={styles.label}>Add tags</Text>
         <TextInput
           style={styles.input}
           placeholder={'add tags'}
@@ -171,6 +174,7 @@ const AddNewFeeds = ({ navigation }) => {
           <Text style={styles.posttext}>Post</Text>
         </TouchableOpacity>
       </View>
+      </ScrollView>
     </SafeAreaView>}
   </>
   );
@@ -202,16 +206,30 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     paddingHorizontal: width * 0.08,
     color: '#fff',
+    // ...Platform.select({
+    //   ios:{
+    //     backgroundColor: '#1B5953',
+    //     borderRadius: 100,
+    //     paddingHorizontal: width * 0.06,
+    //     padding:height* 0.02
+    //   }
+    // })
   },
   inputdes: {
     backgroundColor: '#1B5953',
     borderRadius: 10,
     color: '#fff',
-
     paddingHorizontal: width * 0.05,
   },
   margininbetween: {
     marginVertical: height * 0.02,
+    ...Platform.select({
+      ios:{
+        marginVertical: height * 0.02,
+        
+      }
+    })
+    
   },
   label: {
     fontSize: calculateFontSize(15),
@@ -250,6 +268,16 @@ const styles = StyleSheet.create({
     color: '#28918F',
     textTransform: 'capitalize',
     fontFamily: 'Poppins',
+    ...Platform.select({
+      ios:{
+        fontSize: calculateFontSize(15),
+        // fontWeight: 'bold',
+        color: '#28918F',
+        textTransform: 'capitalize',
+        fontFamily: 'Poppins',
+        
+      }
+    })
   },
   bottomconta: {
     // marginVertical:height*0.04,

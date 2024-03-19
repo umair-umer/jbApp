@@ -12,17 +12,13 @@ import IMG from '../../assets/dp.png'
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { calculateDaysAgo } from '../../config/utilities/hours';
-import { baseprofileurl } from '../../config/utilities';
+import { base, baseprofileurl } from '../../config/utilities';
 import Loader from '../../Components/Loader';
 import { useFocusEffect } from '@react-navigation/native';
 const JobsearchScreen = ({ navigation,route }) => {
   const { salaryRange, selectedJobType, selectedJob, selectedLocation } = route.params || {};
  
-  console.log(
-    // route.params,
-    salaryRange, selectedJobType, selectedJob, selectedLocation,
-    // salaryRange,selectedJobType,selectedJob,selectedLocation
-    "alll");
+  
   const { token, type } = useSelector((state) => state.auth);
   const [jobsData, setJobsData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -47,7 +43,7 @@ const JobsearchScreen = ({ navigation,route }) => {
     const fetchData = async () => {
       setIsLoading(true);
       const { salaryRange, selectedJobType, selectedJob, selectedLocation } = ignoreFilters ? {} : route.params || {};
-      const baseURL = `https://jobbookbackend.azurewebsites.net/api/v1/jobbook/${type}/home/jobs`;
+      const baseURL = `${base}/${type}/home/jobs`;
   
       let queryParams = new URLSearchParams();
       if (searchQuery) queryParams.append('title', searchQuery);
@@ -85,7 +81,7 @@ const JobsearchScreen = ({ navigation,route }) => {
   useEffect(() => {
     // Make an Axios GET request to your API endpoint with the token
     axios
-      .get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/profile', {
+      .get('base/api/v1/jobbook/auth/profile', {
         headers: {
           "Authorization": `Bearer ${token}`,
         },
@@ -202,7 +198,7 @@ const JobsearchScreen = ({ navigation,route }) => {
                           <Text style={styles.companyname}>{job.user.name}</Text>
                         </View>
                       </View>
-                      <TouchableOpacity onPress={() => navigation.navigate("jobdeatilview", { id:job._id })}
+                      <TouchableOpacity onPress={() => navigation.navigate("jobdeatilview", { appliedJobs:job })}
                         style={{ flexDirection: "row", alignItems: "center", marginBottom: height * 0.035, marginRight: width * 0.01, }}>
                         <Text style={styles.vietex}>View</Text>
                         <Feather name='arrow-up-right' size={20} color={"white"} style={{ bottom: height * 0.01, }} />

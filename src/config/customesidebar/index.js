@@ -18,7 +18,7 @@ import axios from 'axios';
 import { calculateFontSize } from '../../config/font';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
-import { baseprofileurl } from '../utilities';
+import { base, baseprofileurl } from '../utilities';
 import { logout } from '../../store/actions/authActions';
 import Loader from '../../Components/Loader';
 const { width, height } = Dimensions.get('window');
@@ -31,7 +31,7 @@ const CusTomDrawer = ({ navigation }) => {
   useEffect(() => {
     // Make an Axios GET request to your API endpoint with the token
     axios
-      .get('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/profile', {
+      .get(`${base}/auth/profile`, {
         headers: {
           "Authorization": `Bearer ${token}`,
         },
@@ -59,7 +59,7 @@ const CusTomDrawer = ({ navigation }) => {
   });
   const handleLogout = () => {
     setload(true)
-    axios.post('https://jobbookbackend.azurewebsites.net/api/v1/jobbook/auth/logout', {}, {
+    axios.post(`${base}/auth/logout`, {}, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then((response) => {
@@ -90,7 +90,7 @@ const CusTomDrawer = ({ navigation }) => {
               onPress={() => navigation.navigate('userprofilescreen')}>
 
               <Image
-                resizeMode="contain"
+                resizeMode="cover"
                 style={{ width: '100%', height: '100%' }}
                 source={{ uri:`${baseprofileurl}${userData.picture}` }}
               />

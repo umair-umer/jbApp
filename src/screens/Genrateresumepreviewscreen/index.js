@@ -19,6 +19,9 @@ const {width, height} = Dimensions.get('window');
 import {CustomeButton, CustomeHeader} from '../../Components';
 
 function Resumepreview({navigation}) {
+
+
+  
   return (
     <ImageBackground
     style={styles.backgroundImage}
