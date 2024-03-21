@@ -57,6 +57,7 @@
     "redux": "^5.0.1",
     "redux-persist": "^6.0.0",
     "rn-bottom-drawer": "^1.4.3",
+    "socket.io-client": "^4.7.5",
     "zego-express-engine-reactnative": "^3.2.0"
   },
   "devDependencies": {

@@ -92,7 +92,7 @@ const CusTomDrawer = ({ navigation }) => {
               <Image
                 resizeMode="cover"
                 style={{ width: '100%', height: '100%' }}
-                source={{ uri:`${baseprofileurl}${userData.picture}` }}
+                source={{uri:`${baseprofileurl}${userData.picture}` }}
               />
             </TouchableOpacity>
             <TouchableOpacity

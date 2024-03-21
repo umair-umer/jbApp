@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   TouchableOpacity,
   TextInput,
@@ -12,22 +12,24 @@ import {
   ScrollView,
 } from 'react-native';
 import Images from '../../config/im';
-import {calculateFontSize} from '../../config/font';
-import {CustomeButton, CustomeforgetHeader} from '../../Components';
+import { calculateFontSize } from '../../config/font';
+import { CustomeButton, CustomeforgetHeader } from '../../Components';
 import Entypo from 'react-native-vector-icons/Entypo';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
-import {base, baseprofileurl} from '../../config/utilities';
-const {width, height} = Dimensions.get('window');
-export const POstUPloderprofile = ({navigation, route}) => {
-  const {id} = route.params;
-  console.log(id, 'postdata');
-  const {token, type} = useSelector(state => state.auth);
+import qs from 'qs';
+import { base, baseprofileurl } from '../../config/utilities';
+const { width, height } = Dimensions.get('window');
+export const POstUPloderprofile = ({ navigation, route }) => {
+  const { id } = route.params;
+  // console.log(id, 'postdata');
+  const { token, type } = useSelector(state => state.auth);
 
   const [profileData, setProfileData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const [Chatid,setChatid]=useState("")
+  const[userId,setId]=useState("")
   useEffect(() => {
     const fetchData = async () => {
       const config = {
@@ -40,8 +42,9 @@ export const POstUPloderprofile = ({navigation, route}) => {
 
       try {
         const response = await axios.request(config);
-        console.log(response.data.data[0], 'progileuser');
+        // console.log(response.data.data[0], 'progileuser');
         setProfileData(response.data.data[0]);
+        setId(response.data.data[0]._id);
         setIsLoading(false);
       } catch (error) {
         console.log(error);
@@ -56,6 +59,33 @@ export const POstUPloderprofile = ({navigation, route}) => {
     if (!dateString) return 'Present';
     const date = new Date(dateString);
     return date.toLocaleDateString();
+  };
+  const handleClick = () => {
+    const data = qs.stringify({
+      'receiverId': userId
+    });
+
+    const config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: `${base}/chat/create`,
+      headers: { 
+        'Content-Type': 'application/x-www-form-urlencoded', 
+        Authorization: `Bearer ${token}`,
+      },
+      data: data
+    };
+
+    axios.request(config)
+    .then((response) => {
+      // console.log(JSON.stringify(response.data),"jdsghjsgdjshg");
+      setChatid(response.data.chat)
+      console.log(Chatid,"-----");
+      navigation.navigate("userchatroomscreen",{chat:Chatid,senderid:userId})
+    })
+    .catch((error) => {
+      console.log(error,"jhsjfdggdf");
+    });
   };
   return (
     <SafeAreaView style={styles.conatiner}>
@@ -79,22 +109,35 @@ export const POstUPloderprofile = ({navigation, route}) => {
           style={styles.arrowimage}>
           <Image
             resizeMode="center"
-            style={{width: '100%', height: '100%'}}
+            style={{ width: '100%', height: '100%' }}
             source={Images.arrow}
           />
         </TouchableOpacity>
       </View>
 
       <View style={styles.proimg}>
-        <Image
-          source={{uri: `${baseprofileurl}${profileData.picture}`}}
-          style={{width: '100%', height: '100%'}}
+        {profileData.picture ? <Image
+          source={{ uri:`${baseprofileurl}${profileData.picture}` }}
+          style={{ width: '100%', height: '100%' }}
           resizeMode="cover"
-        />
+        /> :
+
+          <Image
+
+            source={Images.avtr}
+
+            style={{ width: '100%', height: '100%' }}
+            resizeMode="cover"
+          />
+        }
       </View>
+      {type == "company" && <TouchableOpacity onPress={handleClick} style={{ borderRadius: 5, backgroundColor: "#2CA599", marginHorizontal: width * 0.03, flexDirection: "column", width: width * 0.3, alignItems: "center", paddingVertical: height * 0.02, }} >
+        <Text style={{ color: "white" }}>Meassage</Text>
+      </TouchableOpacity>}
       <ScrollView style={styles.scrollcontain}>
-        <View style={{paddingVertical: height * 0.02}}>
+        <View style={{ paddingVertical: height * 0.02 }}>
           <Text style={styles.prname}>{profileData.name}</Text>
+
           <Text style={styles.position}>Creative Director </Text>
           <Text style={styles.companyname}>The Company Media Office </Text>
           <Text style={styles.location}>
@@ -114,9 +157,9 @@ export const POstUPloderprofile = ({navigation, route}) => {
           </View> */}
         </View>
 
-        <View style={{borderBottomWidth: 1, borderBottomColor: '#fff'}} />
+        <View style={{ borderBottomWidth: 1, borderBottomColor: '#fff' }} />
         <View style={styles.procon}>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text
               style={{
                 color: '#fff',
@@ -136,19 +179,19 @@ export const POstUPloderprofile = ({navigation, route}) => {
               alignItems: 'center',
             }}>
             <View style={styles.wrkexperience}>
-              <View style={{paddingHorizontal: width * 0.01}}>
+              <View style={{ paddingHorizontal: width * 0.01 }}>
                 {/* <Text style={{color: '#CCC4C4', fontWeight: '300'}}>
                   1,362 Followers
                 </Text>
                 <Text style={{color: '#CCC4C4', fontWeight: '300'}}>
                   Connected 3 year 1 month
                 </Text> */}
-                <Text style={{color: '#fff'}}>{profileData.about}</Text>
+                <Text style={{ color: '#fff' }}>{profileData.about}</Text>
               </View>
             </View>
           </View>
         </View>
-        <View style={{borderBottomWidth: 1, borderBottomColor: '#fff'}} />
+        <View style={{ borderBottomWidth: 1, borderBottomColor: '#fff' }} />
         <View style={styles.procon}>
           <Text style={styles.heading}>Experience</Text>
           {profileData.experience && profileData.experience.length > 0 ? (
@@ -169,7 +212,7 @@ export const POstUPloderprofile = ({navigation, route}) => {
                       style={styles.img}
                     />
                   </View>
-                  <View style={{paddingHorizontal: width * 0.03}}>
+                  <View style={{ paddingHorizontal: width * 0.03 }}>
                     <Text
                       style={{
                         color: '#fff',
@@ -179,11 +222,11 @@ export const POstUPloderprofile = ({navigation, route}) => {
                       {item.title || 'N/A'}{' '}
                       {/* Use N/A if title is null or empty */}
                     </Text>
-                    <Text style={{color: '#fff'}}>
+                    <Text style={{ color: '#fff' }}>
                       {item.company || 'N/A'}{' '}
                       {/* Use N/A if company is null or empty */}
                     </Text>
-                    <Text style={{color: '#fff'}}>
+                    <Text style={{ color: '#fff' }}>
                       {item.from
                         ? new Date(item.from).toLocaleDateString()
                         : 'N/A'}{' '}
@@ -200,7 +243,7 @@ export const POstUPloderprofile = ({navigation, route}) => {
             <Text style={styles.noExperience}>No experience listed</Text>
           )}
         </View>
-        <View style={{borderBottomWidth: 1, borderBottomColor: '#fff'}} />
+        <View style={{ borderBottomWidth: 1, borderBottomColor: '#fff' }} />
 
         <View style={styles.procon}>
           <Text
@@ -226,7 +269,7 @@ export const POstUPloderprofile = ({navigation, route}) => {
                   style={styles.img}
                 />
               </View>
-              <View style={{paddingHorizontal: width * 0.03}}>
+              <View style={{ paddingHorizontal: width * 0.03 }}>
                 <Text
                   style={{
                     color: '#fff',
@@ -235,14 +278,14 @@ export const POstUPloderprofile = ({navigation, route}) => {
                   }}>
                   Lorem University
                 </Text>
-                <Text style={{color: '#CBC2C2'}}>PeopleReady Pass, TX</Text>
-                <Text style={{color: '#CBC2C2'}}>Dec 2022 - Present</Text>
+                <Text style={{ color: '#CBC2C2' }}>PeopleReady Pass, TX</Text>
+                <Text style={{ color: '#CBC2C2' }}>Dec 2022 - Present</Text>
               </View>
             </View>
           </View>
         </View>
 
-        <View style={{borderBottomWidth: 1, borderBottomColor: '#fff'}} />
+        <View style={{ borderBottomWidth: 1, borderBottomColor: '#fff' }} />
         <View style={styles.procon}>
           <Text
             style={{
@@ -260,7 +303,7 @@ export const POstUPloderprofile = ({navigation, route}) => {
             }}
             onPress={() => navigation.navigate('educationscreen')}>
             <View style={styles.wrkexperience}>
-              <View style={{paddingHorizontal: width * 0.03}}>
+              <View style={{ paddingHorizontal: width * 0.03 }}>
                 <Text
                   style={{
                     color: '#fff',
@@ -283,14 +326,14 @@ export const POstUPloderprofile = ({navigation, route}) => {
                       borderRadius: 100,
                       right: width * 0.01,
                     }}></View>
-                  <Text style={{color: '#CBC2C2'}}>{profileData.skills}</Text>
+                  <Text style={{ color: '#CBC2C2' }}>{profileData.skills}</Text>
                 </View>
               </View>
             </View>
           </View>
         </View>
 
-        <View style={{borderBottomWidth: 1, borderBottomColor: '#fff'}} />
+        <View style={{ borderBottomWidth: 1, borderBottomColor: '#fff' }} />
         <View style={styles.procon}>
           <Text
             style={{
@@ -308,7 +351,7 @@ export const POstUPloderprofile = ({navigation, route}) => {
             }}
             onPress={() => navigation.navigate('educationscreen')}>
             <View style={styles.wrkexperience}>
-              <View style={{paddingHorizontal: width * 0.01}}>
+              <View style={{ paddingHorizontal: width * 0.01 }}>
                 <Text
                   style={{
                     color: '#fff',

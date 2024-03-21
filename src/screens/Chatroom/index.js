@@ -6,22 +6,67 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import InputText from '../../Components/inputText';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import { io } from 'socket.io-client';
+import { useSelector } from 'react-redux';
+import { baseprofileurl } from '../../config/utilities';
+
 const ChatRoom = ({ route, navigation }) => {
     // const { senderName } = route?.params;
+    const { token, userId } = useSelector((state) => state.auth);
+    // console.log(userId, "chatwaliscree");
+    const chat = route.params.chat
+    const [chatdata, setchatData] = useState(chat)
+
+    console.log(chatdata.participants, "hysdgsdjh");
+        
+    const SERVER_URL = baseprofileurl;
+    const TOKEN = token; // 
 
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([
         // Initial messages here if any
     ]);
     const scrollViewRef = useRef();
+    const socket = useRef(null);
+
+    useEffect(() => {
+        socket.current = io(SERVER_URL, {
+            auth: {
+                token: TOKEN, // Pass token here if your server requires authentication
+            },
+        });
+
+        socket.current.on("RECEIVE_MESSAGE", (newMessage) => {
+            setMessages((prevMessages) => [...prevMessages, newMessage]);
+            Alert.alert("Message Status", "Message sent successfully!");
+        });
+
+
+        return () => {
+            socket.current.disconnect();
+        };
+    }, []);
+
     const handleSend = () => {
         if (message) {
+            const userId = userId; // Your user's ID needs to be set here
+
+            const receiverId = chatdata.participants.find((participant) => participant !== userId);
+
+            console.log(receiverId,"reciverid");
             const newMessage = { text: message, isSender: true };
+            socket.current.emit("SEND_MESSAGE", {
+                chatId: chatdata._id,
+                senderId: userId,
+                receiverId:receiverId,
+                content: newMessage
+
+
+            }); // Modify according to your backend's expected format
             setMessages([...messages, newMessage]);
             setMessage(''); // Clear the input field after sending
         }
     };
-
     // Scroll to the bottom when messages change or on initial render
     useEffect(() => {
         if (scrollViewRef.current) {
@@ -30,19 +75,19 @@ const ChatRoom = ({ route, navigation }) => {
     }, [messages]);
     const endVideoCall = () => {
         if (peerConnection.current) {
-          peerConnection.current.close();
+            peerConnection.current.close();
         }
         if (localStream) {
-          localStream.release();
+            localStream.release();
         }
         // Reset state
         setLocalStream(null);
         setRemoteStream(null);
         peerConnection.current = null;
-      };
-      const handleVideocall=()=>{
+    };
+    const handleVideocall = () => {
         navigation.navigate("videocallscreen")
-      }
+    }
     return (
         <SafeAreaView style={styles.container}>
 
@@ -77,7 +122,7 @@ const ChatRoom = ({ route, navigation }) => {
                     ))}
                 </ScrollView>
 
-              
+
             </View>
             <View style={styles.inputchatcontainer}>
                 <View style={styles.inputcontainer}><InputText value={message}
@@ -90,7 +135,7 @@ const ChatRoom = ({ route, navigation }) => {
                     {/* <Text>End Call</Text> */}
                 </TouchableOpacity>
             </View>
-     
+
         </SafeAreaView>
     )
 }

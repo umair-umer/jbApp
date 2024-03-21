@@ -81,7 +81,7 @@ const JobsearchScreen = ({ navigation,route }) => {
   useEffect(() => {
     // Make an Axios GET request to your API endpoint with the token
     axios
-      .get('base/api/v1/jobbook/auth/profile', {
+      .get(`${base}/api/v1/jobbook/auth/profile`, {
         headers: {
           "Authorization": `Bearer ${token}`,
         },

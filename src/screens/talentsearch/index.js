@@ -74,8 +74,8 @@ export const TalentSearch = ({navigation}) => {
 
           try {
               const response = await axios(config);
+              console.log(response.data.data,"uyuf")// Adjust according to the shape of your response
               setData(response.data.data); 
-              console.log(response.data.data);// Adjust according to the shape of your response
           } catch (error) {
               console.error('Failed to fetch data:', error);
               // Handle error appropriately in your UI

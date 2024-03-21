@@ -86,10 +86,10 @@ const Profilescreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    setloader(true)
+    // setloader(true)
     axios
       .get(
-        'base/api/v1/jobbook/auth/profile',
+        `${base}/auth/profile`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -98,7 +98,7 @@ const Profilescreen = ({ navigation }) => {
       )
       .then(response => {
       
-        setloader(false)
+        // setloader(false)
         // Handle the successful response and update userData state
         // const { name, email ,picture} = response.data.data; // Update this with your actual response structure
         const name = response.data.data[0].name;
@@ -112,6 +112,7 @@ const Profilescreen = ({ navigation }) => {
           ? response.data.data[0].experience
           : []; // Default to an empty array if not already an array
         phone;
+        console.log(response.data,"ijohighf");
         setUserData({ name, email, picture, phone, appliedJobsCount, skills, experience, about });
 
 

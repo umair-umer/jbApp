@@ -76,6 +76,7 @@ import saveicon from'../assets/saveicon.png'
 import fil from "../assets/fil.png"
 import b from "../assets/b.png"
 import facebook from "../assets/fb.png"
+import avtr from "../assets/avtr.jpg"
 import Profileplace from "../assets/profileplaceholder.jpg"
 
 
@@ -157,7 +158,8 @@ const Images = {
   fil,
   b,
   facebook,
-  Profileplace
+  Profileplace,
+  avtr
 
 };
 

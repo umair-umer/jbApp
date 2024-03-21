@@ -139,12 +139,13 @@ const LoginScreen = ({navigation}) => {
       const success = response.data.success;
       const token = response.data.token;
       const type = response.data.user.role;
-      console.log(token, type, success, '====>');
+      const userId=response.data.user.id
+      console.log(response.data.id , '====>');
       if (success) {
         // setload(true)
-        dispatch({type: 'LOGIN_SUCCESS', payload: {token, type}});
+        dispatch({type: 'LOGIN_SUCCESS', payload: {token, type, userId}});
 
-        navigation.navigate('home');
+        // navigation.navigate('home');
         setload(false);
       }
     } catch (error) {
