@@ -26,6 +26,8 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import {useSelector} from 'react-redux';
 import axios from 'axios';
 import {base, baseprofileurl} from '../../config/utilities';
+import qs from 'qs';
+
 
 function DynamicField({placeholder, onRemove, onChange, value}) {
   return (
@@ -212,7 +214,7 @@ function Genrateresumeform({navigation, route}) {
         },
       },
     }));
-  };
+  }; 
 
   const toggleContactVisibility = () => {
     setContactVisible(!isContactVisible);
@@ -222,78 +224,150 @@ function Genrateresumeform({navigation, route}) {
     setAboutVisible(!isAboutVisible);
   };
 
+  // const generateCV = async () => {
+  //   const profileImageBase64 = profileImage
+  //     ? await convertImageToBase64(profileImage.uri)
+  //     : null;
+  //   const payload = {
+  //     temp: templateType,
+  //     name: formData.name,
+  //     email: formData.email,
+  //     location: formData.location,
+  //     dateOfBirth: `${formData.personalInfo.dateOfBirth.year}-${formData.personalInfo.dateOfBirth.month}-${formData.personalInfo.dateOfBirth.date}`,
+  //     phone: formData.phone,
+  //     website: formData.website,
+  //     interest: formData.interest,
+  //     skills: skills.map(skill => {
+  //       console.log('skillp===', skill);
+  //       return {name: skill.name, value: skill.value};
+  //     }),
+  //     experience: experiences.map(exp => {
+  //       console.log('exp+========>>>', exp);
+  //       return {
+  //         company: exp.company,
+  //         position: exp.position,
+  //         about: exp.about,
+  //         from: exp.from,
+  //         to: exp.to,
+  //       };
+  //     }),
+  //     education: educations.map(edu => ({
+  //       name: edu.name,
+  //       degree: edu.degree,
+  //       from: edu.from,
+  //       to: edu.to,
+  //     })),
+  //     profileImage: profileImageBase64,
+  //     summary: summaries.map(summary => summary.value),
+  //     about: about,
+  //   };
+
+  //   if (!token) {
+  //     console.error('No token available');
+  //     return;
+  //   }
+  //   console.log('Payload for debugging:', JSON.stringify(payload, null, 2))
+  //   const config = {
+  //     method: 'post',
+  //     url: `${base}/talent/home/generate`,
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //     data: payload,
+  //   };
+  //   console.log('datatat payload====>', payload);
+  //   try {
+  //     const response = await axios.request(config);
+  //     console.log(response.data.path, 'path');
+  //     if (response.data && response.data.path) {
+  //       const fullPath = baseprofileurl + response.data.path;
+  //       Linking.openURL(fullPath).catch(err => {
+  //         console.error('Failed to open URL:', err.message);
+  //       });
+  //     } else {
+  //       console.log('No URL received from the server');
+  //     }
+  //     console.log('response===>>>', response);
+  //   } catch (error) {
+  //     console.error(
+  //       'Error generating CV:',
+  //       error.response ? error.response.data : error.message,
+  //     );
+  //   }
+  // };
+
   const generateCV = async () => {
-    const profileImageBase64 = profileImage
-      ? await convertImageToBase64(profileImage.uri)
-      : null;
-    const payload = {
+    // Convert the skills, experience, and education to JSON strings
+    const skillsJSON = JSON.stringify(formData.skills.map(skill => ({
+      name: skill.name,
+      value: skill.value
+    })));
+  
+    const experienceJSON = JSON.stringify(formData.experiences.map(exp => ({
+      company: exp.company,
+      position: exp.position,
+      about: exp.about,
+      from: exp.from,
+      to: exp.to
+    })));
+  
+    const educationJSON = JSON.stringify(formData.educations.map(edu => ({
+      name: edu.name,
+      degree: edu.degree,
+      from: edu.from,
+      to: edu.to
+    })));
+  
+    // Prepare the form data using qs.stringify
+    const dataToSend = qs.stringify({
       temp: templateType,
-      name: formData.name,
-      email: formData.email,
-      location: formData.location,
+      name: formData.personalInfo.name,
+      email: formData.personalInfo.email,
+      location: formData.personalInfo.location,
       dateOfBirth: `${formData.personalInfo.dateOfBirth.year}-${formData.personalInfo.dateOfBirth.month}-${formData.personalInfo.dateOfBirth.date}`,
-      phone: formData.phone,
-      website: formData.website,
-      interest: formData.interest,
-      skills: skills.map(skill => {
-        console.log('skillp===', skill);
-        return {name: skill.name, value: skill.value};
-      }),
-      experience: experiences.map(exp => {
-        console.log('exp+========>>>', exp);
-        return {
-          company: exp.company,
-          position: exp.position,
-          about: exp.about,
-          from: exp.from,
-          to: exp.to,
-        };
-      }),
-      education: educations.map(edu => ({
-        name: edu.name,
-        degree: edu.degree,
-        from: edu.from,
-        to: edu.to,
-      })),
-      profileImage: profileImageBase64,
-      summary: summaries.map(summary => summary.value),
-      about: about,
-    };
-
-    if (!token) {
-      console.error('No token available');
-      return;
-    }
-
+      phone: formData.contact.phone,
+      website: formData.contact.website,
+      about: formData.about,
+      skills: skillsJSON,
+      experience: experienceJSON,
+      education: educationJSON,
+      // Add more fields as needed
+    });
+  
     const config = {
       method: 'post',
-      url: `${base}/talent/home/generate`,
+      url: 'https://app.jobbooks.app/api/v1/jobbook/talent/home/generate',
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': `Bearer ${token}`, // Make sure token is defined and valid
       },
-      data: payload,
+      data: dataToSend,
     };
-    console.log('datatat payload====>', payload);
+  
     try {
       const response = await axios.request(config);
-      console.log(response.data.path, 'path');
+  
+      // Assuming the response includes the path to the generated PDF
       if (response.data && response.data.path) {
-        const fullPath = baseprofileurl + response.data.path;
-        Linking.openURL(fullPath).catch(err => {
-          console.error('Failed to open URL:', err.message);
+        // Construct the full URL to the PDF
+        const baseUrl = 'https://app.jobbooks.app'; // Your API base URL
+        const fullPdfUrl = `${baseUrl}${response.data.path}`; // Concatenate to get the full PDF URL
+  
+        // Use Linking to open the PDF URL in the default web browser
+        Linking.openURL(fullPdfUrl).catch(err => {
+          console.error('Failed to open the PDF URL:', err);
         });
       } else {
-        console.log('No URL received from the server');
+        console.log('No PDF path was provided in the response');
       }
-      console.log('response===>>>', response);
     } catch (error) {
-      console.error(
-        'Error generating CV:',
-        error.response ? error.response.data : error.message,
-      );
+      console.error('Error during API call:', error.response ? error.response.data : error.message);
     }
   };
+  
+
+
 
   return (
     <ImageBackground
