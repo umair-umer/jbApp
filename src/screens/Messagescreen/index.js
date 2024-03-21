@@ -87,6 +87,7 @@ const chatData = [
 const Messagesscreen = ({ navigation }) => {
   const { token, userId } = useSelector((state) => state.auth); // Assuming this is how you get the userId
   const [chats, setChats] = useState([]);
+  const [chatboxid,setchatboxid]=useState("")
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -102,7 +103,9 @@ const Messagesscreen = ({ navigation }) => {
       try {
         const response = await axios.request(config);
         setChats(response.data.chats);
-        console.log(response.data.chats,"000");
+        console.log(response.data.chats[0]._id,"000");
+        setchatboxid(response.data.chats[0]._id,)
+       
         setIsLoading(false);
       } catch (error) {
         console.error(error);
@@ -115,9 +118,9 @@ const Messagesscreen = ({ navigation }) => {
 
   const renderChatItem = ({ item }) => {
     const otherParticipant = item.participants.find(participant => participant._id !== userId);
-// console.log(otherParticipant._id ,"holaa");
+console.log(otherParticipant ,"holaa");
 const navigateToChatRoom = () => {
-  navigation.navigate('userchatroomscreen', { Chatid: otherParticipant._id });
+  navigation.navigate('userchatroomscreen', { Chatid: chatboxid,otherparticepat: otherParticipant._id });
 };
     return (
 

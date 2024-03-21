@@ -8,58 +8,93 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { io } from 'socket.io-client';
 import { useSelector } from 'react-redux';
-import { base ,baseprofileurl} from '../../config/utilities';
+import { base, baseprofileurl, basewithoutv1 } from '../../config/utilities';
 import axios from 'axios';
 const ChatRoom = ({ route, navigation }) => {
 
     const { token, userId } = useSelector((state) => state.auth);
- 
-    const chatId = route.params.Chatid
-   
 
-    console.log(chatId, "hysdgsdjh");
-        
-    
-    const SERVER_URL = baseprofileurl;
-    const TOKEN = token; // 
+    const chatId = route.params.Chatid;
+    const [chatid, setchatid] = useState(route.params.Chatid);
+    const otherparticepat = route.params.otherparticepat
+    console.log("otherparticepat",otherparticepat);
+
+
+
+
+
+
+
 
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([
-        // Initial messages here if any
+
     ]);
+    console.log(message, "message");
     const scrollViewRef = useRef();
-    const socket = useRef(null);
+    const socket = useRef();
     useEffect(() => {
         const fetchChatHistory = async () => {
             const response = await axios.get(`${base}/chat/history/${chatId}`, {
-                headers: { 'Authorization': `Bearer ${TOKEN}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
-    console.log(response,"gdhjsadf");
-            if (response.status === 200) {
+            console.log(response, "gdhjsadf");
+            if (response.data.messages) {
                 setMessages(response.data.messages);
             } else {
-                console.error('Failed to fetch chat history', response.status);
+                setMessages([]);
             }
         };
-    
-        fetchChatHistory().catch(console.error);
-    }, [TOKEN, chatId]);
-   
 
- 
-    const handleSend = () => {
-        if (message) {
-            const newMessage = { text: message, isSender: true };
-            setMessages([...messages, newMessage]);
-            setMessage(''); // Clear the input field after sending
-        }
-    };
+        fetchChatHistory().catch(console.error);
+    }, [token, chatId]);
+
+
+
+
+
+    useEffect(() => {
+        socket.current = io(basewithoutv1, {
+            auth: { token: token },
+        });
+        socket.current.emit('JOIN_CHAT', chatId);
+        socket.current.on('RECEIVE_MESSAGE', (message) => {
+            setMessages(prevMessages => [...prevMessages, message]);
+
+        });
+       
+
+       
+
+
+        return () => {
+            socket.current.disconnect();
+        };
+    }, [chatId, userId]);
+
+
 
     useEffect(() => {
         if (scrollViewRef.current) {
             scrollViewRef.current.scrollToEnd({ animated: true });
         }
     }, [messages]);
+    const handleSend = () => {
+        console.log(chatId, "chatid", otherparticepat, "particenptid");
+
+
+        socket.current.emit('SEND_MESSAGE', {
+            chatId: chatid,
+            senderId: userId,
+            receiverId: otherparticepat,
+            content: message
+        }
+
+        );
+        setMessage('');
+
+        console.log(message, "messagesmessages");
+    };
     const endVideoCall = () => {
         if (peerConnection.current) {
             peerConnection.current.close();
@@ -95,15 +130,14 @@ const ChatRoom = ({ route, navigation }) => {
             <View style={{ flex: 1, paddingVertical: height * 0.03, }}>
                 <ScrollView
                     ref={scrollViewRef}
-                    contentContainerStyle={styles.chatContainer}
-                >
+                    contentContainerStyle={styles.chatContainer}>
                     {messages?.map((msg, index) => (
                         <View
                             key={index}
-                            style={msg.isSender ? styles.senderchat : styles.reciverchat}
+                            style={msg.senderId === userId ? styles.senderchat : styles.reciverchat}
                         >
-                            <Text style={msg.isSender ? styles.sendertext : styles.recivertext}>
-                                {msg.text}
+                            <Text style={msg.senderId === userId ? styles.sendertext : styles.recivertext}>
+                                {msg.content}
                             </Text>
                         </View>
                     ))}

@@ -82,7 +82,7 @@ export const POstUPloderprofile = ({ navigation, route }) => {
     axios.request(config)
     .then((response) => {
       setIsLoading(false);
-      // console.log(JSON.stringify(response.data),"jdsghjsgdjshg");
+   
       setChatid(response.data.chat._id)
     
   
