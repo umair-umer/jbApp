@@ -8,17 +8,18 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { io } from 'socket.io-client';
 import { useSelector } from 'react-redux';
-import { baseprofileurl } from '../../config/utilities';
-
+import { base ,baseprofileurl} from '../../config/utilities';
+import axios from 'axios';
 const ChatRoom = ({ route, navigation }) => {
-    // const { senderName } = route?.params;
-    const { token, userId } = useSelector((state) => state.auth);
-    // console.log(userId, "chatwaliscree");
-    const chat = route.params.chat
-    const [chatdata, setchatData] = useState(chat)
 
-    console.log(chatdata.participants, "hysdgsdjh");
+    const { token, userId } = useSelector((state) => state.auth);
+ 
+    const chatId = route.params.Chatid
+   
+
+    console.log(chatId, "hysdgsdjh");
         
+    
     const SERVER_URL = baseprofileurl;
     const TOKEN = token; // 
 
@@ -28,46 +29,32 @@ const ChatRoom = ({ route, navigation }) => {
     ]);
     const scrollViewRef = useRef();
     const socket = useRef(null);
-
     useEffect(() => {
-        socket.current = io(SERVER_URL, {
-            auth: {
-                token: TOKEN, // Pass token here if your server requires authentication
-            },
-        });
-
-        socket.current.on("RECEIVE_MESSAGE", (newMessage) => {
-            setMessages((prevMessages) => [...prevMessages, newMessage]);
-            Alert.alert("Message Status", "Message sent successfully!");
-        });
-
-
-        return () => {
-            socket.current.disconnect();
+        const fetchChatHistory = async () => {
+            const response = await axios.get(`${base}/chat/history/${chatId}`, {
+                headers: { 'Authorization': `Bearer ${TOKEN}` }
+            });
+    console.log(response,"gdhjsadf");
+            if (response.status === 200) {
+                setMessages(response.data.messages);
+            } else {
+                console.error('Failed to fetch chat history', response.status);
+            }
         };
-    }, []);
+    
+        fetchChatHistory().catch(console.error);
+    }, [TOKEN, chatId]);
+   
 
+ 
     const handleSend = () => {
         if (message) {
-            const userId = userId; // Your user's ID needs to be set here
-
-            const receiverId = chatdata.participants.find((participant) => participant !== userId);
-
-            console.log(receiverId,"reciverid");
             const newMessage = { text: message, isSender: true };
-            socket.current.emit("SEND_MESSAGE", {
-                chatId: chatdata._id,
-                senderId: userId,
-                receiverId:receiverId,
-                content: newMessage
-
-
-            }); // Modify according to your backend's expected format
             setMessages([...messages, newMessage]);
             setMessage(''); // Clear the input field after sending
         }
     };
-    // Scroll to the bottom when messages change or on initial render
+
     useEffect(() => {
         if (scrollViewRef.current) {
             scrollViewRef.current.scrollToEnd({ animated: true });
@@ -110,7 +97,7 @@ const ChatRoom = ({ route, navigation }) => {
                     ref={scrollViewRef}
                     contentContainerStyle={styles.chatContainer}
                 >
-                    {messages.map((msg, index) => (
+                    {messages?.map((msg, index) => (
                         <View
                             key={index}
                             style={msg.isSender ? styles.senderchat : styles.reciverchat}

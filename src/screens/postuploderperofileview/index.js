@@ -19,7 +19,9 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import qs from 'qs';
 import { base, baseprofileurl } from '../../config/utilities';
+import Loader from '../../Components/Loader';
 const { width, height } = Dimensions.get('window');
+
 export const POstUPloderprofile = ({ navigation, route }) => {
   const { id } = route.params;
   // console.log(id, 'postdata');
@@ -64,6 +66,7 @@ export const POstUPloderprofile = ({ navigation, route }) => {
     const data = qs.stringify({
       'receiverId': userId
     });
+    setIsLoading(true);
 
     const config = {
       method: 'post',
@@ -78,294 +81,306 @@ export const POstUPloderprofile = ({ navigation, route }) => {
 
     axios.request(config)
     .then((response) => {
+      setIsLoading(false);
       // console.log(JSON.stringify(response.data),"jdsghjsgdjshg");
-      setChatid(response.data.chat)
-      console.log(Chatid,"-----");
-      navigation.navigate("userchatroomscreen",{chat:Chatid,senderid:userId})
+      setChatid(response.data.chat._id)
+    
+  
     })
     .catch((error) => {
       console.log(error,"jhsjfdggdf");
     });
   };
+  useEffect(() => {
+    if (Chatid) {
+      navigation.navigate("userchatroomscreen", { Chatid });
+    }
+  }, [Chatid]);
   return (
-    <SafeAreaView style={styles.conatiner}>
-      <Image
-        style={{
-          width: '100%',
-          bottom: 14,
-          ...Platform.select({
-            ios: {
-              // padding:10,
-              bottom: height * 0.03,
-            },
-          }),
-        }}
-        resizeMode="contain"
-        source={Images.b}
-      />
-      <View style={styles.arrowbox}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.arrowimage}>
-          <Image
-            resizeMode="center"
-            style={{ width: '100%', height: '100%' }}
-            source={Images.arrow}
-          />
-        </TouchableOpacity>
-      </View>
+   <>
+   {isLoading? <Loader/> :
+     <SafeAreaView style={styles.conatiner}>
+     <Image
+       style={{
+         width: '100%',
+         bottom: 14,
+         ...Platform.select({
+           ios: {
+             // padding:10,
+             bottom: height * 0.03,
+           },
+         }),
+       }}
+       resizeMode="contain"
+       source={Images.b}
+     />
+     <View style={styles.arrowbox}>
+       <TouchableOpacity
+         onPress={() => navigation.goBack()}
+         style={styles.arrowimage}>
+         <Image
+           resizeMode="center"
+           style={{ width: '100%', height: '100%' }}
+           source={Images.arrow}
+         />
+       </TouchableOpacity>
+     </View>
 
-      <View style={styles.proimg}>
-        {profileData.picture ? <Image
-          source={{ uri:`${baseprofileurl}${profileData.picture}` }}
-          style={{ width: '100%', height: '100%' }}
-          resizeMode="cover"
-        /> :
+     <View style={styles.proimg}>
+       {profileData.picture ? <Image
+         source={{ uri:`${baseprofileurl}${profileData.picture}` }}
+         style={{ width: '100%', height: '100%' }}
+         resizeMode="cover"
+       /> :
 
-          <Image
+         <Image
 
-            source={Images.avtr}
+           source={Images.avtr}
 
-            style={{ width: '100%', height: '100%' }}
-            resizeMode="cover"
-          />
-        }
-      </View>
-      {type == "company" && <TouchableOpacity onPress={handleClick} style={{ borderRadius: 5, backgroundColor: "#2CA599", marginHorizontal: width * 0.03, flexDirection: "column", width: width * 0.3, alignItems: "center", paddingVertical: height * 0.02, }} >
-        <Text style={{ color: "white" }}>Meassage</Text>
-      </TouchableOpacity>}
-      <ScrollView style={styles.scrollcontain}>
-        <View style={{ paddingVertical: height * 0.02 }}>
-          <Text style={styles.prname}>{profileData.name}</Text>
+           style={{ width: '100%', height: '100%' }}
+           resizeMode="cover"
+         />
+       }
+     </View>
+     {type == "company" && <TouchableOpacity onPress={handleClick} style={{ borderRadius: 5, backgroundColor: "#2CA599", marginHorizontal: width * 0.03, flexDirection: "column", width: width * 0.3, alignItems: "center", paddingVertical: height * 0.02, }} >
+       <Text style={{ color: "white" }}>Meassage</Text>
+     </TouchableOpacity>}
+     <ScrollView style={styles.scrollcontain}>
+       <View style={{ paddingVertical: height * 0.02 }}>
+         <Text style={styles.prname}>{profileData.name}</Text>
 
-          <Text style={styles.position}>Creative Director </Text>
-          <Text style={styles.companyname}>The Company Media Office </Text>
-          <Text style={styles.location}>
-            New York City, United States of America{' '}
-          </Text>
-          {/* <View style={{flexDirection: 'row', marginVertical: height * 0.03}}>
-            <TouchableOpacity style={styles.connectBtn}>
-              <Text style={{color: '#fff',fontSize:calculateFontSize(11)}}>Connect</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.manageBtn}>
-              <Text style={{color: '#fff',fontSize:calculateFontSize(11)}}>Message</Text>
-            </TouchableOpacity>
+         <Text style={styles.position}>Creative Director </Text>
+         <Text style={styles.companyname}>The Company Media Office </Text>
+         <Text style={styles.location}>
+           New York City, United States of America{' '}
+         </Text>
+         {/* <View style={{flexDirection: 'row', marginVertical: height * 0.03}}>
+           <TouchableOpacity style={styles.connectBtn}>
+             <Text style={{color: '#fff',fontSize:calculateFontSize(11)}}>Connect</Text>
+           </TouchableOpacity>
+           <TouchableOpacity style={styles.manageBtn}>
+             <Text style={{color: '#fff',fontSize:calculateFontSize(11)}}>Message</Text>
+           </TouchableOpacity>
 
-            <TouchableOpacity style={styles.moreBtn}>
-              <Entypo name='dots-three-vertical' size={9} color={'#fff'}/>
-            </TouchableOpacity>
-          </View> */}
-        </View>
+           <TouchableOpacity style={styles.moreBtn}>
+             <Entypo name='dots-three-vertical' size={9} color={'#fff'}/>
+           </TouchableOpacity>
+         </View> */}
+       </View>
 
-        <View style={{ borderBottomWidth: 1, borderBottomColor: '#fff' }} />
-        <View style={styles.procon}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text
-              style={{
-                color: '#fff',
-                fontSize: calculateFontSize(16),
-                fontWeight: '700',
-              }}>
-              About
-            </Text>
-            {/* <TouchableOpacity style={styles.manageBtn}>
-              <Text style={{color: '#fff',fontSize:calculateFontSize(12)}}>Follow</Text>
-            </TouchableOpacity> */}
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}>
-            <View style={styles.wrkexperience}>
-              <View style={{ paddingHorizontal: width * 0.01 }}>
-                {/* <Text style={{color: '#CCC4C4', fontWeight: '300'}}>
-                  1,362 Followers
-                </Text>
-                <Text style={{color: '#CCC4C4', fontWeight: '300'}}>
-                  Connected 3 year 1 month
-                </Text> */}
-                <Text style={{ color: '#fff' }}>{profileData.about}</Text>
-              </View>
-            </View>
-          </View>
-        </View>
-        <View style={{ borderBottomWidth: 1, borderBottomColor: '#fff' }} />
-        <View style={styles.procon}>
-          <Text style={styles.heading}>Experience</Text>
-          {profileData.experience && profileData.experience.length > 0 ? (
-            profileData.experience.map((item, index) => (
-              <View
-                key={index}
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-                onPress={() => navigation.navigate('educationscreen')}>
-                <View style={styles.wrkexperience}>
-                  <View style={styles.dpPic}>
-                    <Image
-                      resizeMode="center"
-                      source={Images.user}
-                      style={styles.img}
-                    />
-                  </View>
-                  <View style={{ paddingHorizontal: width * 0.03 }}>
-                    <Text
-                      style={{
-                        color: '#fff',
-                        fontSize: calculateFontSize(16),
-                        fontWeight: '700',
-                      }}>
-                      {item.title || 'N/A'}{' '}
-                      {/* Use N/A if title is null or empty */}
-                    </Text>
-                    <Text style={{ color: '#fff' }}>
-                      {item.company || 'N/A'}{' '}
-                      {/* Use N/A if company is null or empty */}
-                    </Text>
-                    <Text style={{ color: '#fff' }}>
-                      {item.from
-                        ? new Date(item.from).toLocaleDateString()
-                        : 'N/A'}{' '}
-                      -
-                      {item.to
-                        ? new Date(item.to).toLocaleDateString()
-                        : 'Present'}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            ))
-          ) : (
-            <Text style={styles.noExperience}>No experience listed</Text>
-          )}
-        </View>
-        <View style={{ borderBottomWidth: 1, borderBottomColor: '#fff' }} />
+       <View style={{ borderBottomWidth: 1, borderBottomColor: '#fff' }} />
+       <View style={styles.procon}>
+         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+           <Text
+             style={{
+               color: '#fff',
+               fontSize: calculateFontSize(16),
+               fontWeight: '700',
+             }}>
+             About
+           </Text>
+           {/* <TouchableOpacity style={styles.manageBtn}>
+             <Text style={{color: '#fff',fontSize:calculateFontSize(12)}}>Follow</Text>
+           </TouchableOpacity> */}
+         </View>
+         <View
+           style={{
+             flexDirection: 'row',
+             justifyContent: 'space-between',
+             alignItems: 'center',
+           }}>
+           <View style={styles.wrkexperience}>
+             <View style={{ paddingHorizontal: width * 0.01 }}>
+               {/* <Text style={{color: '#CCC4C4', fontWeight: '300'}}>
+                 1,362 Followers
+               </Text>
+               <Text style={{color: '#CCC4C4', fontWeight: '300'}}>
+                 Connected 3 year 1 month
+               </Text> */}
+               <Text style={{ color: '#fff' }}>{profileData.about}</Text>
+             </View>
+           </View>
+         </View>
+       </View>
+       <View style={{ borderBottomWidth: 1, borderBottomColor: '#fff' }} />
+       <View style={styles.procon}>
+         <Text style={styles.heading}>Experience</Text>
+         {profileData.experience && profileData.experience.length > 0 ? (
+           profileData.experience.map((item, index) => (
+             <View
+               key={index}
+               style={{
+                 flexDirection: 'row',
+                 justifyContent: 'space-between',
+                 alignItems: 'center',
+               }}
+               onPress={() => navigation.navigate('educationscreen')}>
+               <View style={styles.wrkexperience}>
+                 <View style={styles.dpPic}>
+                   <Image
+                     resizeMode="center"
+                     source={Images.user}
+                     style={styles.img}
+                   />
+                 </View>
+                 <View style={{ paddingHorizontal: width * 0.03 }}>
+                   <Text
+                     style={{
+                       color: '#fff',
+                       fontSize: calculateFontSize(16),
+                       fontWeight: '700',
+                     }}>
+                     {item.title || 'N/A'}{' '}
+                     {/* Use N/A if title is null or empty */}
+                   </Text>
+                   <Text style={{ color: '#fff' }}>
+                     {item.company || 'N/A'}{' '}
+                     {/* Use N/A if company is null or empty */}
+                   </Text>
+                   <Text style={{ color: '#fff' }}>
+                     {item.from
+                       ? new Date(item.from).toLocaleDateString()
+                       : 'N/A'}{' '}
+                     -
+                     {item.to
+                       ? new Date(item.to).toLocaleDateString()
+                       : 'Present'}
+                   </Text>
+                 </View>
+               </View>
+             </View>
+           ))
+         ) : (
+           <Text style={styles.noExperience}>No experience listed</Text>
+         )}
+       </View>
+       <View style={{ borderBottomWidth: 1, borderBottomColor: '#fff' }} />
 
-        <View style={styles.procon}>
-          <Text
-            style={{
-              color: '#fff',
-              fontSize: calculateFontSize(18),
-              fontWeight: '700',
-            }}>
-            Education
-          </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-            onPress={() => navigation.navigate('educationscreen')}>
-            <View style={styles.wrkexperience}>
-              <View style={styles.dpPic}>
-                <Image
-                  resizeMode="center"
-                  source={Images.user}
-                  style={styles.img}
-                />
-              </View>
-              <View style={{ paddingHorizontal: width * 0.03 }}>
-                <Text
-                  style={{
-                    color: '#fff',
-                    fontSize: calculateFontSize(16),
-                    fontWeight: '700',
-                  }}>
-                  Lorem University
-                </Text>
-                <Text style={{ color: '#CBC2C2' }}>PeopleReady Pass, TX</Text>
-                <Text style={{ color: '#CBC2C2' }}>Dec 2022 - Present</Text>
-              </View>
-            </View>
-          </View>
-        </View>
+       <View style={styles.procon}>
+         <Text
+           style={{
+             color: '#fff',
+             fontSize: calculateFontSize(18),
+             fontWeight: '700',
+           }}>
+           Education
+         </Text>
+         <View
+           style={{
+             flexDirection: 'row',
+             justifyContent: 'space-between',
+             alignItems: 'center',
+           }}
+           onPress={() => navigation.navigate('educationscreen')}>
+           <View style={styles.wrkexperience}>
+             <View style={styles.dpPic}>
+               <Image
+                 resizeMode="center"
+                 source={Images.user}
+                 style={styles.img}
+               />
+             </View>
+             <View style={{ paddingHorizontal: width * 0.03 }}>
+               <Text
+                 style={{
+                   color: '#fff',
+                   fontSize: calculateFontSize(16),
+                   fontWeight: '700',
+                 }}>
+                 Lorem University
+               </Text>
+               <Text style={{ color: '#CBC2C2' }}>PeopleReady Pass, TX</Text>
+               <Text style={{ color: '#CBC2C2' }}>Dec 2022 - Present</Text>
+             </View>
+           </View>
+         </View>
+       </View>
 
-        <View style={{ borderBottomWidth: 1, borderBottomColor: '#fff' }} />
-        <View style={styles.procon}>
-          <Text
-            style={{
-              color: '#fff',
-              fontSize: calculateFontSize(18),
-              fontWeight: '700',
-            }}>
-            Skills
-          </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-            onPress={() => navigation.navigate('educationscreen')}>
-            <View style={styles.wrkexperience}>
-              <View style={{ paddingHorizontal: width * 0.03 }}>
-                <Text
-                  style={{
-                    color: '#fff',
-                    fontSize: calculateFontSize(16),
-                    fontWeight: '700',
-                  }}>
-                  Creative Strategy
-                </Text>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <View
-                    style={{
-                      width: width * 0.03,
-                      height: height * 0.015,
-                      backgroundColor: '#fff',
-                      borderRadius: 100,
-                      right: width * 0.01,
-                    }}></View>
-                  <Text style={{ color: '#CBC2C2' }}>{profileData.skills}</Text>
-                </View>
-              </View>
-            </View>
-          </View>
-        </View>
+       <View style={{ borderBottomWidth: 1, borderBottomColor: '#fff' }} />
+       <View style={styles.procon}>
+         <Text
+           style={{
+             color: '#fff',
+             fontSize: calculateFontSize(18),
+             fontWeight: '700',
+           }}>
+           Skills
+         </Text>
+         <View
+           style={{
+             flexDirection: 'row',
+             justifyContent: 'space-between',
+             alignItems: 'center',
+           }}
+           onPress={() => navigation.navigate('educationscreen')}>
+           <View style={styles.wrkexperience}>
+             <View style={{ paddingHorizontal: width * 0.03 }}>
+               <Text
+                 style={{
+                   color: '#fff',
+                   fontSize: calculateFontSize(16),
+                   fontWeight: '700',
+                 }}>
+                 Creative Strategy
+               </Text>
+               <View
+                 style={{
+                   flexDirection: 'row',
+                   justifyContent: 'center',
+                   alignItems: 'center',
+                 }}>
+                 <View
+                   style={{
+                     width: width * 0.03,
+                     height: height * 0.015,
+                     backgroundColor: '#fff',
+                     borderRadius: 100,
+                     right: width * 0.01,
+                   }}></View>
+                 <Text style={{ color: '#CBC2C2' }}>{profileData.skills}</Text>
+               </View>
+             </View>
+           </View>
+         </View>
+       </View>
 
-        <View style={{ borderBottomWidth: 1, borderBottomColor: '#fff' }} />
-        <View style={styles.procon}>
-          <Text
-            style={{
-              color: '#fff',
-              fontSize: calculateFontSize(18),
-              fontWeight: '700',
-            }}>
-            Languages
-          </Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-            onPress={() => navigation.navigate('educationscreen')}>
-            <View style={styles.wrkexperience}>
-              <View style={{ paddingHorizontal: width * 0.01 }}>
-                <Text
-                  style={{
-                    color: '#fff',
-                    fontSize: calculateFontSize(16),
-                    fontWeight: '700',
-                  }}>
-                  English
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+       <View style={{ borderBottomWidth: 1, borderBottomColor: '#fff' }} />
+       <View style={styles.procon}>
+         <Text
+           style={{
+             color: '#fff',
+             fontSize: calculateFontSize(18),
+             fontWeight: '700',
+           }}>
+           Languages
+         </Text>
+         <View
+           style={{
+             flexDirection: 'row',
+             justifyContent: 'space-between',
+             alignItems: 'center',
+           }}
+           onPress={() => navigation.navigate('educationscreen')}>
+           <View style={styles.wrkexperience}>
+             <View style={{ paddingHorizontal: width * 0.01 }}>
+               <Text
+                 style={{
+                   color: '#fff',
+                   fontSize: calculateFontSize(16),
+                   fontWeight: '700',
+                 }}>
+                 English
+               </Text>
+             </View>
+           </View>
+         </View>
+       </View>
+     </ScrollView>
+   </SafeAreaView>
+   }
+   
+   
+   </>
   );
 };
 const styles = StyleSheet.create({
